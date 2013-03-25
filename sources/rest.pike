@@ -95,7 +95,7 @@ mapping describe_object(object o, int|void show_details)
     {
         desc->mime_type = o->query_attribute("DOC_MIME_TYPE");
         if (show_details)
-            desc->content = o->get_content();
+            catch { desc->content = o->get_content(); };
     }
 
     return desc;
