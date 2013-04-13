@@ -47,13 +47,15 @@ string execute(mapping vars)
         {
             if (data->post && sizeof(data->post))
             {
-                create_subgroup(data->post->create_subgroup, o);
+                object err = catch{ create_subgroup(data->post->create_subgroup, o); }
             }
 
             data += describe_object(o, 1);
             data->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]);
             data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1);
             data->subgroups = describe_object(o->get_sub_groups()[*]);
+            if (error)
+               data->error = sprintf("%O", error);
         }
         else
         {
