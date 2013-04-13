@@ -47,7 +47,7 @@ string execute(mapping vars)
         {
             if (data->post && sizeof(data->post))
             {
-                object err = catch{ create_subgroup(data->post->create_subgroup, o); }
+                object err = catch{ create_subgroup(data->post->create_subgroup, o); };
             }
 
             data += describe_object(o, 1);
