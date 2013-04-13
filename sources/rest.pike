@@ -60,7 +60,7 @@ string execute(mapping vars)
                data->error = sprintf("%O", err);
             if (objectp(res))
                 data->res = describe_object(res);
-            else if (res!="nil")
+            else //if (res!="nil")
                data->res = sprintf("%O", res);
         }
         else
