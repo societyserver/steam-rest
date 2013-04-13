@@ -55,7 +55,7 @@ string execute(mapping vars)
             data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1);
             data->subgroups = describe_object(o->get_sub_groups()[*]);
             if (error)
-               data->error = sprintf("%O", error);
+               data->error = sprintf("%O", indices(error));
         }
         else
         {
