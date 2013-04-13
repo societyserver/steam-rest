@@ -45,10 +45,11 @@ string execute(mapping vars)
         o = GROUP(vars->request)||USER(vars->request);
         if (o)
         {
-            object err;
+            mixed err;
+            mixed res;
             if (data->post && sizeof(data->post))
             {
-                err = catch{ create_subgroup(data->post->create_subgroup, o); };
+                err = catch{ data->res = create_subgroup(data->post->create_subgroup, o); };
             }
 
             data += describe_object(o, 1);
