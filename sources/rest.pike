@@ -48,6 +48,7 @@ string execute(mapping vars)
             data += describe_object(o, 1);
             data->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]);
             data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1);
+            data->subgroups = describe_object(0->get_sub_groups()[*]);
         }
         else
         {
