@@ -61,7 +61,7 @@ string execute(mapping vars)
             if (objectp(res))
                 data->res = describe_object(res);
             else
-               data->error = sprintf("%O", res);
+               data->res = sprintf("%O", res);
         }
         else
         {
