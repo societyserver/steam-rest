@@ -88,7 +88,7 @@ mapping describe_object(object o, int|void show_details)
             object schedule = workroom->get_object_byname("schedule");
             if (schedule)
                 desc->schedule = schedule->get_content();
-            desc->members = describe_object(o->get_members()[*]);
+            desc->members = describe_object(o->get_members(CLASS_USER)[*]);
         }
     }
 
