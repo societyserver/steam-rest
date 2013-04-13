@@ -49,7 +49,7 @@ string execute(mapping vars)
             mixed res;
             if (data->post && sizeof(data->post))
             {
-                err = catch{ data->res = create_subgroup(data->post->create_subgroup, o); };
+                err = catch{ res = create_subgroup(data->post->create_subgroup, o); };
             }
 
             data += describe_object(o, 1);
@@ -58,6 +58,10 @@ string execute(mapping vars)
             data->subgroups = describe_object(o->get_sub_groups()[*]);
             if (err)
                data->error = sprintf("%O", err);
+            if (objectp(res))
+                data->res = describe_object(res);
+            else
+               data->error = sprintf("%O", res);
         }
         else
         {
