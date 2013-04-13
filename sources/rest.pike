@@ -45,17 +45,18 @@ string execute(mapping vars)
         o = GROUP(vars->request)||USER(vars->request);
         if (o)
         {
+            object err;
             if (data->post && sizeof(data->post))
             {
-                object err = catch{ create_subgroup(data->post->create_subgroup, o); };
+                err = catch{ create_subgroup(data->post->create_subgroup, o); };
             }
 
             data += describe_object(o, 1);
             data->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]);
             data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1);
             data->subgroups = describe_object(o->get_sub_groups()[*]);
-            if (error)
-               data->error = sprintf("%O", indices(error));
+            if (err)
+               data->error = sprintf("%O", err);
         }
         else
         {
