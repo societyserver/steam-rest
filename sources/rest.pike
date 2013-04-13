@@ -45,6 +45,11 @@ string execute(mapping vars)
         o = GROUP(vars->request)||USER(vars->request);
         if (o)
         {
+            if (data->post && sizeof(data->post))
+            {
+                create_subgroup(o, data->post->create_subgroup);
+            }
+
             data += describe_object(o, 1);
             data->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]);
             data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1);
@@ -100,4 +105,10 @@ mapping describe_object(object o, int|void show_details)
     }
 
     return desc;
+}
+
+object create_subgroup(string name, object parent)
+{
+    object factory = _Server->get_factory(CLASS_GROUP);
+    return factory->execute( ([ "name":name, "parentgroup":parent ]) );
 }
