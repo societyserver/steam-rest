@@ -86,7 +86,7 @@ mapping describe_object(object o, int|void show_details)
     mapping desc = ([]);
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
-    desc->description = o->query_attribute("OBJ_DESC");
+    desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
 
     if (o->get_class() == "User")
@@ -125,7 +125,7 @@ mapping describe_object(object o, int|void show_details)
 object newgroup(mapping group, object parent)
 {
     object factory = _Server->get_factory(CLASS_GROUP);
-    return factory->execute( ([ "name":group->name, 
-                                "parentgroup":parent, 
-                                "description":group->title ]) );
+    object group_obj = factory->execute( ([ "name":group->name, "parentgroup":parent ]) );
+    if (group->title)
+        group_obj->set_attribute("OBJ_DESC", group->title);
 }
