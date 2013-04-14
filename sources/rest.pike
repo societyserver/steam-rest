@@ -56,7 +56,7 @@ string execute(mapping vars)
             mixed res;
             if (data->post && sizeof(data->post))
             {
-                err = catch{ res = create_subgroup(data->post->create_subgroup, o); };
+                err = catch{ res = newgroup(data->post->newgroup, o); };
             }
 
             data += describe_object(o, 1);
@@ -122,8 +122,10 @@ mapping describe_object(object o, int|void show_details)
     return desc;
 }
 
-object create_subgroup(string name, object parent)
+object newgroup(mapping group, object parent)
 {
     object factory = _Server->get_factory(CLASS_GROUP);
-    return factory->execute( ([ "name":name, "parentgroup":parent ]) );
+    return factory->execute( ([ "name":group->name, 
+                                "parentgroup":parent, 
+                                "description":group->description ]) );
 }
