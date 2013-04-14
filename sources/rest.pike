@@ -127,5 +127,5 @@ object newgroup(mapping group, object parent)
     object factory = _Server->get_factory(CLASS_GROUP);
     return factory->execute( ([ "name":group->name, 
                                 "parentgroup":parent, 
-                                "description":group->description ]) );
+                                "description":group->title ]) );
 }
