@@ -16,7 +16,12 @@ string execute(mapping vars)
         werror("REST: %O\nREST: %O\n", vars->__body, data->post);
     }
 
-    if (vars->request == "settings")
+    if (vars->request == "login")
+    {
+        if (this_user() != USER("guest"))
+            data->login = "login successful";
+    }
+    else if (vars->request == "settings")
     {
         if (data->post && sizeof(data->post))
             foreach (data->post; string key; string value)
