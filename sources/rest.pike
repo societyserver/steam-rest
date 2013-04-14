@@ -20,6 +20,8 @@ string execute(mapping vars)
     {
         if (this_user() != USER("guest"))
             data->login = "login successful";
+        else
+            data->login = "user not logged in";
     }
     else if (vars->request == "settings")
     {
