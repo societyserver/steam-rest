@@ -64,7 +64,7 @@ string execute(mapping vars)
             data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1);
             data->subgroups = describe_object(o->get_sub_groups()[*]);
             if (err)
-               data->error = sprintf("%O:%O", err[0], indices(err[0]));
+               data->error = sprintf("%O", err);
             if (objectp(res))
                 data->res = describe_object(res);
             else if (res)
