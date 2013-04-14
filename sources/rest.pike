@@ -53,7 +53,7 @@ string execute(mapping vars)
         if (o)
         {
             mixed err;
-            mixed res = "nil";
+            mixed res;
             if (data->post && sizeof(data->post))
             {
                 err = catch{ res = create_subgroup(data->post->create_subgroup, o); };
@@ -67,7 +67,7 @@ string execute(mapping vars)
                data->error = sprintf("%O", err);
             if (objectp(res))
                 data->res = describe_object(res);
-            else //if (res!="nil")
+            else if (res)
                data->res = sprintf("%O", res);
         }
         else
