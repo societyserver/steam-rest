@@ -122,8 +122,10 @@ mapping describe_object(object o, int|void show_details)
     return desc;
 }
 
-object newgroup(mapping group, object parent)
+string|object newgroup(mapping group, object parent)
 {
+    if (!group->name)
+        return "name missing!";
     object factory = _Server->get_factory(CLASS_GROUP);
     object group_obj = factory->execute( ([ "name":group->name, "parentgroup":parent ]) );
     if (group->title)
