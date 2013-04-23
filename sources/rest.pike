@@ -135,8 +135,8 @@ string|object newgroup(mapping post, object parent)
     foreach (post - ([ "newgroup":1 ]); string type; mapping data)
     {
         // TODO: support plugins for types here?
-        if (this["make"+type])
-            this["make"+type](group_obj, data);
+        if (this()["make"+type])
+            this()["make"+type](group_obj, data);
         else
             werror("(REST newgroup make%s() not found)\n", type);
     }
