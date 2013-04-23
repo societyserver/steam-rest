@@ -146,5 +146,6 @@ string|object newgroup(mapping post, object parent)
 
 void makeevent(object group, mapping data)
 {
+    werror("(REST making an event)");
     group->set_attribute("date", "data->...FIXME");
 }
