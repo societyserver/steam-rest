@@ -131,4 +131,20 @@ string|object newgroup(mapping post, object parent)
     object group_obj = factory->execute( ([ "name":post->newgroup->name, "parentgroup":parent ]) );
     if (post->newgroup->title)
         group_obj->set_attribute("OBJ_DESC", post->newgroup->title);
+
+    foreach (post - ([ "newgroup":1 ]); string type; mapping data)
+    {
+        // TODO: support plugins for types here?
+        if (this["make"+type])
+            this["make"+type](group_obj, data);
+        else
+            werror("(REST newgroup make%s() not found)\n", type);
+    }
+
+    return group_obj;
+}
+
+void makeevent(object group, mapping data)
+{
+    group->set_attribute("date", "data->...FIXME");
 }
