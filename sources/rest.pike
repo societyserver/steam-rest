@@ -124,6 +124,7 @@ mapping describe_object(object o, int|void show_details)
 
 string|object newgroup(mapping group, object parent)
 {
+    werror("(REST) %O\n", group);
     if (!group->name)
         return "name missing!";
     object factory = _Server->get_factory(CLASS_GROUP);
