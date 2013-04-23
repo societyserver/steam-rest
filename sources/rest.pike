@@ -56,7 +56,7 @@ string execute(mapping vars)
             mixed res;
             if (data->post && sizeof(data->post))
             {
-                err = catch{ res = newgroup(data->post->newgroup, o); };
+                err = catch{ res = newgroup(data->post, o); };
             }
 
             data += describe_object(o, 1);
