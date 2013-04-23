@@ -122,13 +122,13 @@ mapping describe_object(object o, int|void show_details)
     return desc;
 }
 
-string|object newgroup(mapping group, object parent)
+string|object newgroup(mapping post, object parent)
 {
-    werror("(REST newgroup) %O\n", group);
-    if (!group->name)
+    werror("(REST newgroup) %O\n", post);
+    if (!post->newgroup->name)
         return "name missing!";
     object factory = _Server->get_factory(CLASS_GROUP);
-    object group_obj = factory->execute( ([ "name":group->name, "parentgroup":parent ]) );
-    if (group->title)
-        group_obj->set_attribute("OBJ_DESC", group->title);
+    object group_obj = factory->execute( ([ "name":post->newgroup->name, "parentgroup":parent ]) );
+    if (post->newgroup->title)
+        group_obj->set_attribute("OBJ_DESC", post->newgroup->title);
 }
