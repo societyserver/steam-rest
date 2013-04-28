@@ -2,7 +2,7 @@ inherit "classes/Script";
 #include <database.h>
 #include <classes.h>
 
-string execute(mapping vars)
+mapping execute(mapping vars)
 {
     werror("WE WON'T REST");
     mapping data = ([]);
