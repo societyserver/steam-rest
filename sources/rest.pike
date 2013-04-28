@@ -110,6 +110,8 @@ mapping describe_object(object o, int|void show_details)
                 desc->schedule = schedule->get_content();
             desc->members = describe_object(o->get_members(CLASS_USER)[*]);
         }
+        if (o->query_attribute("event"))
+            desc->event=o->query_attribute("event");
     }
 
     if (o->get_object_class() & CLASS_DOCUMENT)
@@ -147,5 +149,5 @@ string|object newgroup(mapping post, object parent)
 void makeevent(object group, mapping data)
 {
     werror("(REST making an event)");
-    group->set_attribute("date", "data->...FIXME");
+    group->set_attribute("event", "data");
 }
