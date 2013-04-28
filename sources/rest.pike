@@ -77,7 +77,7 @@ string execute(mapping vars)
         }
     }
 
-    return Standards.JSON.encode(data);
+    return ([ "data":Standards.JSON.encode(data), "type":"application/json" ]);
 }
 
 mapping describe_object(object o, int|void show_details)
