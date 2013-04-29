@@ -4,7 +4,7 @@ inherit "classes/Script";
 
 mapping execute(mapping vars)
 {
-    werror("WE WON'T REST");
+    werror("(WE WON'T REST %O)\n", vars->request);
     mapping data = ([]);
     object o;
 
@@ -13,7 +13,7 @@ mapping execute(mapping vars)
     if (vars->__body)
     {
         data->post = Standards.JSON.decode(vars->__body);
-        werror("REST: %O\nREST: %O\n", vars->__body, data->post);
+        werror("(REST %O)\n(REST %O)\n", vars->__body, data->post);
     }
 
     if (vars->request == "login")
