@@ -140,7 +140,7 @@ string|object newgroup(mapping post, object parent)
         if (this()["make"+type])
             this()["make"+type](group_obj, data);
         else
-            werror("(REST newgroup make%s() not found)\n", type);
+            werror("(REST newgroup make%s() not found (%O))\n", type, indices(this()));
     }
 
     return group_obj;
