@@ -148,6 +148,7 @@ string|object newgroup(mapping post, object parent)
 
 void makeevent(object group, mapping data)
 {
-    werror("(REST making an event)");
+    werror("(REST making an event)\n");
+    werror("(REST (%O %O %O \n(%{%O %}))\n", this, this(), this()->get_object(), indices(this()->get_object()));
     group->set_attribute("event", "data");
 }
