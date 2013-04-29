@@ -139,10 +139,10 @@ string|object newgroup(mapping post, object parent)
     foreach (post - ([ "newgroup":1 ]); string type; mapping data)
     {
         // TODO: support plugins for types here?
-        if (this["make"+type])
-            this["make"+type](group_obj, data);
+        if (this()->get_object()["make"+type])
+            this()->get_object()["make"+type](group_obj, data);
         else
-            werror("(REST newgroup make%s() not found (%O %O %O \n(%{%O %}))\n", type, this, this(), this()->get_object(), indices(this));
+            werror("(REST newgroup make%s() not found (%O %O %O \n(%{%O %}))\n", type, this, this(), this()->get_object(), indices(this()->get_object()));
     }
 
     return group_obj;
@@ -151,6 +151,5 @@ string|object newgroup(mapping post, object parent)
 void makeevent(object group, mapping data)
 {
     werror("(REST making an event)\n");
-    werror("(REST (%O %O %O \n(%{%O %}))\n", this, this(), this()->get_object(), indices(this()->get_object()));
     group->set_attribute("event", "data");
 }
