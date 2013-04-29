@@ -152,5 +152,5 @@ string|object newgroup(mapping post, object parent)
 void makeevent(object group, mapping data)
 {
     werror("(REST making an event)\n");
-    group->set_attribute("event", "data");
+    group->set_attribute("event", data);
 }
