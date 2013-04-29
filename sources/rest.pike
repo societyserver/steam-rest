@@ -112,9 +112,9 @@ mapping describe_object(object o, int|void show_details)
             desc->members = describe_object(o->get_members(CLASS_USER)[*]);
             if (o->get_parent())
                 desc->parent = describe_object(o->get_parent());
+	    if (o->query_attribute("event"))
+		desc->event=o->query_attribute("event");
         }
-        if (o->query_attribute("event"))
-            desc->event=o->query_attribute("event");
     }
 
     if (o->get_object_class() & CLASS_DOCUMENT)
