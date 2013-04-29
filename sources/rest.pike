@@ -137,10 +137,10 @@ string|object newgroup(mapping post, object parent)
     foreach (post - ([ "newgroup":1 ]); string type; mapping data)
     {
         // TODO: support plugins for types here?
-        if (this()->get_object()["make"+type])
-            this()->get_object()["make"+type](group_obj, data);
+        if (this["make"+type])
+            this["make"+type](group_obj, data);
         else
-            werror("(REST newgroup make%s() not found (%O %O %O \n(%{%O %}))\n", type, this, this(), this()->get_object(), indices(this()->get_object()));
+            werror("(REST newgroup make%s() not found (%O %O %O \n(%{%O %}))\n", type, this, this(), this()->get_object(), indices(this));
     }
 
     return group_obj;
