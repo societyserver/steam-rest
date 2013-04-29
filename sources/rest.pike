@@ -94,7 +94,8 @@ mapping describe_object(object o, int|void show_details)
         desc->id = o->get_identifier();
         desc->fullname = o->query_attribute("USER_FULLNAME");
         desc->path = get_path(o->query_attribute("USER_WORKROOM"));
-        desc->trail = describe_object(Array.uniq(reverse(o->query_attribute("trail")))[*]);
+        if (show_details)
+            desc->trail = describe_object(Array.uniq(reverse(o->query_attribute("trail")))[*]);
     }
 
     if (o->get_class() == "Group")
