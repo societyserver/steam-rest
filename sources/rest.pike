@@ -152,7 +152,7 @@ string|object handle_group(mapping post, object group)
 	    child_group->set_attribute("OBJ_DESC", post->title);
         return child_group;
     }
-    else if (post->action = "update")
+    else if (post->action == "update")
     {
         if (post->title)
 	    group->set_attribute("OBJ_DESC", post->title);
