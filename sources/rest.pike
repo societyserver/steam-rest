@@ -169,7 +169,7 @@ string|object handle_event(mapping post, object group)
     group = handle_group(post, group);
 
     werror("(REST making an event)\n");
-    group->set_attribute("event", data);
+    group->set_attribute("event", group->query_attribute("event")+post->event);
     return group;
 }
 
