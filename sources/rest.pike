@@ -56,7 +56,7 @@ mapping execute(mapping vars)
             mixed res;
             if (data->post && sizeof(data->post))
             {
-                err = catch{ res = newgroup(data->post, o); };
+                err = catch{ res = postgroup(data->post, o); };
             }
 
             data += describe_object(o, 1);
@@ -125,6 +125,12 @@ mapping describe_object(object o, int|void show_details)
     }
 
     return desc;
+}
+
+string|object postgroup(mapping post, object group)
+{
+    if (post->newgroup)
+        return newgroup(post, group);
 }
 
 string|object newgroup(mapping post, object parent)
