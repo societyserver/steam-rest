@@ -129,13 +129,43 @@ mapping describe_object(object o, int|void show_details)
 
 string|object postgroup(mapping post, object group)
 {
+    werror("(REST postgroup) %O\n", post);
     if (post->newgroup)
         return newgroup(post, group);
+
+    if (post->type && this()->get_object()["handle_"+post->type])
+        return this()->get_object()["handle_"+post->type](post, group);
+    else
+        return handle_group(post, group);
+}
+
+string|object handle_group(mapping post, object group)
+{
+    if (post->action == "new")
+    {
+        if (!post->name)
+            return "name missing!";
+        
+	object factory = _Server->get_factory(CLASS_GROUP);
+	object child_group = factory->execute( ([ "name":post->name, "parentgroup":group ]) );
+	if (post->title)
+	    child_group->set_attribute("OBJ_DESC", post->title);
+        return child_group;
+    }
+    else if (post->action = "update")
+    {
+        if (post->title)
+	    group->set_attribute("OBJ_DESC", post->title);
+        if (post->name) // rename group
+            return "renaming groups not yet supported";        
+        return group;
+    }
+    else
+        return sprintf("action %s not supported", post->action);
 }
 
 string|object newgroup(mapping post, object parent)
 {
-    werror("(REST newgroup) %O\n", post);
     if (!post->newgroup->name)
         return "name missing!";
     object factory = _Server->get_factory(CLASS_GROUP);
