@@ -164,6 +164,15 @@ string|object handle_group(mapping post, object group)
         return sprintf("action %s not supported", post->action);
 }
 
+string|object handle_event(mapping post, object group)
+{
+    group = handle_group(post, group);
+
+    werror("(REST making an event)\n");
+    group->set_attribute("event", data);
+    return group;
+}
+
 string|object newgroup(mapping post, object parent)
 {
     if (!post->newgroup->name)
