@@ -131,7 +131,7 @@ string|object postgroup(mapping post, object group)
 {
     werror("(REST postgroup) %O\n", post);
     if (post->newgroup)
-        return newgroup(post, group);
+        return "old API for creating groups is no longer supported";
 
     if (post->type && this()->get_object()["handle_"+post->type])
         return this()->get_object()["handle_"+post->type](post, group);
