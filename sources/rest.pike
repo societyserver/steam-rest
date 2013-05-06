@@ -5,79 +5,70 @@ inherit "classes/Script";
 mapping execute(mapping vars)
 {
     werror("(WE WON'T REST %O)\n", vars->request);
-    mapping data = ([]);
+    mapping result = ([]);
     object o;
 
-    data->user = describe_object(this_user());
+    result->user = describe_object(this_user());
 
     if (vars->__body)
     {
-        data->post = Standards.JSON.decode(vars->__body);
-        werror("(REST %O)\n(REST %O)\n", vars->__body, data->post);
+        vars->_json = vars->__body;
+        vars->__data = Standards.JSON.decode(vars->__body);
+        werror("(REST %O)\n(REST %O)\n", vars->__data, vars->__body);
     }
 
-    if (vars->request == "login")
+    if (this()->get_object()["handle_"+vars->request])
     {
-        if (this_user() != USER("guest"))
-            data->login = "login successful";
-        else
-            data->login = "user not logged in";
-    }
-    else if (vars->request == "settings")
-    {
-        if (data->post && sizeof(data->post))
-            foreach (data->post; string key; string value)
-            {
-                if (this_user()->query_attribute(key) != value)
-                    this_user()->set_attribute(key, value);
-            }
-        data->settings = this_user()->query_attributes() & (< "OBJ_DESC", "OBJ_NAME", "USER_ADRESS", "USER_EMAIL", "USER_FIRSTNAME", "USER_FULLNAME", "USER_LANGUAGE" >);
+        result += this()->get_object()["handle_"+vars->request](vars);
     }
     else if (!vars->request || vars->request == "/")
     {
-        data->classes = describe_object(Array.filter(this_user()->get_groups(), GROUP("ekita")->is_virtual_member)[*]);
-        data->all_schools = describe_object(GROUP("ekita")->get_sub_groups()[*]);
+        result->classes = describe_object(Array.filter(this_user()->get_groups(), GROUP("ekita")->is_virtual_member)[*]);
+        result->all_schools = describe_object(GROUP("ekita")->get_sub_groups()[*]);
     }
     else if (vars->request[0] == '/')
     {
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
-        data = describe_object(o, 1);
+        result = describe_object(o, 1);
         if (o->get_object_class() & CLASS_CONTAINER)
-            data->documents = describe_object(o->get_inventory()[*]);
+            result->documents = describe_object(o->get_inventory()[*]);
         if (o->get_object_class() & CLASS_ROOM)
             this_user()->move(o);
     }
     else
     {
-        o = GROUP(vars->request)||USER(vars->request);
+        o = GROUP(vars->request);
         if (o)
-        {
-            mixed err;
-            mixed res;
-            if (data->post && sizeof(data->post))
-            {
-                err = catch{ res = postgroup(data->post, o); };
-            }
-
-            data += describe_object(o, 1);
-            catch{ data->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]); };
-            catch{ data->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
-            data->subgroups = describe_object(o->get_sub_groups()[*]);
-            if (err)
-               data->error = sprintf("%O", err[0]);
-            if (objectp(res))
-                data->res = describe_object(res);
-            else if (res)
-               data->res = sprintf("%O", res);
-        }
-        else
-        {
-            data->error = "request not found";
-            data->request = vars->request;
-        }
+            result += handle_group(o, vars);
+	else
+	{
+	    result->error = "request not found";
+	    result->request = vars->request;
+	}
     }
 
-    return ([ "data":Standards.JSON.encode(data), "type":"application/json" ]);
+    return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
+}
+
+mapping handle_group(object group, mapping vars)
+{
+    mixed err;
+    mixed res;
+    if (vars->__data && sizeof(vars->__data))
+    {
+	err = catch{ res = postgroup(group, vars->__data); };
+    }
+
+    result += describe_object(o, 1);
+    catch{ result->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]); };
+    catch{ result->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
+    result->subgroups = describe_object(o->get_sub_groups()[*]);
+    if (err)
+       result->error = sprintf("%O", err[0]);
+    if (objectp(res))
+	result->res = describe_object(res);
+    else if (res)
+       result->res = sprintf("%O", res);
 }
 
 mapping describe_object(object o, int|void show_details)
@@ -127,19 +118,19 @@ mapping describe_object(object o, int|void show_details)
     return desc;
 }
 
-string|object postgroup(mapping post, object group)
+string|object postgroup(object group, mapping post)
 {
     werror("(REST postgroup) %O\n", post);
     if (post->newgroup)
         return "old API for creating groups is no longer supported";
 
-    if (post->type && this()->get_object()["handle_"+post->type])
-        return this()->get_object()["handle_"+post->type](post, group);
+    if (post->type && this()->get_object()["handle_group_"+post->type])
+        return this()->get_object()["handle_group_"+post->type](post, group);
     else
-        return handle_group(post, group);
+        return handle_group_post(post, group);
 }
 
-string|object handle_group(mapping post, object group)
+string|object handle_group_post(mapping post, object group)
 {
     if (post->action == "new")
     {
@@ -164,38 +155,48 @@ string|object handle_group(mapping post, object group)
         return sprintf("action %s not supported", post->action);
 }
 
-string|object handle_event(mapping post, object group)
+string|object handle_group_event(mapping post, object group)
 {
-    group = handle_group(post, group);
+    group = handle_group_post(post, group);
 
     werror("(REST handling an event)\n");
     group->set_attribute("event", group->query_attribute("event")+post->event);
     return group;
 }
 
-string|object newgroup(mapping post, object parent)
-{
-    if (!post->newgroup->name)
-        return "name missing!";
-    object factory = _Server->get_factory(CLASS_GROUP);
-    object group_obj = factory->execute( ([ "name":post->newgroup->name, "parentgroup":parent ]) );
-    if (post->newgroup->title)
-        group_obj->set_attribute("OBJ_DESC", post->newgroup->title);
-
-    foreach (post - ([ "newgroup":1 ]); string type; mapping data)
-    {
-        // TODO: support plugins for types here?
-        if (this()->get_object()["make"+type])
-            this()->get_object()["make"+type](group_obj, data);
-        else
-            werror("(REST newgroup make%s() not found (%O %O %O \n(%{%O %}))\n", type, this, this(), this()->get_object(), indices(this()->get_object()));
-    }
-
-    return group_obj;
-}
 
 void makeevent(object group, mapping data)
 {
     werror("(REST making an event)\n");
     group->set_attribute("event", data);
+}
+
+
+mapping handle_login(vars)
+{
+    mapping result =([]);
+    if (vars->request == "login")
+    {
+        if (this_user() != USER("guest"))
+            result->login = "login successful";
+        else
+            result->login = "user not logged in";
+    }
+    return result;
+}
+
+mapping handle_settings(vars)
+{
+    mapping result =([]);
+    if (vars->request == "settings")
+    {
+        if (vars->__data && sizeof(vars->__data))
+            foreach (vars->__data; string key; string value)
+            {
+                if (this_user()->query_attribute(key) != value)
+                    this_user()->set_attribute(key, value);
+            }
+        result->settings = this_user()->query_attributes() & (< "OBJ_DESC", "OBJ_NAME", "USER_ADRESS", "USER_EMAIL", "USER_FIRSTNAME", "USER_FULLNAME", "USER_LANGUAGE" >);
+    }
+    return result;
 }
