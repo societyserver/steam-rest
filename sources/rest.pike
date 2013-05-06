@@ -125,12 +125,12 @@ string|object postgroup(object group, mapping post)
         return "old API for creating groups is no longer supported";
 
     if (post->type && this()->get_object()["handle_group_"+post->type])
-        return this()->get_object()["handle_group_"+post->type](post, group);
+        return this()->get_object()["handle_group_"+post->type](group, post);
     else
-        return handle_group_post(post, group);
+        return handle_group_post(group, post);
 }
 
-string|object handle_group_post(mapping post, object group)
+string|object handle_group_post(object group, mapping post)
 {
     if (post->action == "new")
     {
@@ -155,9 +155,9 @@ string|object handle_group_post(mapping post, object group)
         return sprintf("action %s not supported", post->action);
 }
 
-string|object handle_group_event(mapping post, object group)
+string|object handle_group_event(object group, mapping post)
 {
-    group = handle_group_post(post, group);
+    group = handle_group_post(group, post);
 
     werror("(REST handling an event)\n");
     group->set_attribute("event", group->query_attribute("event")+post->event);
@@ -172,7 +172,7 @@ void makeevent(object group, mapping data)
 }
 
 
-mapping handle_login(vars)
+mapping handle_login(mapping vars)
 {
     mapping result =([]);
     if (vars->request == "login")
@@ -185,7 +185,7 @@ mapping handle_login(vars)
     return result;
 }
 
-mapping handle_settings(vars)
+mapping handle_settings(mapping vars)
 {
     mapping result =([]);
     if (vars->request == "settings")
