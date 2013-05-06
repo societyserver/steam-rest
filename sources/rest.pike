@@ -59,16 +59,17 @@ mapping handle_group(object group, mapping vars)
 	err = catch{ res = postgroup(group, vars->__data); };
     }
 
-    result += describe_object(o, 1);
-    catch{ result->menu = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]); };
-    catch{ result->documents = describe_object(o->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
-    result->subgroups = describe_object(o->get_sub_groups()[*]);
+    mapping result = describe_object(group, 1);
+    catch{ result->menu = describe_object(group->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]); };
+    catch{ result->documents = describe_object(group->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
+    result->subgroups = describe_object(group->get_sub_groups()[*]);
     if (err)
        result->error = sprintf("%O", err[0]);
     if (objectp(res))
 	result->res = describe_object(res);
     else if (res)
        result->res = sprintf("%O", res);
+    return result;
 }
 
 mapping describe_object(object o, int|void show_details)
