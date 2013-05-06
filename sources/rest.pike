@@ -9,6 +9,7 @@ mapping execute(mapping vars)
     object o;
 
     result->user = describe_object(this_user());
+    result->__version = this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION");
 
     if (vars->__body)
     {
