@@ -8,7 +8,7 @@ mapping execute(mapping vars)
     mapping result = ([]);
     object o;
 
-    result->user = describe_object(this_user());
+    result->user = describe_object(this_user()); // TODO remove this after frontendcode is updated
     result->me = describe_object(this_user());
     result->__version = this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION");
 
