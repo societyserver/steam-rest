@@ -208,6 +208,6 @@ mapping handle_register(mapping vars)
     werror("REST: register\n");
     mapping result = ([]);
     result->error = "register not supported yet";
-    result->data = vars;
+    result->data = indices(vars);
     return result;
 }
