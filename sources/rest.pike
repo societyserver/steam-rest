@@ -55,11 +55,12 @@ mapping execute(mapping vars)
 mapping handle_lookup(mapping vars)
 {
     mapping result = ([]);
-    object user = USER(vars->username);
+    object user = USER(vars->__data->username);
     if (user)
         result->user=describe_object(user);
     else
-        result->error = sprintf("user %s not found", vars->username);
+        result->error = "user not found";
+    result->request = vars->__data;
     return result;
 }
 
