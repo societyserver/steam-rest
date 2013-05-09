@@ -240,8 +240,7 @@ mapping handle_register(mapping vars)
         }
         else
         {
-            err = catch
-            { 
+            err = catch { 
                 object factory  = _Server->get_factory(CLASS_USER);
                 newuser = factory->execute( ([ "username":vars->__data->username, 
                                                "pw":vars->__data->password ]) );
