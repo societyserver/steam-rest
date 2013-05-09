@@ -221,12 +221,28 @@ mapping handle_register(mapping vars)
     werror("REST: register\n");
     mapping result = ([]);
     result->error = "register not supported yet";
+    result->request = vars->__data;
 
-    object user = USER(vars->__data->username); 
-    if (objectp(user))
-    {
+    object olduser = USER(vars->__data->username); 
+    object newuser;
+
+    if (objectp(olduser))
         result->error = sprintf("user %s already exists", vars->__data->username);
-        result->request = vars->__data;
+    else if (vars->__data->password != vars->__data->password2)
+        result->error = "passwords do not match";
+    else
+    {
+        seteuid(USER("root"));
+        err = catch { 
+            factory  = _Server->get_factory(CLASS_USER);
+            newuser = factory->execute( ([ "username":vars->__data->username, 
+                                           "pw":vars->__data->password ]) );
+        };
+        if (err)
+        {
+            result->error = "failed to create user";
+            result->debug = err;
+        }
     }
 
     return result;
