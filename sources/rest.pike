@@ -235,7 +235,7 @@ mapping handle_register(mapping vars)
         seteuid(USER("root"));
         mixed err = catch
         { 
-            factory  = _Server->get_factory(CLASS_USER);
+            object factory  = _Server->get_factory(CLASS_USER);
             newuser = factory->execute( ([ "username":vars->__data->username, 
                                            "pw":vars->__data->password ]) );
         };
