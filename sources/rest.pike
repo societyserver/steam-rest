@@ -202,3 +202,11 @@ mapping handle_settings(mapping vars)
     }
     return result;
 }
+
+mapping handle_register(mapping vars)
+{
+    mapping result = ([]);
+    result->error = "register not supported yet";
+    result->data = vars;
+    return result;
+}
