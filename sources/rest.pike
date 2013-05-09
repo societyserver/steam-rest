@@ -222,9 +222,12 @@ mapping handle_register(mapping vars)
     mapping result = ([]);
     result->error = "register not supported yet";
 
-    object user = MODULE_USERS->lookup(vars->__data->username); 
+    object user = USER(vars->__data->username); 
     if (objectp(user))
+    {
         result->error = sprintf("user %s already exists", vars->__data->username);
+        result->request = vars->__data
+    }
 
     return result;
 }
