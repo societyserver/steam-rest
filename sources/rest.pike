@@ -226,7 +226,7 @@ mapping handle_register(mapping vars)
     if (objectp(user))
     {
         result->error = sprintf("user %s already exists", vars->__data->username);
-        result->request = vars->__data
+        result->request = vars->__data;
     }
 
     return result;
