@@ -42,11 +42,11 @@ mapping execute(mapping vars)
         o = GROUP(vars->request);
         if (o)
             result += handle_group(o, vars);
-	else
-	{
-	    result->error = "request not found";
-	    result->request = vars->request;
-	}
+        else
+        {
+            result->error = "request not found";
+            result->request = vars->request;
+        }
     }
 
     return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
@@ -70,7 +70,7 @@ mapping handle_group(object group, mapping vars)
     mixed res;
     if (vars->__data && sizeof(vars->__data))
     {
-	err = catch{ res = postgroup(group, vars->__data); };
+        err = catch{ res = postgroup(group, vars->__data); };
     }
 
     mapping result = describe_object(group, 1);
@@ -80,7 +80,7 @@ mapping handle_group(object group, mapping vars)
     if (err)
        result->error = sprintf("%O", err[0]);
     if (objectp(res))
-	result->res = describe_object(res);
+        result->res = describe_object(res);
     else if (res)
        result->res = sprintf("%O", res);
     return result;
@@ -118,8 +118,8 @@ mapping describe_object(object o, int|void show_details)
             desc->members = describe_object(o->get_members(CLASS_USER)[*]);
             if (o->get_parent())
                 desc->parent = describe_object(o->get_parent());
-	    if (o->query_attribute("event"))
-		desc->event=o->query_attribute("event");
+            if (o->query_attribute("event"))
+                desc->event=o->query_attribute("event");
         }
     }
 
@@ -152,16 +152,16 @@ string|object handle_group_post(object group, mapping post)
         if (!post->name)
             return "name missing!";
         
-	object factory = _Server->get_factory(CLASS_GROUP);
-	object child_group = factory->execute( ([ "name":post->name, "parentgroup":group ]) );
-	if (post->title)
-	    child_group->set_attribute("OBJ_DESC", post->title);
+        object factory = _Server->get_factory(CLASS_GROUP);
+        object child_group = factory->execute( ([ "name":post->name, "parentgroup":group ]) );
+        if (post->title)
+            child_group->set_attribute("OBJ_DESC", post->title);
         return child_group;
     }
     else if (post->action == "update")
     {
         if (post->title)
-	    group->set_attribute("OBJ_DESC", post->title);
+            group->set_attribute("OBJ_DESC", post->title);
         if (post->name) // rename group
             return "renaming groups not yet supported";        
         return group;
@@ -232,17 +232,25 @@ mapping handle_register(mapping vars)
         result->error = "passwords do not match";
     else
     {
-        seteuid(USER("root"));
-        mixed err = catch
-        { 
-            object factory  = _Server->get_factory(CLASS_USER);
-            newuser = factory->execute( ([ "username":vars->__data->username, 
-                                           "pw":vars->__data->password ]) );
-        };
-        if (err)
+        mixed err = catch(seteuid(USER("root")));
+        if(err)
         {
-            result->error = "failed to create user";
-            result->debug = err;
+            result->error = sprintf("script permissions wrong!");
+            result->debug = sprintf("%O", err);
+        }
+        else
+        {
+            err = catch
+            { 
+                object factory  = _Server->get_factory(CLASS_USER);
+                newuser = factory->execute( ([ "username":vars->__data->username, 
+                                               "pw":vars->__data->password ]) );
+            };
+            if (err)
+            {
+                result->error = "failed to create user";
+                result->debug = sprintf("%O", err);
+            }
         }
     }
 
