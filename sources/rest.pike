@@ -243,8 +243,12 @@ mapping handle_register(mapping vars)
         {
             err = catch { 
                 object factory  = _Server->get_factory(CLASS_USER);
-                newuser = factory->execute( ([ "username":vars->__data->username, 
-                                               "pw":vars->__data->password ]) );
+                newuser = factory->execute( ([ "nickname":vars->__data->username, 
+                                               "pw":vars->__data->password,
+                                               "email":vars->__data->email,
+                                               "fullname":vars->__data->fullname,
+                                               "firstname":vars->__data->personalname,
+                                             ]) );
             };
             if (err)
             {
@@ -253,7 +257,6 @@ mapping handle_register(mapping vars)
             }
         }
     }
-
     return result;
 }
 
