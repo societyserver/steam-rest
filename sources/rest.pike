@@ -43,6 +43,11 @@ mapping execute(mapping vars)
         if (o)
             result += handle_group(o, vars);
         else
+            o = USER(vars->request);
+
+        if (o)
+            result += handle_user(o, vars);
+        else
         {
             result->error = "request not found";
             result->request = vars->request;
@@ -52,14 +57,10 @@ mapping execute(mapping vars)
     return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
 }
 
-mapping handle_lookup(mapping vars)
+mapping handle_user(object user, mapping vars)
 {
     mapping result = ([]);
-    object user = USER(vars->__data->username);
-    if (user)
-        result->user=describe_object(user);
-    else
-        result->error = "user not found";
+    result->user=describe_object(user);
     result->request = vars->__data;
     return result;
 }
