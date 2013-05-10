@@ -255,7 +255,9 @@ mapping handle_register(mapping vars)
                 result->debug = sprintf("%O", err);
             }
             else
+            {
                 result->user = newuser;
+            }
         }
     }
     return result;
