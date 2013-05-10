@@ -221,7 +221,6 @@ mapping handle_register(mapping vars)
 {
     werror("REST: register\n");
     mapping result = ([]);
-    result->error = "register not supported yet";
     result->request = vars->__data;
 
     object olduser = USER(vars->__data->username); 
@@ -255,6 +254,8 @@ mapping handle_register(mapping vars)
                 result->error = "failed to create user";
                 result->debug = sprintf("%O", err);
             }
+            else
+                result->user = newuser;
         }
     }
     return result;
