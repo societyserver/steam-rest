@@ -263,7 +263,6 @@ mapping handle_register(mapping vars)
             }
             else
             {
-                result->user = newuser;
                 object group = GROUP(vars->__data->group);
                 object pgroup = group;
                 object activationmsg;
@@ -295,6 +294,7 @@ mapping handle_register(mapping vars)
                             from->query_attribute("USER_FULLNAME"));
 
                 }
+                result->user = describe_object(newuser);
             }
         }
     }
