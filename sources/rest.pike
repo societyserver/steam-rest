@@ -152,7 +152,7 @@ string|object handle_group_post(object group, mapping post)
     {
         if (!post->name)
             return "name missing!";
-        
+
         object factory = _Server->get_factory(CLASS_GROUP);
         object child_group = factory->execute( ([ "name":post->name, "parentgroup":group ]) );
         if (post->title)
@@ -164,7 +164,7 @@ string|object handle_group_post(object group, mapping post)
         if (post->title)
             group->set_attribute("OBJ_DESC", post->title);
         if (post->name) // rename group
-            return "renaming groups not yet supported";        
+            return "renaming groups not yet supported";
         return group;
     }
     else
@@ -223,7 +223,7 @@ mapping handle_register(mapping vars)
     mapping result = ([]);
     result->request = vars->__data;
 
-    object olduser = USER(vars->__data->username); 
+    object olduser = USER(vars->__data->username);
     object newuser;
 
     if (objectp(olduser))
@@ -240,9 +240,9 @@ mapping handle_register(mapping vars)
         }
         else
         {
-            err = catch { 
+            err = catch {
                 object factory  = _Server->get_factory(CLASS_USER);
-                newuser = factory->execute( ([ "nickname":vars->__data->username, 
+                newuser = factory->execute( ([ "nickname":vars->__data->username,
                                                "pw":vars->__data->password,
                                                "email":vars->__data->email,
                                                "fullname":vars->__data->fullname,
@@ -257,6 +257,37 @@ mapping handle_register(mapping vars)
             else
             {
                 result->user = newuser;
+                object group = GROUP(vars->__data->group);
+                object pgroup = group;
+                object activationmsg;
+                while (!activationmsg)
+                {
+                    activationmsg = pgroup->query_attribute("GROUP_WORKROOM")->get_object_byname("account-activation");
+                    if (!activationmsg)
+                        pgroup = pgroup->get_parent_group();
+                }
+                if (!activationmsg)
+                    result->error = "activation message not found";
+                else
+                {
+                    string activationemail = activationmsg->get_content();
+                    mapping templ_vars = ([]);
+                    foreach (vars; string key; mixed val)
+                    {
+                        if (stringp(val))
+                            templ_vars["(:"+key+":)"] = val;
+                    }
+                    object from = group->get_admins()[0];
+                    activationemail = replace(activationemail, templ_vars);
+                    MODULE_SMTP->send_mail(newuser->query_attribute("USER_EMAIL"),
+                            activationmsg->query_attribute("OBJ_DESC"),
+                            activationemail,
+                            from->query_attribute("USER_EMAIL"),
+                            from->query_attribute("USER_EMAIL"),
+                            activationmsg->query_attribute("DOC_MIME_TYPE"),
+                            from->query_attribute("USER_FULLNAME"));
+
+                }
             }
         }
     }
