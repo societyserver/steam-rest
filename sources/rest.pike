@@ -223,6 +223,13 @@ mapping handle_register(mapping vars)
     mapping result = ([]);
     result->request = vars->__data;
 
+    object group = GROUP(vars->__data->group);
+    if (!group)
+    {
+        result->error = sprintf("group not found: %O", vars->__data->group);
+        return result;
+    }
+
     object olduser = USER(vars->__data->username);
     object newuser;
 
