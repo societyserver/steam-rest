@@ -266,7 +266,7 @@ mapping handle_register(mapping vars)
                 object group = GROUP(vars->__data->group);
                 object pgroup = group;
                 object activationmsg;
-                while (!activationmsg)
+                while (!activationmsg && pgroup)
                 {
                     activationmsg = pgroup->query_attribute("GROUP_WORKROOM")->get_object_byname("account-activation");
                     if (!activationmsg)
