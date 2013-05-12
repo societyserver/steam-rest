@@ -7,7 +7,9 @@ files = [
   'app/lib/angular/angular-*.js',
   'test/lib/angular/angular-mocks.js',
   'app/js/**/*.js',
-  'test/unit/**/*.js'
+  'src/js/**/*.coffee',
+  'test/unit/**/*.js',
+  'test/unit/**/*.coffee'
 ];
 
 autoWatch = true;
