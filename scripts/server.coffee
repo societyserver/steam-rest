@@ -36,6 +36,7 @@ app.get '/js/:script.js', (req, res) ->
 	res.send coffee.compile fs.readFileSync(
 		"#{src_dir}/js/#{req.params.script}.coffee", "utf-8")
 
+app.get '/', (req, res) -> res.render 'index'
 app.get '/:file.html', (req, res) -> res.render req.params.file
 app.get '/:dir/:file.html', (req, res) ->
 	res.render req.params.dir + '/' + req.params.file
