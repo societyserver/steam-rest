@@ -285,13 +285,20 @@ mapping handle_register(mapping vars)
                     }
                     object from = group->get_admins()[0];
                     activationemail = replace(activationemail, templ_vars);
+                    string fromaddr = sprintf("%s <%s>", 
+                                              from->query_attribute("USER_FULLNAME"), 
+                                              from->query_attribute("USER_EMAIL"));
+                    string toaddr = sprintf("%s <%s>", 
+                                            newuser->query_attribute("USER_FULLNAME"), 
+                                            newuser->query_attribute("USER_EMAIL"));
+
                     MODULE_SMTP->send_mail(newuser->query_attribute("USER_EMAIL"),
                             activationmsg->query_attribute("OBJ_DESC"),
                             activationemail,
                             from->query_attribute("USER_EMAIL"),
-                            from->query_attribute("USER_EMAIL"),
+                            from->get_object_id();
                             activationmsg->query_attribute("DOC_MIME_TYPE"),
-                            from->query_attribute("USER_FULLNAME"));
+                            fromaddr);
 
                 }
                 result->user = describe_object(newuser);
