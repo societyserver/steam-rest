@@ -266,6 +266,15 @@ mapping handle_register(mapping vars)
             else
             {
                 object group = GROUP(vars->__data->group);
+                if ( objectp(group) ) {
+                    err = catch(group->add_member(created));
+                    if ( err ) { 
+                        result->error = sprintf("Failed to add new user to group: %s", vars->group);
+                    }
+                    else
+                        result->group = describe_object(group);
+                }
+
                 object pgroup = group;
                 object activationmsg;
                 while (!activationmsg && pgroup)
