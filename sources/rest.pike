@@ -295,11 +295,12 @@ mapping handle_register(mapping vars)
                                             newuser->query_attribute("USER_FULLNAME"), 
                                             newuser->get_identifier(),
                                             newuser->query_attribute("USER_EMAIL"));
+                    string rcptto = newuser->query_attribute("USER_EMAIL");
                     string messageid = sprintf("<%d-%d@techgrind.asia>", time(), newuser->get_object_id());
 
 // send_mail(array|string email, string subject, string body, void|string from, void|string fromobj, void|string mimetype, void|string fromname, void|string date, void|string message_id, void|string in_reply_to, void|string reply_to, void|string mail_followup_to)
 
-                    MODULE_SMTP->send_mail(toaddr, // array|string email
+                    MODULE_SMTP->send_mail(rcptto, // array|string email
                             activationmsg->query_attribute("OBJ_DESC"), //string subject
                             activationemail, //string body
                             mailfrom, //void|string from
