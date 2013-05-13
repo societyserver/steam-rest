@@ -302,7 +302,7 @@ mapping handle_register(mapping vars)
                                   activationmsg->query_attribute("OBJ_DESC"), 
                                   mailfrom, 
                                   activationmsg->query_attribute("DOC_MIME_TYPE"),
-                                  );
+                                  ([ "To": toaddr, "From": fromaddr, "Messageid":messageid ]));
 
 
 // send_mail(array|string email, string subject, string body, void|string from, void|string fromobj, void|string mimetype, void|string fromname, void|string date, void|string message_id, void|string in_reply_to, void|string reply_to, void|string mail_followup_to)
