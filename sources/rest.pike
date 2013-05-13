@@ -304,7 +304,18 @@ mapping handle_activate(mapping vars)
 {
     werror("REST: activate\n");
     mapping result = ([]);
-    result->error = "activation not supported yet";
+    object user = USER(vars->__data->username);
+    if (!user)
+        result->error = "no such user";
+    else if (!user->get_activation())
+        result->error = "user already activated";
+    else if (!user->activate_user((int)vars->__data->activate))
+        result->error = "invalid activation code";
+    else
+    {
+        result->user = user;
+        result->result = "user is activated";
+    }
     result->data = vars->__data;
     return result;
 }
