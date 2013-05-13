@@ -288,8 +288,9 @@ mapping handle_register(mapping vars)
                     string fromaddr = sprintf("%s <%s>", 
                                               from->query_attribute("USER_FULLNAME"), 
                                               from->query_attribute("USER_EMAIL"));
-                    string toaddr = sprintf("%s <%s>", 
+                    string toaddr = sprintf("%s (%s) <%s>", 
                                             newuser->query_attribute("USER_FULLNAME"), 
+                                            newuser->get_identifier(),
                                             newuser->query_attribute("USER_EMAIL"));
                     string messageid = sprintf("<%d-%d@techgrind.asia>", time(), newuser->get_object_id());
 
