@@ -270,7 +270,7 @@ mapping handle_register(mapping vars)
                     result->error = "group missing";
                 else
                 {
-                    err = catch(group->add_member(created));
+                    err = catch(group->add_member(newuser));
                     if (err)
                         result->error = sprintf("failed to add new user to group: %O", group);
                     else
