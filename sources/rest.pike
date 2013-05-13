@@ -300,7 +300,7 @@ mapping handle_register(mapping vars)
 
                     newuser->mail(activationemail, 
                                   "M "+activationmsg->query_attribute("OBJ_DESC"), 
-                                  mailfrom, 
+                                  "m-"+mailfrom, 
                                   activationmsg->query_attribute("DOC_MIME_TYPE"),
                                   ([ "to": toaddr, "from": fromaddr ]));
 
@@ -310,8 +310,8 @@ mapping handle_register(mapping vars)
                     MODULE_SMTP->send_mail(rcptto, // array|string email
                             activationmsg->query_attribute("OBJ_DESC"), //string subject
                             activationemail, //string body
-                            mailfrom, //void|string from
-                            mailfrom, // void|string fromobj
+                            "s-"+mailfrom, //void|string from
+                            "t-"+mailfrom, // void|string fromobj
                             activationmsg->query_attribute("DOC_MIME_TYPE")); //, // void|string mimetype
                             //fromaddr,                                        // void|string fromname
                             //0,                                                // void|string date
