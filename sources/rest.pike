@@ -232,6 +232,7 @@ mapping handle_register(mapping vars)
 
     object olduser = USER(vars->__data->username);
     object newuser;
+    int activation;
 
     if (objectp(olduser))
         result->error = sprintf("user %s already exists", vars->__data->username);
@@ -255,6 +256,7 @@ mapping handle_register(mapping vars)
                                                "fullname":vars->__data->fullname,
                                                "firstname":vars->__data->personalname,
                                              ]) );
+                activation = factory->get_activation();
             };
             if (err)
             {
@@ -277,12 +279,10 @@ mapping handle_register(mapping vars)
                 else
                 {
                     string activationemail = activationmsg->get_content();
-                    mapping templ_vars = ([]);
-                    foreach (vars; string key; mixed val)
-                    {
-                        if (stringp(val))
-                            templ_vars["(:"+key+":)"] = val;
-                    }
+                    mapping templ_vars = ([
+                                            "(:username:)":newuser->get_identifier(),
+                                            "(:activate:)":(string)activation
+                                          ]);
                     object from = group->get_admins()[0];
                     activationemail = replace(activationemail, templ_vars);
                     string mailfrom = sprintf("%s@%s", 
