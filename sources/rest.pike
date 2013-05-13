@@ -313,7 +313,7 @@ mapping handle_activate(mapping vars)
         result->error = "invalid activation code";
     else
     {
-        result->user = user;
+        result->user = describe_object(user);
         result->result = "user is activated";
     }
     result->data = vars->__data;
