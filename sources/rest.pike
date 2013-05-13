@@ -299,7 +299,7 @@ mapping handle_register(mapping vars)
                     string messageid = sprintf("<%d-%d@techgrind.asia>", time(), newuser->get_object_id());
 
                     newuser->mail(activationemail, 
-                                  "M +"activationmsg->query_attribute("OBJ_DESC"), 
+                                  "M "+activationmsg->query_attribute("OBJ_DESC"), 
                                   mailfrom, 
                                   activationmsg->query_attribute("DOC_MIME_TYPE"),
                                   ([ "to": toaddr, "from": fromaddr ]));
