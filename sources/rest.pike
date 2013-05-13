@@ -294,12 +294,12 @@ mapping handle_register(mapping vars)
                                             newuser->query_attribute("USER_EMAIL"));
 
                     newuser->mail(activationemail, 
-                                  activationmsg->query_attribute("OBJ_DESC"), 
+                                  "A "+activationmsg->query_attribute("OBJ_DESC"), 
                                   fromaddr,
                                   activationmsg->query_attribute("DOC_MIME_TYPE"));
 
                     MODULE_SMTP->send_mail(toaddr,
-                            activationmsg->query_attribute("OBJ_DESC"),
+                            "B "+activationmsg->query_attribute("OBJ_DESC"),
                             activationemail,
                             from->query_attribute("USER_EMAIL"),
                             (string)from->get_object_id(),
