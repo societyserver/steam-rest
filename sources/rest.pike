@@ -266,43 +266,45 @@ mapping handle_register(mapping vars)
             else
             {
                 object group = GROUP(vars->__data->group);
-                if ( objectp(group) ) {
-                    err = catch(group->add_member(created));
-                    if ( err ) { 
-                        result->error = sprintf("Failed to add new user to group: %s", vars->group);
-                    }
-                    else
-                        result->group = describe_object(group);
-                }
-
-                object pgroup = group;
-                object activationmsg;
-                while (!activationmsg && pgroup)
-                {
-                    activationmsg = pgroup->query_attribute("GROUP_WORKROOM")->get_object_byname("account-activation");
-                    if (!activationmsg)
-                        pgroup = pgroup->get_parent_group();
-                }
-                if (!activationmsg)
-                    result->error = "activation message not found";
+                if (!objectp(group))
+                    result->error = "group missing";
                 else
                 {
-                    string activationemail = activationmsg->get_content();
-                    mapping templ_vars = ([ "(:username:)":newuser->get_identifier(),
-                                            "(:activate:)":(string)activation ]);
-                    object from = group->get_admins()[0];
-                    activationemail = replace(activationemail, templ_vars);
-                    string mailfrom = sprintf("%s@%s", 
-                                            from->get_identifier(),
-                                            _Server->get_server_name());
+                    err = catch(group->add_member(created));
+                    if (err)
+                        result->error = sprintf("failed to add new user to group: %s", vars->group);
+                    else
+                        result->group = describe_object(group);
 
-                    newuser->mail(activationemail,
-                                  activationmsg->query_attribute("OBJ_DESC"), 
-                                  mailfrom, 
-                                  activationmsg->query_attribute("DOC_MIME_TYPE"));
+                    object pgroup = group;
+                    object activationmsg;
+                    while (!activationmsg && pgroup)
+                    {
+                        activationmsg = pgroup->query_attribute("GROUP_WORKROOM")->get_object_byname("account-activation");
+                        if (!activationmsg)
+                            pgroup = pgroup->get_parent_group();
+                    }
+                    if (!activationmsg)
+                        result->error = "activation message not found";
+                    else
+                    {
+                        string activationemail = activationmsg->get_content();
+                        mapping templ_vars = ([ "(:username:)":newuser->get_identifier(),
+                                                "(:activate:)":(string)activation ]);
+                        object from = group->get_admins()[0];
+                        activationemail = replace(activationemail, templ_vars);
+                        string mailfrom = sprintf("%s@%s", 
+                                                from->get_identifier(),
+                                                _Server->get_server_name());
 
+                        newuser->mail(activationemail,
+                                      activationmsg->query_attribute("OBJ_DESC"), 
+                                      mailfrom, 
+                                      activationmsg->query_attribute("DOC_MIME_TYPE"));
+
+                    }
+                    result->user = describe_object(newuser);
                 }
-                result->user = describe_object(newuser);
             }
         }
     }
