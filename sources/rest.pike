@@ -288,21 +288,26 @@ mapping handle_register(mapping vars)
                     string fromaddr = sprintf("%s <%s>", 
                                               from->query_attribute("USER_FULLNAME"), 
                                               from->query_attribute("USER_EMAIL"));
+                    string mailfrom = sprintf("%s@%s", 
+                                            from->get_identifier(),
+                                            _Server->get_server_name());
                     string toaddr = sprintf("%s %s <%s>", 
                                             newuser->query_attribute("USER_FULLNAME"), 
                                             newuser->get_identifier(),
                                             newuser->query_attribute("USER_EMAIL"));
                     string messageid = sprintf("<%d-%d@techgrind.asia>", time(), newuser->get_object_id());
 
-                    MODULE_SMTP->send_mail(toaddr,
-                            activationmsg->query_attribute("OBJ_DESC"),
-                            activationemail,
-                            from->query_attribute("USER_EMAIL"),
-                            0,
-                            activationmsg->query_attribute("DOC_MIME_TYPE"),
-                            fromaddr,
-                            0,
-                            messageid);
+// send_mail(array|string email, string subject, string body, void|string from, void|string fromobj, void|string mimetype, void|string fromname, void|string date, void|string message_id, void|string in_reply_to, void|string reply_to, void|string mail_followup_to)
+
+                    MODULE_SMTP->send_mail(toaddr, // array|string email
+                            activationmsg->query_attribute("OBJ_DESC"), //string subject
+                            activationemail, //string body
+                            mailfrom, //void|string from
+                            mailfrom, // void|string fromobj
+                            activationmsg->query_attribute("DOC_MIME_TYPE")); //, // void|string mimetype
+                            //fromaddr,                                        // void|string fromname
+                            //0,                                                // void|string date
+                            //messageid);                                       //void|string message_id
 
                 }
                 result->user = describe_object(newuser);
