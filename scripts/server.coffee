@@ -18,6 +18,7 @@ app.configure ->
 	app.use express.methodOverride()
 	app.use express.bodyParser()
 	app.use express.static public_dir
+	app.use '/test', express.static __dirname + '/../test'
 	app.use app.router
 
 app.configure 'development', ->
