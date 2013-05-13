@@ -296,7 +296,7 @@ mapping handle_register(mapping vars)
                             activationmsg->query_attribute("OBJ_DESC"),
                             activationemail,
                             from->query_attribute("USER_EMAIL"),
-                            from->get_object_id();
+                            from->get_object_id(),
                             activationmsg->query_attribute("DOC_MIME_TYPE"),
                             fromaddr);
 
