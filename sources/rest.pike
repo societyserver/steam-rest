@@ -291,7 +291,7 @@ mapping handle_register(mapping vars)
                     string toaddr = sprintf("%s <%s>", 
                                             newuser->query_attribute("USER_FULLNAME"), 
                                             newuser->query_attribute("USER_EMAIL"));
-                    string messageid = sprintf("%d-%d@techgrind.asia", time(), newuser->get_object_id());
+                    string messageid = sprintf("<%d-%d@techgrind.asia>", time(), newuser->get_object_id());
 
                     MODULE_SMTP->send_mail(toaddr,
                             activationmsg->query_attribute("OBJ_DESC"),
