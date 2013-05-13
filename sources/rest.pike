@@ -305,5 +305,6 @@ mapping handle_activate(mapping vars)
     werror("REST: activate\n");
     mapping result = ([]);
     result->error = "activation not supported yet";
+    result->data = vars->__data;
     return result;
 }
