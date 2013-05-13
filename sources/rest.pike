@@ -272,7 +272,7 @@ mapping handle_register(mapping vars)
                 {
                     err = catch(group->add_member(created));
                     if (err)
-                        result->error = sprintf("failed to add new user to group: %s", vars->group);
+                        result->error = sprintf("failed to add new user to group: %O", group);
                     else
                         result->group = describe_object(group);
 
