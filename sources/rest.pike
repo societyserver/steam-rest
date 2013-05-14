@@ -307,7 +307,7 @@ mapping handle_register(mapping vars)
                                                 _Server->get_server_name());
 
                         array recipients = ({ newuser }) + group->get_admins();
-                        recipients = ({ newuser, USER("martin") });
+
                         recipients->mail(activationemail,
                                       activationmsg->query_attribute("OBJ_DESC"), 
                                       mailfrom, 
