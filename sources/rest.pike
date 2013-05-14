@@ -289,12 +289,17 @@ mapping handle_register(mapping vars)
                     else
                     {
                         string activationemail = activationmsg->get_content();
-                        mapping templ_vars = ([ "(:username:)":newuser->get_identifier(),
-                                                "(:activate:)":(string)activation,
-                                                "(:personalname:)":newuser->query_attribute("USER_FIRSTNAME"),
-                                                "(:fullname:)":newuser->query_attribute("USER_FULLNAME"),
-                                                "(:email:)":newuser->query_attribute("USER_EMAIL"),
-                                                "(:group:)":group->query_attribute("OBJ_DESC")||group->get_identifier() ]);
+                        mapping templ_vars = 
+                            ([ "(:username:)":newuser->get_identifier(),
+                               "(:activate:)":(string)activation,
+                               "(:personalname:)":newuser->query_attribute("USER_FIRSTNAME"),
+                               "(:fullname:)":newuser->query_attribute("USER_FULLNAME"),
+                               "(:email:)":newuser->query_attribute("USER_EMAIL"),
+                               "(:group:)":group->query_attribute("OBJ_DESC") ]); 
+
+                        if (!templ_vars["(:group:)"] || !sizeof(templ_vars["(:group:)"]))
+                            templ_vars["(:group:)"] = group->get_identifier();
+
                         object from = group->get_admins()[0];
                         activationemail = replace(activationemail, templ_vars);
                         string mailfrom = sprintf("%s@%s", 
