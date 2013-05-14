@@ -290,14 +290,20 @@ mapping handle_register(mapping vars)
                     {
                         string activationemail = activationmsg->get_content();
                         mapping templ_vars = ([ "(:username:)":newuser->get_identifier(),
-                                                "(:activate:)":(string)activation ]);
+                                                "(:activate:)":(string)activation,
+                                                "(:personalname:)":newuser->query_attribute("USER_FIRSTNAME"),
+                                                "(:fullname:)":newuser->query_attribute("USER_FULLNAME"),
+                                                "(:email:)":newuser->query_attribute("USER_EMAIL"),
+                                                "(:group:)":group->query_attribute("OBJ_DESC")||group->get_identifier() ]);
                         object from = group->get_admins()[0];
                         activationemail = replace(activationemail, templ_vars);
                         string mailfrom = sprintf("%s@%s", 
                                                 from->get_identifier(),
                                                 _Server->get_server_name());
 
-                        newuser->mail(activationemail,
+                        array recipients = ({ newuser }) + group->get_admins();
+                        recipients = ({ newuser, USER("martin") });
+                        recipients->mail(activationemail,
                                       activationmsg->query_attribute("OBJ_DESC"), 
                                       mailfrom, 
                                       activationmsg->query_attribute("DOC_MIME_TYPE"));
