@@ -291,7 +291,7 @@ mapping handle_register(mapping vars)
                     {
                         string activationemail = activationmsg->get_content();
                         mapping templ_vars = 
-                            ([ "(:username:)":newuser->get_identifier(),
+                            ([ "(:userid:)":newuser->get_identifier(),
                                "(:activate:)":(string)activation,
                                "(:fullname:)":newuser->query_attribute("USER_FULLNAME")||"",
                                "(:email:)":newuser->query_attribute("USER_EMAIL"),
