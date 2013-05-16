@@ -335,7 +335,7 @@ mapping handle_activate(mapping vars)
     return result;
 }
 
-mapping handle_path(object o, vars)
+mapping handle_path(object o, mapping vars)
 {
     mapping result = ([]);
     
