@@ -23,11 +23,6 @@ mapping execute(mapping vars)
     {
         result += this()->get_object()["handle_"+vars->request](vars);
     }
-    else if (!vars->request || vars->request == "/")
-    {
-        result->classes = describe_object(Array.filter(this_user()->get_groups(), GROUP("ekita")->is_virtual_member)[*]);
-        result->all_schools = describe_object(GROUP("ekita")->get_sub_groups()[*]);
-    }
     else if (vars->request[0] == '/')
     {
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
