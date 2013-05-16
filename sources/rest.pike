@@ -27,8 +27,7 @@ mapping execute(mapping vars)
     {
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
         if (o)
-            result += handle_path(o, vars)
-
+            result += handle_path(o, vars);
     }
     else
     {
