@@ -30,15 +30,10 @@ mapping execute(mapping vars)
     }
     else if (vars->request[0] == '/')
     {
-        string path = vars->request;
-        if (vars->request[..5] != "/home/")
-            path = "/home"+vars->request;
-        o = _Server->get_module("filepath:url")->path_to_object(path);
-        result = describe_object(o, 1);
-        if (o->get_object_class() & CLASS_CONTAINER)
-            result->documents = describe_object(o->get_inventory()[*]);
-        if (o->get_object_class() & CLASS_ROOM)
-            this_user()->move(o);
+        o = _Server->get_module("filepath:url")->path_to_object(vars->request);
+        if (o)
+            result += handle_path(o, vars)
+
     }
     else
     {
@@ -104,7 +99,7 @@ mapping describe_object(object o, int|void show_details)
         desc->id = o->get_identifier();
         desc->fullname = o->query_attribute("USER_FULLNAME");
         desc->path = get_path(o->query_attribute("USER_WORKROOM"));
-        if (show_details)
+        if (show_details && o == this_user())
             desc->trail = describe_object(Array.uniq(reverse(o->query_attribute("trail")))[*]);
     }
 
@@ -343,4 +338,16 @@ mapping handle_activate(mapping vars)
     }
     result->data = vars->__data;
     return result;
+}
+
+mapping handle_path(object o, vars)
+{
+    mapping result = ([]);
+    
+    result = describe_object(o, 1);
+
+    if (o->get_object_class() & CLASS_CONTAINER)
+        result->documents = describe_object(o->get_inventory()[*]);
+    if (o->get_object_class() & CLASS_ROOM)
+        this_user()->move(o);
 }
