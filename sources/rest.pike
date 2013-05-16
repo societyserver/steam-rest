@@ -292,8 +292,7 @@ mapping handle_register(mapping vars)
                         mapping templ_vars = 
                             ([ "(:username:)":newuser->get_identifier(),
                                "(:activate:)":(string)activation,
-                               "(:personalname:)":newuser->query_attribute("USER_FIRSTNAME"),
-                               "(:fullname:)":newuser->query_attribute("USER_FULLNAME"),
+                               "(:fullname:)":newuser->query_attribute("USER_FULLNAME")||"",
                                "(:email:)":newuser->query_attribute("USER_EMAIL"),
                                "(:group:)":group->query_attribute("OBJ_DESC") ]); 
 
