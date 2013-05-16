@@ -230,12 +230,13 @@ mapping handle_register(mapping vars)
         return result;
     }
 
-    object olduser = USER(vars->__data->username);
+    string userid = vars->__data->userid||vars->__data->username;
+    object olduser = USER(userid);
     object newuser;
     int activation;
 
     if (objectp(olduser))
-        result->error = sprintf("user %s already exists", vars->__data->username);
+        result->error = sprintf("user %s already exists", userid);
     else if (vars->__data->password != vars->__data->password2)
         result->error = "passwords do not match";
     else
@@ -250,7 +251,7 @@ mapping handle_register(mapping vars)
         {
             err = catch {
                 object factory  = _Server->get_factory(CLASS_USER);
-                newuser = factory->execute( ([ "nickname":vars->__data->username,
+                newuser = factory->execute( ([ "nickname":userid,
                                                "pw":vars->__data->password,
                                                "email":vars->__data->email,
                                                "fullname":vars->__data->fullname,
@@ -325,7 +326,7 @@ mapping handle_activate(mapping vars)
 {
     werror("REST: activate\n");
     mapping result = ([]);
-    object user = USER(vars->__data->username);
+    object user = USER(vars->data->userid||vars->__data->username);
     if (!user)
         result->error = "no such user";
     else if (!user->get_activation())
