@@ -326,7 +326,7 @@ mapping handle_activate(mapping vars)
 {
     werror("REST: activate\n");
     mapping result = ([]);
-    object user = USER(vars->data->userid||vars->__data->username);
+    object user = USER(vars->__data->userid||vars->__data->username);
     if (!user)
         result->error = "no such user";
     else if (!user->get_activation())
