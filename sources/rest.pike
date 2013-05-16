@@ -30,7 +30,10 @@ mapping execute(mapping vars)
     }
     else if (vars->request[0] == '/')
     {
-        o = _Server->get_module("filepath:url")->path_to_object(vars->request);
+        string path = vars->request;
+        if (vars->request[..5] != "/home/")
+            path = "/home"+vars->request;
+        o = _Server->get_module("filepath:url")->path_to_object(path);
         result = describe_object(o, 1);
         if (o->get_object_class() & CLASS_CONTAINER)
             result->documents = describe_object(o->get_inventory()[*]);
