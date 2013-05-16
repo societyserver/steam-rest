@@ -337,13 +337,13 @@ mapping handle_activate(mapping vars)
 
 mapping handle_path(object o, mapping vars)
 {
-    mapping result = ([]);
-    
-    result = describe_object(o, 1);
+    if (o->get_object_class() & CLASS_ROOM)
+        this_user()->move(o);
+
+    mapping result = describe_object(o, 1);
 
     if (o->get_object_class() & CLASS_CONTAINER)
         result->documents = describe_object(o->get_inventory()[*]);
-    if (o->get_object_class() & CLASS_ROOM)
-        this_user()->move(o);
+
     return result;
 }
