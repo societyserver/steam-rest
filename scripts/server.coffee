@@ -3,8 +3,9 @@ app = module.exports = express()
 
 coffee = require 'coffee-script'		# for on the fly compilation
 fs = require 'fs'
-public_dir = __dirname + '/../app'
-src_dir = __dirname + '/../src/'
+root_dir = __dirname + '/..'
+public_dir = root_dir + '/app'
+src_dir = root_dir + '/src/'
 
 stylus = require 'stylus'
 
@@ -18,7 +19,7 @@ app.configure ->
 	app.use express.methodOverride()
 	app.use express.bodyParser()
 	app.use express.static public_dir
-	app.use '/test', express.static __dirname + '/../test'
+	app.use '/test', express.static root_dir + '/test'
 	app.use app.router
 
 app.configure 'development', ->
@@ -36,7 +37,11 @@ app.get '/js/:script.js', (req, res) ->
 	res.send coffee.compile fs.readFileSync(
 		"#{src_dir}/js/#{req.params.script}.coffee", "utf-8")
 
+app.get /(\/test\/(.+\/)?\w+).js/, (req, res) ->
+	res.header 'Content-Type', 'application/javascript'
+	res.send coffee.compile fs.readFileSync(
+		"#{root_dir + req.params[0]}.coffee", "utf-8")
+
 app.get '/', (req, res) -> res.render 'index'
-app.get '/:file.html', (req, res) -> res.render req.params.file
-app.get '/:dir/:file.html', (req, res) ->
-	res.render req.params.dir + '/' + req.params.file
+app.get '/:dir?/:file.html', (req, res) ->
+	res.render (req.params.dir || '.') + '/' + req.params.file
