@@ -121,7 +121,9 @@ mapping describe_object(object o, int|void show_details)
     if (o->get_object_class() & CLASS_DOCUMENT)
     {
         desc->mime_type = o->query_attribute("DOC_MIME_TYPE");
-        if (show_details)
+        desc->size = sizeof(o->get_content());
+
+        if (show_details && o->query_attribute("DOC_MIME_TYPE")[..3]=="text")
             catch { desc->content = o->get_content(); };
     }
 
