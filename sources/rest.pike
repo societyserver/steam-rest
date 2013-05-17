@@ -128,6 +128,26 @@ mapping describe_object(object o, int|void show_details)
     return desc;
 }
 
+mapping handle_path(object o, mapping vars)
+{
+    if (o->get_object_class() & CLASS_ROOM)
+        this_user()->move(o);
+
+    if (vars->__data)
+    {
+        // handle object updates
+    }
+
+    mapping result = describe_object(o, 1);
+    if (o->get_environment())
+        result->environment = describe_object(o->get_environment());
+
+    if (o->get_object_class() & CLASS_CONTAINER)
+        result->inventory = describe_object(o->get_inventory()[*]);
+
+    return result;
+}
+
 string|object postgroup(object group, mapping post)
 {
     werror("(REST postgroup) %O\n", post);
@@ -333,20 +353,5 @@ mapping handle_activate(mapping vars)
         result->result = "user is activated";
     }
     result->data = vars->__data;
-    return result;
-}
-
-mapping handle_path(object o, mapping vars)
-{
-    if (o->get_object_class() & CLASS_ROOM)
-        this_user()->move(o);
-
-    mapping result = describe_object(o, 1);
-    if (o->get_environment())
-        result->environment = describe_object(o->get_environment());
-
-    if (o->get_object_class() & CLASS_CONTAINER)
-        result->inventory = describe_object(o->get_inventory()[*]);
-
     return result;
 }
