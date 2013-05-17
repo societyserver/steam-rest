@@ -343,7 +343,9 @@ mapping handle_path(object o, mapping vars)
     mapping result = describe_object(o, 1);
 
     if (o->get_object_class() & CLASS_CONTAINER)
-        result->documents = describe_object(o->get_inventory()[*]);
+    {
+        result->inventory = describe_object(o->get_inventory()[*]);
+    }
 
     return result;
 }
