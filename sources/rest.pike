@@ -342,7 +342,6 @@ mapping handle_path(object o, mapping vars)
         this_user()->move(o);
 
     mapping result = describe_object(o, 1);
-    result->environment = "none";
     if (o->get_environment())
         result->environment = describe_object(o->get_environment());
 
