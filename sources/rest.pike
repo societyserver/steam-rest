@@ -348,5 +348,7 @@ mapping handle_path(object o, mapping vars)
     if (o->get_object_class() & CLASS_CONTAINER)
         result->inventory = describe_object(o->get_inventory()[*]);
 
+    foo;
+
     return result;
 }
