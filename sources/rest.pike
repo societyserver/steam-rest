@@ -169,10 +169,12 @@ mapping prune_attributes(object o)
     {
         if ( !(< "CONT", "OBJ", "ROOM">)[(attribute/"_")[0]] &&
              (attribute/":")[0] != "xsl")
+        {
             catch (pruned[attribute] = o->query_attribute(attribute));
 
-        if (objectp(pruned[attribute]))
-            pruned[attribute] = describe_object(pruned[attribute]);
+            if (objectp(pruned[attribute]))
+                pruned[attribute] = describe_object(pruned[attribute]);
+        }
     }
     return pruned;
 }
