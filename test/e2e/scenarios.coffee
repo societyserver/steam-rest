@@ -1,25 +1,32 @@
+angular.scenario.dsl 'expectClass', -> (klass, selector, label) ->
+	expect(element(selector, label).prop('classList')).toContain klass
+
+angular.scenario.dsl 'expectViewText', -> (text, selector, label) ->
+	expect(element("[ng-view] "+ (selector || ''), label).text()).toMatch text
+
 describe 'Tech Grind app', ->
-	beforeEach ->
-		browser().navigateTo '/index.html'
+	describe 'root page', ->
+		beforeEach -> browser().navigateTo '/'
+		it 'shows the home page', -> expect(browser().location().url()).toBe "/home"
 
-	it 'should automatically redirect to /view1 when location hash/fragment is empty', ->
-		expect(browser().location().url()).toBe "/view1"
+	describe 'home page', ->
+		beforeEach -> browser().navigateTo '#/home'
+		it 'shows Top happenings', -> expectViewText "Top Happenings"
+		it 'shows Latest Content', -> expectViewText "Latest Content"
+		it 'highlights the home menu and only that', ->
+			expectClass 'active', '#menu #home'
+			expect(element('#menu [class="active"]').count()).toBe 1
 
-	describe 'view1', ->
-		beforeEach ->
-			browser().navigateTo '#/view1'
+	describe 'regions', ->
+		beforeEach -> browser().navigateTo '#/regions'
 
-		it 'should render view1 when user navigates to /view1', ->
-			expect(element('[ng-view] p:first').text()).
-				toMatch /partial for view 1/
+	describe 'a specific regions', ->
+		beforeEach -> browser().navigateTo '#/regions/thailand'
 
-			expect(element('[ng-view]').text()).
-				toMatch "MOCK DATA"
-
-	describe 'view2', ->
-		beforeEach ->
-			browser().navigateTo '#/view2'
-
-		it 'should render view2 when user navigates to /view2', ->
-			expect(element('[ng-view] p:first').text()).
-				toMatch /partial for view 2/
+	describe 'calendar', ->
+	describe 'events', ->
+	describe 'resources', ->
+	describe 'media', ->
+	describe 'partners', ->
+		xit 'shows Global Partners'
+		xit 'has Connect With Us form'

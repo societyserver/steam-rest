@@ -4,12 +4,12 @@ html(lang="en", ng-app="TechGrindApp")
 		meta(charset="utf-8")
 		title TechGrind &middot; Asia's Startup Community
 		link(rel="stylesheet", href='css/app.css')
-	body
-		#head
+	body(ng-controller="AppCtrl")
+		heading
 			h1 TechGrind
-			ul#menu
-		#content(ng-view)
-		#foot
+		nav(ng-include="'partials/menu.html'")
+		section#main(ng-view)
+		footer
 			ul
 				li 123
 				li 1234
