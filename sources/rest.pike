@@ -86,12 +86,12 @@ mapping describe_object(object o, int|void show_details)
 {
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
+    desc += prune_attributes(o->query_attributes());
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->type = o->get_class();
-    desc += prune_attributes(o->query_attributes());
 
     if (o->get_class() == "User")
     {
