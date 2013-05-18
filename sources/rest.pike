@@ -169,8 +169,8 @@ mapping prune_attributes(object o)
     foreach (o->get_attributes(); string attribute; mixed value)
     {
         if ( !(< "DOC_VERSIONS" >)[attribute] &&
-             !(< "CONT", "OBJ", "ROOM">)[(attribute/"_")[0]] &&
-             (attribute/":")[0] != "xsl")
+             !(< "CONT", "OBJ", "ROOM", "DOC">)[(attribute/"_")[0]] &&
+             !(< "xsl", "web" >)[(attribute/":")[0]] )
         {
             catch{ pruned[attribute] = o->query_attribute(attribute); };
 
