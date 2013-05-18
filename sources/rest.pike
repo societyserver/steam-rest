@@ -134,6 +134,7 @@ mapping handle_path(object o, mapping vars)
 {
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
+    mapping result = ([]);
 
     if (vars->__data && vars->__data->update)
     {
@@ -144,9 +145,9 @@ mapping handle_path(object o, mapping vars)
             o->set_attribute("OBJ_DESC", update->title);
         if (update->content && update->content != o->get_content())
             o->set_content(update->content);
+        result->update = update;
     }
 
-    mapping result = ([]);
     result->object = describe_object(o, 1);
     if (o->get_environment())
         result->environment = describe_object(o->get_environment());
