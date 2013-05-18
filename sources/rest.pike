@@ -140,7 +140,8 @@ mapping handle_path(object o, mapping vars)
         // handle object updates
     }
 
-    mapping result = describe_object(o, 1);
+    mapping result = ([]);
+    ressult->object = describe_object(o, 1);
     if (o->get_environment())
         result->environment = describe_object(o->get_environment());
 
