@@ -10,6 +10,9 @@ mapping execute(mapping vars)
 
     result->user = describe_object(this_user()); // TODO remove this after frontendcode is updated
     result->me = describe_object(this_user());
+    catch{ result->me->session = this_user()->get_session_id(); };
+    catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
+
     result->__version = this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION");
 
     if (vars->__body)
