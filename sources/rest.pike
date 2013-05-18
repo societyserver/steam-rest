@@ -91,7 +91,7 @@ mapping describe_object(object o, int|void show_details)
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->type = o->get_class();
-    desc += prune_attributes(o->query_attributes);
+    desc += prune_attributes(o->query_attributes());
 
     if (o->get_class() == "User")
     {
