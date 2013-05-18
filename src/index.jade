@@ -22,3 +22,6 @@ html(lang="en", ng-app="TechGrindApp")
 		script(src="js/controllers.js")
 		script(src="js/filters.js")
 		script(src="js/directives.js")
+		if settings.env == 'test'
+			script(src="test/lib/angular/angular-mocks.js")
+			script(src="test/e2e/backend-mocks.js")

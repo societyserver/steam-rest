@@ -1,7 +1,6 @@
 # Customizations
 
-`scripts/server.coffee` is a node+express webserver which can compile on the fly like below,
-if the corresponding static file doesn't exist:
+`scripts/server.coffee` is a node+express webserver which can compile jade/coffee files on the fly if the corresponding static file doesn't exist:
 
     http://localhost:8000/page.html <-- src/page.jade
     http://localhost:8000/dir/page.html <-- src/dir/page.jade
@@ -13,7 +12,12 @@ Usage:
     npm install
     scripts/server.coffee
 
+For E2E testing under the `http://localhost:8000/test/e2e/runner.html` url, the server should be started in test mode, so it can activate a mock backend, defined in test/e2e/backend-mocks.coffee.
+
+    NODE_ENV=test scripts/server.coffee
+
 TODO: compile script for deployment
+
 
 # angular-seed — the seed for AngularJS apps
 

@@ -13,6 +13,9 @@ describe 'Tech Grind app', ->
 			expect(element('[ng-view] p:first').text()).
 				toMatch /partial for view 1/
 
+			expect(element('[ng-view]').text()).
+				toMatch "MOCK DATA"
+
 	describe 'view2', ->
 		beforeEach ->
 			browser().navigateTo '#/view2'
