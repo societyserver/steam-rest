@@ -135,9 +135,15 @@ mapping handle_path(object o, mapping vars)
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
 
-    if (vars->__data)
+    if (vars->__data && vars->__data->update)
     {
-        // handle object updates
+        mapping update = vars->__data->update;
+        if (update->name && update->name != o->get_identifier())
+            o->set_identifier(update->name);
+        if (update->title && update->title != o->query_attribute("OBJ_DESC"))
+            o->set_attribute("OBJ_DESC", update->title);
+        if (update->content && update->content != o->get_content())
+            o->set_content(update->content);
     }
 
     mapping result = ([]);
