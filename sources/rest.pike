@@ -91,6 +91,7 @@ mapping describe_object(object o, int|void show_details)
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->type = o->get_class();
+    desc += prune_attributes(o->query_attributes);
 
     if (o->get_class() == "User")
     {
@@ -159,6 +160,21 @@ mapping handle_path(object o, mapping vars)
         result->inventory = describe_object(o->get_inventory()[*]);
 
     return result;
+}
+
+mapping prune_attributes(mapping attributes)
+{
+    mapping pruned = ([]);
+    foreach (attributes; string attribute; mixed value)
+    {
+        if ( !(< "CONT", "OBJ", "ROOM">)[(attribute/"_")[0]] &&
+             (attribute/":")[0] != "xsl")
+            pruned[attribute] = value;
+
+        if (objectp(value))
+            pruned[attribute] = describe_object(value);
+    }
+    return pruned;
 }
 
 string|object postgroup(object group, mapping post)
