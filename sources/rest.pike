@@ -86,7 +86,7 @@ mapping describe_object(object o, int|void show_details)
 {
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
-    desc += prune_attributes(o->query_attributes());
+    desc += prune_attributes(o);
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
     desc->title = o->query_attribute("OBJ_DESC");
@@ -162,17 +162,17 @@ mapping handle_path(object o, mapping vars)
     return result;
 }
 
-mapping prune_attributes(mapping attributes)
+mapping prune_attributes(object o)
 {
     mapping pruned = ([]);
-    foreach (attributes; string attribute; mixed value)
+    foreach (o->get_attributes(); string attribute; mixed value)
     {
         if ( !(< "CONT", "OBJ", "ROOM">)[(attribute/"_")[0]] &&
              (attribute/":")[0] != "xsl")
-            pruned[attribute] = value;
+            catch (pruned[attribute] = o->query_attribute(attribute));
 
-        if (objectp(value))
-            pruned[attribute] = describe_object(value);
+        if (objectp(pruned[attribute]))
+            pruned[attribute] = describe_object(pruned[attribute]);
     }
     return pruned;
 }
