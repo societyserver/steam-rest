@@ -172,7 +172,7 @@ mapping prune_attributes(object o)
     if (!attributes)
         return pruned;
 
-    foreach (o->get_attributes(); string attribute; mixed value)
+    foreach (attributes; string attribute; mixed value)
     {
         if ( !(< "DOC_VERSIONS" >)[attribute] &&
              !(< "CONT", "OBJ", "ROOM", "DOC">)[(attribute/"_")[0]] &&
@@ -181,7 +181,9 @@ mapping prune_attributes(object o)
             catch{ pruned[attribute] = o->query_attribute(attribute); };
 
             if (objectp(pruned[attribute]))
+            {
                 catch{ pruned[attribute] = describe_object(pruned[attribute]); };
+            }
         }
     }
     return pruned;
