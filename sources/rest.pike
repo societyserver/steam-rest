@@ -13,7 +13,7 @@ mapping execute(mapping vars)
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
 
-    result->__version = this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION");
+    result->__version = this()->get_object()->query_attribute("OBJ_LAST_CHANGED");
 
     if (vars->__body)
     {
@@ -185,7 +185,6 @@ mapping prune_attributes(object o)
             {
                 pruned[attribute] = ([ "oid":pruned[attribute]->get_object_id() ]);
                 catch{ pruned[attribute] = describe_object(pruned[attribute]); };
-                error
             }
         } 
     }
