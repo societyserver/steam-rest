@@ -86,8 +86,8 @@ mapping describe_object(object o, int|void show_details)
 {
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
-//    if (show_details)
-//        desc += prune_attributes(o);
+    if (show_details)
+        desc += prune_attributes(o);
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
     desc->title = o->query_attribute("OBJ_DESC");
@@ -166,6 +166,12 @@ mapping handle_path(object o, mapping vars)
 mapping prune_attributes(object o)
 {
     mapping pruned = ([]);
+    array attributes;
+
+    catch{ attributes = o->get_attributes(); };
+    if (!attributes)
+        return pruned;
+
     foreach (o->get_attributes(); string attribute; mixed value)
     {
         if ( !(< "DOC_VERSIONS" >)[attribute] &&
