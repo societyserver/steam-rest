@@ -179,13 +179,15 @@ mapping prune_attributes(object o)
              !(< "xsl", "web" >)[(attribute/":")[0]] )
         {
             pruned[attribute] = "ok";
-            /* catch{ pruned[attribute] = o->query_attribute(attribute); };
+            /* 
+            catch{ pruned[attribute] = o->query_attribute(attribute); };
 
             if (objectp(pruned[attribute]))
             {
                 catch{ pruned[attribute] = describe_object(pruned[attribute]); };
             }
-        } */
+            */
+        } 
     }
     return pruned;
 }
