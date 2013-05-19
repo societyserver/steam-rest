@@ -175,7 +175,7 @@ mapping prune_attributes(object o)
             catch{ pruned[attribute] = o->query_attribute(attribute); };
 
             if (objectp(pruned[attribute]))
-                pruned[attribute] = describe_object(pruned[attribute]);
+                catch{ pruned[attribute] = describe_object(pruned[attribute]); };
         }
     }
     return pruned;
