@@ -13,8 +13,7 @@ mapping execute(mapping vars)
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
 
-    result->__version = this()->get_object()->query_attribute("OBJ_LAST_CHANGED");
-    error
+    result->__version = Calendar.Second(this()->get_object()->query_attribute("OBJ_LAST_CHANGED"))->format_time_short();
 
     if (vars->__body)
     {
