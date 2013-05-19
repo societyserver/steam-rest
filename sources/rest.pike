@@ -166,7 +166,7 @@ mapping handle_path(object o, mapping vars)
 mapping prune_attributes(object o)
 {
     mapping pruned = ([]);
-    array attributes;
+    mapping attributes;
 
     catch{ attributes = o->get_attributes(); };
     if (!attributes)
@@ -174,7 +174,8 @@ mapping prune_attributes(object o)
 
     foreach (attributes; string attribute; mixed value)
     {
-        if ( !(< "DOC_VERSIONS" >)[attribute] &&
+        pruned[attribute] = "ok";
+        /* if ( !(< "DOC_VERSIONS" >)[attribute] &&
              !(< "CONT", "OBJ", "ROOM", "DOC">)[(attribute/"_")[0]] &&
              !(< "xsl", "web" >)[(attribute/":")[0]] )
         {
@@ -184,7 +185,7 @@ mapping prune_attributes(object o)
             {
                 catch{ pruned[attribute] = describe_object(pruned[attribute]); };
             }
-        }
+        } */
     }
     return pruned;
 }
