@@ -174,12 +174,12 @@ mapping prune_attributes(object o)
 
     foreach (attributes; string attribute; mixed value)
     {
-        pruned[attribute] = "ok";
-        /* if ( !(< "DOC_VERSIONS" >)[attribute] &&
+        if ( !(< "DOC_VERSIONS" >)[attribute] &&
              !(< "CONT", "OBJ", "ROOM", "DOC">)[(attribute/"_")[0]] &&
              !(< "xsl", "web" >)[(attribute/":")[0]] )
         {
-            catch{ pruned[attribute] = o->query_attribute(attribute); };
+            pruned[attribute] = "ok";
+            /* catch{ pruned[attribute] = o->query_attribute(attribute); };
 
             if (objectp(pruned[attribute]))
             {
