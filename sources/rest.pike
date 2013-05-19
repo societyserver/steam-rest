@@ -185,6 +185,7 @@ mapping prune_attributes(object o)
             {
                 pruned[attribute] = ([ "oid":pruned[attribute]->get_object_id() ]);
                 catch{ pruned[attribute] = describe_object(pruned[attribute]); };
+                error
             }
         } 
     }
