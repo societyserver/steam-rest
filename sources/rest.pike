@@ -180,12 +180,12 @@ mapping prune_attributes(object o)
         {
             pruned[attribute] = "ok";
             catch{ pruned[attribute] = o->query_attribute(attribute); };
-            /* 
+
             if (objectp(pruned[attribute]))
             {
-                catch{ pruned[attribute] = describe_object(pruned[attribute]); };
+                pruned[attribute] = ([ "object":pruned[attribute]->get_object_id() ]);
+                //catch{ pruned[attribute] = describe_object(pruned[attribute]); };
             }
-            */
         } 
     }
     return pruned;
