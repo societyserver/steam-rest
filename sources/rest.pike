@@ -183,7 +183,7 @@ mapping prune_attributes(object o)
 
             if (objectp(pruned[attribute]))
             {
-                pruned[attribute] = ([ "object":pruned[attribute]->get_object_id() ]);
+                pruned[attribute] = ([ "oid":pruned[attribute]->get_object_id() ]);
                 //catch{ pruned[attribute] = describe_object(pruned[attribute]); };
             }
         } 
