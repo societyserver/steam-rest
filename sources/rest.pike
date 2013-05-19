@@ -14,6 +14,7 @@ mapping execute(mapping vars)
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
 
     result->__version = this()->get_object()->query_attribute("OBJ_LAST_CHANGED");
+    error
 
     if (vars->__body)
     {
