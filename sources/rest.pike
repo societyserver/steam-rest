@@ -177,7 +177,7 @@ mapping prune_attributes(object o)
     foreach (attributes; string attribute; mixed value)
     {
         if ( !(< "DOC_VERSIONS" >)[attribute] &&
-             !(< "CONT", "OBJ", "ROOM", "DOC">)[(attribute/"_")[0]] &&
+             !(< "CONT", "OBJ", "ROOM", "DOC", "GROUP" >)[(attribute/"_")[0]] &&
              !(< "xsl", "web" >)[(attribute/":")[0]] )
         {
             pruned[attribute] = "ok";
