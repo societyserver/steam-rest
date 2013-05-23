@@ -49,6 +49,8 @@ mapping execute(mapping vars)
         }
     }
 
+    werror("(rest) %O\n", result);
+
     return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
 }
 
