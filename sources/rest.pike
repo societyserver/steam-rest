@@ -94,7 +94,7 @@ mapping describe_object(object o, int|void show_details)
     desc->path = get_path(o);
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
-    desc->type = o->get_class();
+    desc->class = o->get_class();
 
     if (o->get_class() == "User")
     {
