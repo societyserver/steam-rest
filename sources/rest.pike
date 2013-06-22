@@ -13,7 +13,7 @@ mapping execute(mapping vars)
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
 
-    result->__version = Calendar.Second(this()->get_object()->query_attribute("OBJ_LAST_CHANGED"))->format_time_short();
+    result->__version = sprintf("(%O %s)", _get_version(), Calendar.Second(this()->get_object()->query_attribute("OBJ_LAST_CHANGED"))->format_time_short());
 
     if (vars->__body)
     {
@@ -401,4 +401,11 @@ mapping handle_activate(mapping vars)
     }
     result->data = vars->__data;
     return result;
+}
+
+mixed _get_version()
+{
+    if (!this()->get_object()->query_attribute("compiled-version"))
+        this()->get_object()->set_attribute("compiled-version", this()->get_object()->query_attribute("OBJ_SOURCE")->query_attribute("DOC_VERSION"));
+    return this()->get_object()->query_attribute("compiled-version");
 }
