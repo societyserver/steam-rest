@@ -406,6 +406,6 @@ mapping handle_activate(mapping vars)
 mixed _get_version()
 {
     if (!this()->get_object()->query_attribute("compiled-version"))
-        this()->get_object()->set_attribute("compiled-version", this()->get_object()->query_attribute("OBJ_SOURCE")->query_attribute("DOC_VERSION"));
+        this()->get_object()->set_attribute("compiled-version", this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION"));
     return this()->get_object()->query_attribute("compiled-version");
 }
