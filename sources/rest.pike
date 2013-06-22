@@ -408,3 +408,4 @@ mixed _get_version()
     return Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
 }
 
+this is an error
