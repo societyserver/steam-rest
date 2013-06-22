@@ -13,7 +13,7 @@ mapping execute(mapping vars)
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
 
-    result->__version = sprintf("(%O %s)", _get_version(), Calendar.Second(this()->get_object()->query_attribute("OBJ_LAST_CHANGED"))->format_time_short());
+    result->__version = _get_version();
 
     if (vars->__body)
     {
@@ -405,19 +405,6 @@ mapping handle_activate(mapping vars)
 
 mixed _get_version()
 {
-    if (!this()->get_object()->query_attribute("compiled-version"))
-    {
-        mixed err = catch(seteuid(USER("root")));
-//        if(err)
-//        {
-//            result->error = sprintf("script permissions wrong!");
-//            result->debug = sprintf("%O", err);
-//        }
-//        else
-//        {
-            catch(this()->get_object()->set_attribute("compiled-version", this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION")));
-//        }
-    }
-    return this()->get_object()->query_attribute("compiled-version");
+    return Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
 }
 
