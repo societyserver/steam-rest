@@ -421,4 +421,3 @@ mixed _get_version()
     return this()->get_object()->query_attribute("compiled-version");
 }
 
-this is a compile error
