@@ -408,15 +408,15 @@ mixed _get_version()
     if (!this()->get_object()->query_attribute("compiled-version"))
     {
         mixed err = catch(seteuid(USER("root")));
-        if(err)
-        {
-            result->error = sprintf("script permissions wrong!");
-            result->debug = sprintf("%O", err);
-        }
-        else
-        {
+//        if(err)
+//        {
+//            result->error = sprintf("script permissions wrong!");
+//            result->debug = sprintf("%O", err);
+//        }
+//        else
+//        {
             catch(this()->get_object()->set_attribute("compiled-version", this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOC_VERSION")));
-        }
+//        }
     }
     return this()->get_object()->query_attribute("compiled-version");
 }
