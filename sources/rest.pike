@@ -8,7 +8,6 @@ mapping execute(mapping vars)
     mapping result = ([]);
     object o;
 
-    result->user = describe_object(this_user()); // TODO remove this after frontendcode is updated
     result->me = describe_object(this_user());
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
