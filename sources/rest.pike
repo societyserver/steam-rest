@@ -318,6 +318,8 @@ mapping handle_register(mapping vars)
                                                "firstname":vars->__data->personalname,
                                              ]) );
                 activation = factory->get_activation();
+                if (testuser(newuser))
+                    result->activation = activation;
             };
             if (err)
             {
@@ -404,8 +406,13 @@ mapping handle_activate(mapping vars)
 
 mixed handle_delete(mapping vars)
 {
-    if (search("test", this_user()->get_identifier()) != -1) //only test-users may be deleted without confirmation.
+    if (testuser(this_user())) //only test-users may be deleted without confirmation.
         return this_user()->delete();
+}
+
+int testuser(object user)
+{
+    return (user->get_identifier()[..5] == ".test.");
 }
 
 mixed _get_version()
