@@ -402,6 +402,12 @@ mapping handle_activate(mapping vars)
     return result;
 }
 
+mixed handle_delete(mapping vars)
+{
+    if (search("test", this_user()->get_identifier()) != -1) //only test-users may be deleted without confirmation.
+        return this_user()->delete();
+}
+
 mixed _get_version()
 {
     return Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
