@@ -412,7 +412,7 @@ mixed handle_delete(mapping vars)
 
 int testuser(object user)
 {
-    return (user->get_identifier()[..5] == ".test.");
+    return (user->get_identifier()[..4] == "test.");
 }
 
 mixed _get_version()
