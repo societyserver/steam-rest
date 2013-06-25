@@ -404,10 +404,22 @@ mapping handle_activate(mapping vars)
     return result;
 }
 
-mixed handle_delete(mapping vars)
+mapping handle_delete(mapping vars)
 {
+    mapping result;
     if (testuser(this_user())) //only test-users may be deleted without confirmation.
-        return this_user()->delete();
+    {
+        mixed err = catch(seteuid(USER("root")));
+        if(err)
+        {
+            result->error = sprintf("script permissions wrong!");
+            result->debug = sprintf("%O", err);
+        }
+        else
+        {
+            err = catch { result = this_user()->delete(); };
+        }
+        return result
 }
 
 int testuser(object user)
