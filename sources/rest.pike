@@ -417,7 +417,7 @@ mapping handle_delete(mapping vars)
         }
         else
         {
-            err = catch { result = this_user()->delete(); };
+            err = catch { result->delete = this_user()->delete(); };
         }
     }
     return result;
