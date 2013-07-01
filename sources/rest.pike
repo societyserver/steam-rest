@@ -419,7 +419,7 @@ mapping handle_delete(mapping vars)
         {
             err = catch { result = this_user()->delete(); };
         }
-        return result
+        return result;
 }
 
 int testuser(object user)
@@ -431,3 +431,4 @@ mixed _get_version()
 {
     return Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
 }
+
