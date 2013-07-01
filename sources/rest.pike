@@ -419,8 +419,8 @@ mapping handle_delete(mapping vars)
         {
             err = catch { result = this_user()->delete(); };
         }
-        return result;
     }
+    return result;
 }
 
 int testuser(object user)
