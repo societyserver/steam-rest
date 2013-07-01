@@ -406,7 +406,7 @@ mapping handle_activate(mapping vars)
 
 mapping handle_delete(mapping vars)
 {
-    mapping result;
+    mapping result = ([]);
     if (testuser(this_user())) //only test-users may be deleted without confirmation.
     {
         mixed err = catch(seteuid(USER("root")));
@@ -420,6 +420,7 @@ mapping handle_delete(mapping vars)
             err = catch { result = this_user()->delete(); };
         }
         return result;
+    }
 }
 
 int testuser(object user)
