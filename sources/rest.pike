@@ -35,11 +35,11 @@ mapping execute(mapping vars)
     }
 
     mixed type_result;
-    if (o && vars->type)
-       type_result = OBJ("/scripts/type-handler.pike")->run(vars->type, vars->__internal->request_method, o, vars->data);
+    if (o)
+       type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
 
-    if (type_result)
-        result[vars->type] = type_result[vars->type];
+    if (mappingp(type_result))
+        result += type_result;
     else if (o && o->get_class() == "User")
         result += handle_user(o, vars);
     else if (o && o->get_class() == "Group")
