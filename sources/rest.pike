@@ -39,7 +39,7 @@ mapping execute(mapping vars)
        type_result = OBJ("/scripts/type-handler.pike")->run(vars->type, vars->__internal->request_method, o, vars->data);
 
     if (type_result)
-        result[vars->type] = type_result;
+        result[vars->type] = type_result[vars->type];
     else if (o && o->get_class() == "User")
         result += handle_user(o, vars);
     else if (o && o->get_class() == "Group")
