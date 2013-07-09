@@ -39,8 +39,9 @@ mapping execute(mapping vars)
     mixed type_result;
     if (o)
     {
-       type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
        result->debug->trace += ({ "calling type-handler" });
+       type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
+       result->debug->type_result = type_result;
     }
 
     if (mappingp(type_result))
