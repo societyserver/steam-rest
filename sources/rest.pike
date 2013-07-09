@@ -26,26 +26,26 @@ mapping execute(mapping vars)
         result += this()->get_object()["handle_"+vars->request](vars);
     }
     else if (vars->request[0] == '/')
-    {
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
-        if (o)
-            result += handle_path(o, vars);
-    }
     else
     {
         o = GROUP(vars->request);
-        if (o)
-            result += handle_group(o, vars);
-        else
+        if (!o)
             o = USER(vars->request);
+    }
 
-        if (o)
-            result += handle_user(o, vars);
-        else
-        {
-            result->error = "request not found";
-            result->request = vars->request;
-        }
+    if (o && vars->type)
+        result += OBJ("/scripts/type-handler.pike")->run(vars->type, o, vars->data);
+    else if (o && o->get_class() == "User")
+        result += handle_user(o, vars);
+    else if (o && o->get_class() == "Group")
+        result += handle_group(o, vars);
+    else if (o)
+        result += handle_path(o, vars);
+    else
+    {
+        result->error = "request not found";
+        result->request = vars->request;
     }
 
     werror("(rest) %O\n", result);
@@ -430,6 +430,6 @@ int testuser(object user)
 
 mixed _get_version()
 {
-    return Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
+    return ({ "2013-07-09-1", Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short() });
 }
 
