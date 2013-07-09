@@ -11,6 +11,8 @@ mapping execute(mapping vars)
     result->me = describe_object(this_user());
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
+    if (GROUP("coder")->is_virtual_member(this_user()))
+        result->debug = ([ "trace":({}) ]);
 
     result->__version = _get_version();
 
@@ -36,7 +38,10 @@ mapping execute(mapping vars)
 
     mixed type_result;
     if (o)
+    {
        type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
+       result->debug->trace += ({ "calling type-handler" });
+    }
 
     if (mappingp(type_result))
         result += type_result;
@@ -54,8 +59,8 @@ mapping execute(mapping vars)
 
     werror("(rest) %O\n", result);
 
-    if (GROUP("coder")->is_virtual_member(this_user()))
-        result->debug = vars - ([ "fp":true ]);
+    if (result->debug)
+        result->debug->request = vars - ([ "fp":true ]);
 
     return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
 }
@@ -312,7 +317,7 @@ mapping handle_register(mapping vars)
         if(err)
         {
             result->error = sprintf("script permissions wrong!");
-            result->debug = sprintf("%O", err);
+            result->debug->setuid = sprintf("%O", err);
         }
         else
         {
@@ -331,7 +336,7 @@ mapping handle_register(mapping vars)
             if (err)
             {
                 result->error = "failed to create user";
-                result->debug = sprintf("%O", err);
+                result->debug->create_user = sprintf("%O", err);
             }
             else
             {
@@ -420,7 +425,7 @@ mapping handle_delete(mapping vars)
         if(err)
         {
             result->error = sprintf("script permissions wrong!");
-            result->debug = sprintf("%O", err);
+            result->debug->delete = sprintf("%O", err);
         }
         else
         {
