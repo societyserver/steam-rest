@@ -54,7 +54,7 @@ mapping execute(mapping vars)
 
     werror("(rest) %O\n", result);
 
-    if (GROUP("coder")->is_virtual_member(this_user()) || GROUP("admin")->is_virtual_member(this_user()))
+    if (GROUP("coder")->is_virtual_member(this_user()))
         result->debug = vars;
 
     return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
