@@ -55,7 +55,7 @@ mapping execute(mapping vars)
     werror("(rest) %O\n", result);
 
     if (GROUP("coder")->is_virtual_member(this_user()))
-        result->debug = vars;
+        result->debug = indices(vars);
 
     return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
 }
