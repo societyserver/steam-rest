@@ -35,7 +35,7 @@ mapping execute(mapping vars)
     }
 
     if (o && vars->type)
-        result += OBJ("/scripts/type-handler.pike")->run(vars->type, o, vars->data) || ([]);
+        result[vars->type] = OBJ("/scripts/type-handler.pike")->run(vars->type, o, vars->data);
     else if (o && o->get_class() == "User")
         result += handle_user(o, vars);
     else if (o && o->get_class() == "Group")
