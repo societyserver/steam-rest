@@ -29,6 +29,8 @@ mapping execute(mapping vars)
     }
     else if (vars->request[0] == '/')
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
+    else if (vars->request == "")
+        o = this_user();
     else
     {
         o = GROUP(vars->request);
@@ -109,8 +111,6 @@ mapping describe_object(object o, int|void show_details)
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
-    if (o->query_attribute("event"))
-        desc->type = "event";
 
     if (o->get_class() == "User")
     {
@@ -136,8 +136,6 @@ mapping describe_object(object o, int|void show_details)
                 desc->members = describe_object(o->get_members(CLASS_USER)[*]);
             if (o->get_parent())
                 desc->parent = describe_object(o->get_parent());
-            if (o->query_attribute("event"))
-                desc->event=o->query_attribute("event");
         }
     }
 
@@ -212,9 +210,6 @@ mapping prune_attributes(object o)
 string|object postgroup(object group, mapping post)
 {
     werror("(REST postgroup) %O\n", post);
-    if (post->newgroup)
-        return "old API for creating groups is no longer supported";
-
     if (post->type && this()->get_object()["handle_group_"+post->type])
         return this()->get_object()["handle_group_"+post->type](group, post);
     else
@@ -254,14 +249,6 @@ string|object handle_group_event(object group, mapping post)
     group->set_attribute("event", group->query_attribute("event")+post->event);
     return group;
 }
-
-
-void makeevent(object group, mapping data)
-{
-    werror("(REST making an event)\n");
-    group->set_attribute("event", data);
-}
-
 
 mapping handle_login(mapping vars)
 {
