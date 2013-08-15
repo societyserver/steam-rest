@@ -14,6 +14,7 @@ mapping execute(mapping vars)
     if (GROUP("coder")->is_virtual_member(this_user()))
         result->debug = ([ "trace":({}) ]);
 
+    result->request = vars->request;
     result->__version = _get_version();
 
     if (vars->__body)
@@ -57,10 +58,7 @@ mapping execute(mapping vars)
     else if (o)
         result += handle_path(o, vars);
     else
-    {
         result->error = "request not found";
-        result->request = vars->request;
-    }
 
     werror("(rest) %O\n", result);
 
