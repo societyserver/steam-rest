@@ -28,37 +28,40 @@ mapping execute(mapping vars)
     {
         result += this()->get_object()["handle_"+vars->request](vars);
     }
-    else if (vars->request[0] == '/')
-        o = _Server->get_module("filepath:url")->path_to_object(vars->request);
-    else if (vars->request == "")
-        o = this_user();
     else
     {
-        o = GROUP(vars->request);
-        if (!o)
-            o = USER(vars->request);
-    }
+        if (vars->request[0] == '/')
+            o = _Server->get_module("filepath:url")->path_to_object(vars->request);
+        else if (vars->request == "")
+            o = this_user();
+        else
+        {
+            o = GROUP(vars->request);
+            if (!o)
+                o = USER(vars->request);
+        }
 
-    mixed type_result;
-    if (o)
-    {
-        if (result->debug)
-            result->debug->trace += ({ "calling type-handler" });
-        type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
-        if (result->debug)
-            result->debug->type_result = type_result;
-    }
+        mixed type_result;
+        if (o)
+        {
+            if (result->debug)
+                result->debug->trace += ({ "calling type-handler" });
+            type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
+            if (result->debug)
+                result->debug->type_result = type_result;
+        }
 
-    if (mappingp(type_result))
-        result += type_result;
-    else if (o && o->get_class() == "User")
-        result += handle_user(o, vars);
-    else if (o && o->get_class() == "Group")
-        result += handle_group(o, vars);
-    else if (o)
-        result += handle_path(o, vars);
-    else
-        result->error = "request not found";
+        if (mappingp(type_result))
+            result += type_result;
+        else if (o && o->get_class() == "User")
+            result += handle_user(o, vars);
+        else if (o && o->get_class() == "Group")
+            result += handle_group(o, vars);
+        else if (o)
+            result += handle_path(o, vars);
+        else
+            result->error = "request not found";
+    }
 
     werror("(rest) %O\n", result);
 
