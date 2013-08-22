@@ -45,7 +45,7 @@ mapping execute(mapping vars)
         if (o)
         {
             if (result->debug)
-                result->debug->trace += ({ "calling type-handler" });
+                result->debug->trace += ({ "calling type-handler", vars->__internal->request_method, o->describe(), vars->data });
             type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
             if (result->debug)
                 result->debug->type_result = type_result;
