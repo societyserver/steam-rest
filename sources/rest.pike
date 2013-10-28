@@ -179,7 +179,7 @@ mapping handle_path(object o, mapping vars)
         result->environment = describe_object(o->get_environment());
 
     if (o->get_object_class() & CLASS_CONTAINER)
-        result->inventory = describe_object(o->get_inventory()[*]);
+        result->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_DOCUMENT))[*]);
 
     return result;
 }
