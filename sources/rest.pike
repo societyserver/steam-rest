@@ -4,7 +4,7 @@ inherit "classes/Script";
 
 mapping execute(mapping vars)
 {
-    werror("(WE WON'T REST %O)\n", vars);
+    werror("(WE WON'T REST %O)\n", vars->request);
     mapping result = ([]);
     object o;
 
@@ -14,7 +14,6 @@ mapping execute(mapping vars)
     if (GROUP("coder")->is_virtual_member(this_user()))
         result->debug = ([ "trace":({}) ]);
 
-    result->request = vars->request;
     result->__version = _get_version();
 
     if (vars->__body)
@@ -28,39 +27,37 @@ mapping execute(mapping vars)
     {
         result += this()->get_object()["handle_"+vars->request](vars);
     }
+    else if (vars->request[0] == '/')
+        o = _Server->get_module("filepath:url")->path_to_object(vars->request);
     else
     {
-        if (vars->request[0] == '/')
-            o = _Server->get_module("filepath:url")->path_to_object(vars->request);
-        else if (vars->request == "")
-            o = this_user();
-        else
-        {
-            o = GROUP(vars->request);
-            if (!o)
-                o = USER(vars->request);
-        }
+        o = GROUP(vars->request);
+        if (!o)
+            o = USER(vars->request);
+    }
 
-        mixed type_result;
-        if (o)
-        {
-            if (result->debug)
-                result->debug->trace += ({ "calling type-handler", vars->__internal->request_method, o->describe(), vars->__data });
-            type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->__data);
-            if (result->debug)
-                result->debug->type_result = type_result;
-        }
+    mixed type_result;
+    if (o)
+    {
+        if (result->debug)
+            result->debug->trace += ({ "calling type-handler" });
+        type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
+        if (result->debug)
+            result->debug->type_result = type_result;
+    }
 
-        if (mappingp(type_result))
-            result += type_result;
-        else if (o && o->get_class() == "User")
-            result += handle_user(o, vars);
-        else if (o && o->get_class() == "Group")
-            result += handle_group(o, vars);
-        else if (o)
-            result += handle_path(o, vars);
-        else
-            result->error = "request not found";
+    if (mappingp(type_result))
+        result += type_result;
+    else if (o && o->get_class() == "User")
+        result += handle_user(o, vars);
+    else if (o && o->get_class() == "Group")
+        result += handle_group(o, vars);
+    else if (o)
+        result += handle_path(o, vars);
+    else
+    {
+        result->error = "request not found";
+        result->request = vars->request;
     }
 
     werror("(rest) %O\n", result);
@@ -68,7 +65,7 @@ mapping execute(mapping vars)
     if (result->debug)
         result->debug->request = vars - ([ "fp":true ]);
 
-    return ([ "data":Standards.JSON.encode(result), "type":"application/json" ]);
+    return ([ "data":string_to_utf8(Standards.JSON.encode(result)), "type":"application/json" ]);
 }
 
 mapping handle_user(object user, mapping vars)
@@ -112,6 +109,8 @@ mapping describe_object(object o, int|void show_details)
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
+    if (o->query_attribute("event"))
+        desc->type = "event";
 
     if (o->get_class() == "User")
     {
@@ -137,6 +136,8 @@ mapping describe_object(object o, int|void show_details)
                 desc->members = describe_object(o->get_members(CLASS_USER)[*]);
             if (o->get_parent())
                 desc->parent = describe_object(o->get_parent());
+            if (o->query_attribute("event"))
+                desc->event=o->query_attribute("event");
         }
     }
 
@@ -147,6 +148,9 @@ mapping describe_object(object o, int|void show_details)
 
         if (show_details && o->query_attribute("DOC_MIME_TYPE")[..3]=="text")
             catch { desc->content = o->get_content(); };
+
+//        if (show_details && o->query_attribute("DOC_MIME_TYPE")=="application/json")
+//            catch { desc->data = o->get_content(); };
     }
 
     return desc;
@@ -211,6 +215,9 @@ mapping prune_attributes(object o)
 string|object postgroup(object group, mapping post)
 {
     werror("(REST postgroup) %O\n", post);
+    if (post->newgroup)
+        return "old API for creating groups is no longer supported";
+
     if (post->type && this()->get_object()["handle_group_"+post->type])
         return this()->get_object()["handle_group_"+post->type](group, post);
     else
@@ -250,6 +257,14 @@ string|object handle_group_event(object group, mapping post)
     group->set_attribute("event", group->query_attribute("event")+post->event);
     return group;
 }
+
+
+void makeevent(object group, mapping data)
+{
+    werror("(REST making an event)\n");
+    group->set_attribute("event", data);
+}
+
 
 mapping handle_login(mapping vars)
 {
