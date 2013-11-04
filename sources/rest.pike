@@ -7,6 +7,7 @@ mapping execute(mapping vars)
     werror("(WE WON'T REST %O)\n", vars->request);
     mapping result = ([]);
     object o;
+    string path_info;
 
     result->me = describe_object(this_user());
     catch{ result->me->session = this_user()->get_session_id(); };
@@ -28,7 +29,12 @@ mapping execute(mapping vars)
         result += this()->get_object()["handle_"+vars->request](vars);
     }
     else if (vars->request[0] == '/')
+    {
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
+        werror("(path_to_object %s %O)\n", vars->request, o);
+        if (!o)
+            [o, path_info] = get_path_info(vars->request);
+    }
     else
     {
         o = GROUP(vars->request);
@@ -41,9 +47,12 @@ mapping execute(mapping vars)
     {
         if (result->debug)
             result->debug->trace += ({ "calling type-handler" });
-        type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, vars->data);
+        type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, path_info, vars->data);
         if (result->debug)
-            result->debug->type_result = type_result;
+            if (mappingp(type_result))
+                result->debug->type_result = type_result->debug;
+            else
+                result->debug->type_result = type_result;
     }
 
     if (mappingp(type_result))
@@ -53,7 +62,7 @@ mapping execute(mapping vars)
     else if (o && o->get_class() == "Group")
         result += handle_group(o, vars);
     else if (o)
-        result += handle_path(o, vars);
+        result += handle_path(o, vars, path_info);
     else
     {
         result->error = "request not found";
@@ -156,11 +165,17 @@ mapping describe_object(object o, int|void show_details)
     return desc;
 }
 
-mapping handle_path(object o, mapping vars)
+mapping handle_path(object o, mapping vars, void|string path_info)
 {
+    mapping result = ([]);
+    if (path_info)
+    {
+        result->error = "can not find "+path_info;
+        return result;
+    }
+
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
-    mapping result = ([]);
 
     if (vars->__data && vars->__data->update)
     {
@@ -454,3 +469,22 @@ mixed _get_version()
     return ({ "2013-07-09-1", Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short() });
 }
 
+array get_path_info(string path)
+{
+
+    object parent = OBJ("/");
+    object o;
+    string path_info;
+    array restpath = (path/"/")-({""});
+
+    while (sizeof(restpath) && (o = parent->get_object_byname(restpath[0])))
+    {
+        parent = o;
+        restpath = restpath[1..];
+    }
+    if (sizeof(restpath))
+        path_info = restpath * "/";
+
+    werror("(get_path_info %O %O)\n", parent, path_info);
+    return ({ parent, path_info });
+}
