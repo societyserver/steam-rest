@@ -99,7 +99,7 @@ mapping handle_group(object group, mapping vars)
     catch{ result->documents = describe_object(group->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
     result->subgroups = describe_object(group->get_sub_groups()[*]);
     if (err)
-       result->error = sprintf("%O", err[0]);
+       result->error = sprintf("handle_group %O", err[0]);
     if (objectp(res))
         result->res = describe_object(res);
     else if (res)
@@ -222,7 +222,7 @@ mapping prune_attributes(object o)
                 pruned[attribute] = ([ "oid":pruned[attribute]->get_object_id() ]);
                 catch{ pruned[attribute] = describe_object(pruned[attribute]); };
             }
-        } 
+        }
     }
     return pruned;
 }
@@ -260,8 +260,12 @@ string|object handle_group_post(object group, mapping post)
             return "renaming groups not yet supported";
         return group;
     }
-    else
+    else if ( stringp(post->action) )
         return sprintf("action %s not supported", post->action);
+    else if ( !post->action )
+        return sprintf("action missing");
+    else
+        return sprintf("action %O malformed", post->action);
 }
 
 string|object handle_group_event(object group, mapping post)
@@ -387,27 +391,27 @@ mapping handle_register(mapping vars)
                     else
                     {
                         string activationemail = activationmsg->get_content();
-                        mapping templ_vars = 
+                        mapping templ_vars =
                             ([ "(:userid:)":newuser->get_identifier(),
                                "(:activate:)":(string)activation,
                                "(:fullname:)":newuser->query_attribute("USER_FULLNAME")||"",
                                "(:email:)":newuser->query_attribute("USER_EMAIL"),
-                               "(:group:)":group->query_attribute("OBJ_DESC") ]); 
+                               "(:group:)":group->query_attribute("OBJ_DESC") ]);
 
                         if (!templ_vars["(:group:)"] || !sizeof(templ_vars["(:group:)"]))
                             templ_vars["(:group:)"] = group->get_identifier();
 
                         object from = group->get_admins()[0];
                         activationemail = replace(activationemail, templ_vars);
-                        string mailfrom = sprintf("%s@%s", 
+                        string mailfrom = sprintf("%s@%s",
                                                 from->get_identifier(),
                                                 _Server->get_server_name());
 
                         array recipients = ({ newuser }) + group->get_admins();
 
                         recipients->mail(activationemail,
-                                      activationmsg->query_attribute("OBJ_DESC"), 
-                                      mailfrom, 
+                                      activationmsg->query_attribute("OBJ_DESC"),
+                                      mailfrom,
                                       activationmsg->query_attribute("DOC_MIME_TYPE"));
 
                     }
