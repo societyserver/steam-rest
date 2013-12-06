@@ -165,7 +165,7 @@ mapping describe_object(object o, int|void show_details, int|void tree)
 
     if (o->get_object_class() & CLASS_CONTAINER && tree)
     {
-        desc->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_CONTAINER), 0, 1)[*]);
+        desc->inventory = describe_object(o->get_inventory_by_class(CLASS_CONTAINER)[*], 0, 1);
     }
 
     return desc;
@@ -203,7 +203,7 @@ mapping handle_path(object o, mapping vars, void|string path_info)
         result->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_DOCUMENT))[*]);
 
     if (o->get_object_class() & CLASS_CONTAINER && path_info == "tree")
-        result->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_CONTAINER), 0, 1)[*]);
+        result->inventory = describe_object(o->get_inventory_by_class(CLASS_CONTAINER)[*], 0, 1);
 
     return result;
 }
