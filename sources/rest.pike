@@ -32,9 +32,10 @@ mapping execute(mapping vars)
     {
         o = _Server->get_module("filepath:url")->path_to_object(vars->request);
         werror("(path_to_object %s %O)\n", vars->request, o);
+        array path_info_debug;
         if (!o)
-            [o, path_info] = get_path_info(vars->request);
-        result->path_info_debug = ({ sprintf("%O", o), path_info });
+            [o, path_info, path_info_debug] = get_path_info(vars->request);
+        result->path_info_debug = path_info_debug;
     }
     else
     {
@@ -483,7 +484,9 @@ mixed _get_version()
 array get_path_info(string path)
 {
 
+    array debug = ({});
     object parent = OBJ("/");
+    debug += ({ sprintf("%O", parent) });
     object o;
     string path_info;
     array restpath = (path/"/")-({""});
@@ -491,11 +494,12 @@ array get_path_info(string path)
     while (sizeof(restpath) && (o = parent->get_object_byname(restpath[0])))
     {
         parent = o;
+        debug += ({ sprintf("%O", parent) });
         restpath = restpath[1..];
     }
     if (sizeof(restpath))
         path_info = restpath * "/";
 
     werror("(get_path_info %O %O)\n", parent, path_info);
-    return ({ parent, path_info });
+    return ({ parent, path_info, debug });
 }
