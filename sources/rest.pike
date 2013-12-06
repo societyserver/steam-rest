@@ -34,7 +34,6 @@ mapping execute(mapping vars)
         werror("(path_to_object %s %O)\n", vars->request, o);
         if (!o)
             [o, path_info] = get_path_info(vars->request);
-        result->path_info_debug = ({ sprintf("%O", o->this()), path_info, indices(o) });
     }
     else
     {
@@ -499,5 +498,7 @@ array get_path_info(string path)
         path_info = restpath * "/";
 
     werror("(get_path_info %O %O)\n", parent, path_info);
+    // for some reason,  OBJ("/home")->get_object_byname("foo") does not return a proxy object.
+    // ->this() fixes that, while on proxy objects it returns itself
     return ({ parent->this(), path_info });
 }
