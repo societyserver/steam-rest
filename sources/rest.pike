@@ -108,7 +108,7 @@ mapping handle_group(object group, mapping vars)
     return result;
 }
 
-mapping describe_object(object o, int|void show_details)
+mapping describe_object(object o, int|void show_details, int|void tree)
 {
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
@@ -163,6 +163,11 @@ mapping describe_object(object o, int|void show_details)
 //            catch { desc->data = o->get_content(); };
     }
 
+    if (o->get_object_class() & CLASS_CONTAINER && tree)
+    {
+        desc->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_CONTAINER), 0, 1)[*]);
+    }
+
     return desc;
 }
 
@@ -196,6 +201,9 @@ mapping handle_path(object o, mapping vars, void|string path_info)
 
     if (o->get_object_class() & CLASS_CONTAINER)
         result->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_DOCUMENT))[*]);
+
+    if (o->get_object_class() & CLASS_CONTAINER && path_info == "tree")
+        result->inventory = describe_object((o->get_inventory_by_class(CLASS_CONTAINER)+o->get_inventory_by_class(CLASS_CONTAINER), 0, 1)[*]);
 
     return result;
 }
