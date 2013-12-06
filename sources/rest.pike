@@ -176,7 +176,7 @@ mapping handle_path(object o, mapping vars, void|string path_info)
 
     if (path_info == "tree")
     {
-        result->error = o;
+        result->error = sprintf("%O", o);
         return result;
     }
 
