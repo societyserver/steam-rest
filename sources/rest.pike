@@ -170,7 +170,7 @@ mapping handle_path(object o, mapping vars, void|string path_info)
     mapping result = ([]);
     if (path_info && path_info != "tree")
     {
-        result->error = "can not find "+path_info;
+        result->error = ({ "can not find "+path_info, sprintf("%O", o) });
         return result;
     }
 
