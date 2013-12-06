@@ -497,5 +497,5 @@ array get_path_info(string path)
         path_info = restpath * "/";
 
     werror("(get_path_info %O %O)\n", parent, path_info);
-    return ({ parent, path_info });
+    return ({ parent->this(), path_info });
 }
