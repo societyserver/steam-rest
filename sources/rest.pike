@@ -494,8 +494,8 @@ array get_path_info(string path)
     while (sizeof(restpath) && (o = parent->get_object_byname(restpath[0])))
     {
         parent = o;
-        debug += ({ sprintf("%O", parent) });
         restpath = restpath[1..];
+        debug += ({ ([ sprintf("%O", parent):restpath[0] ]) });
     }
     if (sizeof(restpath))
         path_info = restpath * "/";
