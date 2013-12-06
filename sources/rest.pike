@@ -34,6 +34,7 @@ mapping execute(mapping vars)
         werror("(path_to_object %s %O)\n", vars->request, o);
         if (!o)
             [o, path_info] = get_path_info(vars->request);
+        result->path_info_debug = ({ sprintf("%O", o), path_info });
     }
     else
     {
