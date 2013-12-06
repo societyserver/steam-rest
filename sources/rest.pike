@@ -168,7 +168,7 @@ mapping describe_object(object o, int|void show_details)
 mapping handle_path(object o, mapping vars, void|string path_info)
 {
     mapping result = ([]);
-    if (path_info)
+    if (path_info && path_info != "tree")
     {
         result->error = "can not find "+path_info;
         return result;
