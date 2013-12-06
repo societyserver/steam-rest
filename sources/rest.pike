@@ -175,12 +175,6 @@ mapping handle_path(object o, mapping vars, void|string path_info)
         return result;
     }
 
-    if (path_info == "tree")
-    {
-        result->error = sprintf("%O", o);
-        return result;
-    }
-
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
 
