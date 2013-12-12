@@ -107,7 +107,7 @@ mapping handle_group(object group, mapping vars)
     return result;
 }
 
-mapping describe_object(object o, int|void show_details, int|void tree)
+mapping describe_object(object o, int|void show_details, int|void tree, int|void icon)
 {
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
@@ -118,7 +118,8 @@ mapping describe_object(object o, int|void show_details, int|void tree)
     desc->title = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
-    //desc->icon = describe_object(o->get_icon());
+    if (!icon)
+        desc->icon = describe_object(o->get_icon(), 0, 0, 1);
     if (o->query_attribute("event"))
         desc->type = "event";
 
