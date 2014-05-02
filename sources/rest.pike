@@ -66,8 +66,8 @@ mapping execute(mapping vars)
     else
     {
         result->error = "request not found";
-        result->request = vars->request;
     }
+    result->request = vars->request;
 
     werror("(rest) %O\n", result);
 
