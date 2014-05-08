@@ -171,6 +171,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     if (o->get_object_class() & CLASS_CONTAINER)
     {
         desc->documents = sizeof(o->get_inventory_by_class(CLASS_CONTAINER|CLASS_DOCUMENT|CLASS_LINK));
+        desc->links = sizeof(o->get_inventory_by_class(CLASS_DOCEXTERN));
     }
 
     return desc;
