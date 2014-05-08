@@ -206,7 +206,7 @@ mapping handle_path(object o, mapping vars, void|string path_info)
         result->environment = describe_object(o->get_environment());
 
     if (o->get_object_class() & CLASS_ROOM)
-        result->inventory = describe_object((o->get_inventory_by_class(CLASS_ROOM)+o->get_inventory_by_class(CLASS_DOCUMENT))[*]);
+        result->inventory = describe_object((o->get_inventory_by_class(CLASS_ROOM|CLASS_DOCUMENT|CLASS_DOCEXTERN))[*]);
 
     if (o->get_object_class() & CLASS_ROOM && path_info == "tree")
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
