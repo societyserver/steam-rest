@@ -164,6 +164,9 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
 //            catch { desc->data = o->get_content(); };
     }
 
+    if (o->get_object_class() & CLASS_DOCEXTERN)
+       desc->url = o->query_attribute("OBJ_URL");
+
     if (o->get_object_class() & CLASS_ROOM && tree)
     {
         desc->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
