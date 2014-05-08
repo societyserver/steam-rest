@@ -165,7 +165,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     }
 
     if (o->get_object_class() & CLASS_DOCEXTERN)
-       desc->url = o->query_attribute("OBJ_URL");
+       desc->url = o->query_attribute("DOC_EXTERN_URL");
 
     if (o->get_object_class() & CLASS_ROOM && tree)
     {
