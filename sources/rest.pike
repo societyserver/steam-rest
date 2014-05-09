@@ -4,7 +4,7 @@ inherit "classes/Script";
 
 mapping execute(mapping vars)
 {
-    werror("(WE WON'T REST %O)\n", vars->request);
+    werror("(WE WON'T REST (%O %O))\n", vars->__internal->request_method, vars->request);
     mapping result = ([]);
     object o;
     string path_info;
