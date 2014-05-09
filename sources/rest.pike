@@ -16,6 +16,7 @@ mapping execute(mapping vars)
         result->debug = ([ "trace":({}) ]);
 
     result->__version = _get_version();
+    result->__date = Calendar.now()->format_time_short();
 
     if (vars->__body)
     {
