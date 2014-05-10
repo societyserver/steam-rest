@@ -183,7 +183,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
 
 mapping handle_path(object o, mapping vars, void|string path_info)
 {
-    werror("(REST handle_path %O %O %O)", o, o->get_object_class(), o->get_object_class() & CLASS_ROOM|CLASS_CONTAINER);
+    werror("(REST handle_path %O)", o);
     mapping result = ([]);
     if (path_info && path_info != "tree")
     {
