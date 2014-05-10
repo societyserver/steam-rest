@@ -69,6 +69,7 @@ mapping execute(mapping vars)
         result->error = "request not found";
     }
     result->request = vars->request;
+    result["request-method"] = vars->__internal->request_method;
 
     werror("(rest) %O\n", result);
 
