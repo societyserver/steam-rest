@@ -63,7 +63,7 @@ mapping execute(mapping vars)
     else if (o && o->get_class() == "Group")
         result += handle_group(o, vars);
     else if (o)
-        result += handle_path(o, vars, path_info);
+        result += handle_path(o, vars->__internal->request_method, vars, path_info);
     else
     {
         result->error = "request not found";
@@ -182,9 +182,9 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     return desc;
 }
 
-mapping handle_path(object o, mapping vars, void|string path_info)
+mapping handle_path(object o, string request_method, mapping vars, void|string path_info)
 {
-    werror("(REST handle_path %O)", o);
+    werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
     if (path_info && path_info != "tree")
     {
