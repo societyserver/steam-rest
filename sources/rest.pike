@@ -210,7 +210,7 @@ mapping handle_path(object o, mapping vars, void|string path_info)
     if (o->get_environment())
         result->environment = describe_object(o->get_environment());
 
-    if (o->get_object_class() & CLASS_ROOM|CLASS_CONTAINER)
+    if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM|CLASS_DOCUMENT|CLASS_DOCEXTERN)[*]);
 
     if (o->get_object_class() & CLASS_ROOM && path_info == "tree")
