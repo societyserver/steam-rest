@@ -208,6 +208,7 @@ mapping handle_path(object o, string request_method, mapping vars, void|string p
         result->update = update;
       break;
       case "PUT":
+        result->PUT = "i don't know what to do";
       break;
       case "DELETE": // delete after describing the object
       break;
