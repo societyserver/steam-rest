@@ -31,7 +31,7 @@ mapping execute(mapping vars)
     }
     else if (vars->request[0] == '/')
     {
-        o = _Server->get_module("filepath:url")->path_to_object(vars->request);
+        o = _Server->get_module("filepath:tree")->path_to_object(vars->request);
         werror("(path_to_object %s %O)\n", vars->request, o);
         if (!o)
             [o, path_info] = get_path_info(vars->request);
