@@ -240,7 +240,7 @@ mapping handle_path(object o, string request_method, mapping data, void|string p
     {
       mixed err = catch(o->delete());
       if (err)
-        result->error = err;
+        result->error = sprintf("%O", err);
     }
 
     return result;
