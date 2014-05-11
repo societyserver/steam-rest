@@ -212,6 +212,7 @@ mapping handle_path(object o, string request_method, mapping data, void|string p
           object factory = _Server->get_factory(CLASS_DOCEXTERN);
           object newlink = factory->execute( ([ "name":data->name, "url":data->url]) );
           newlink->move(o);
+          result->PUT=sprintf("%O", newlink);
         }
         if (data->name && !data->url && data->content)
           // create document
