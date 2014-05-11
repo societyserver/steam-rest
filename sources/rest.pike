@@ -237,7 +237,11 @@ mapping handle_path(object o, string request_method, mapping data, void|string p
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
 
     if (request_method == "DELETE")
-      o->delete();
+    {
+      mixed err = catch(o->delete());
+      if (err)
+        result->error = err;
+    }
 
     return result;
 }
