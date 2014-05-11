@@ -195,9 +195,10 @@ mapping handle_path(object o, string request_method, mapping vars, void|string p
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
 
-    if (vars->__data && vars->__data->update)
+    switch (request_method)
     {
-        mapping update = vars->__data->update;
+      case "POST":
+        mapping update = vars->__data;
         if (update->name && update->name != o->get_identifier())
             o->set_identifier(update->name);
         if (update->title && update->title != o->query_attribute("OBJ_DESC"))
@@ -205,6 +206,11 @@ mapping handle_path(object o, string request_method, mapping vars, void|string p
         if (update->content && update->content != o->get_content())
             o->set_content(update->content);
         result->update = update;
+      break;
+      case "PUT":
+      break;
+      case "DELETE": // delete after describing the object
+      break;
     }
 
     result->object = describe_object(o, 1);
@@ -216,6 +222,9 @@ mapping handle_path(object o, string request_method, mapping vars, void|string p
 
     if (o->get_object_class() & CLASS_ROOM && path_info == "tree")
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
+
+    if (request_method == "DELETE")
+      o->delete();
 
     return result;
 }
