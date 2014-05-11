@@ -63,7 +63,7 @@ mapping execute(mapping vars)
     else if (o && o->get_class() == "Group")
         result += handle_group(o, vars);
     else if (o)
-        result += handle_path(o, vars->__internal->request_method, vars, path_info);
+        result += handle_path(o, vars->__internal->request_method, vars->__data, path_info);
     else
     {
         result->error = "request not found";
@@ -182,7 +182,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     return desc;
 }
 
-mapping handle_path(object o, string request_method, mapping vars, void|string path_info)
+mapping handle_path(object o, string request_method, mapping data, void|string path_info)
 {
     werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
@@ -198,17 +198,27 @@ mapping handle_path(object o, string request_method, mapping vars, void|string p
     switch (request_method)
     {
       case "POST":
-        mapping update = vars->__data;
-        if (update->name && update->name != o->get_identifier())
-            o->set_identifier(update->name);
-        if (update->title && update->title != o->query_attribute("OBJ_DESC"))
-            o->set_attribute("OBJ_DESC", update->title);
-        if (update->content && update->content != o->get_content())
-            o->set_content(update->content);
-        result->update = update;
+        if (data->name && data->name != o->get_identifier())
+            o->set_identifier(data->name);
+        if (data->title && data->title != o->query_attribute("OBJ_DESC"))
+            o->set_attribute("OBJ_DESC", data->title);
+        if (data->content && data->content != o->get_content())
+            o->set_content(data->content);
+        result->data = data;
       break;
       case "PUT":
-        result->PUT = "i don't know what to do";
+        if (data->name && data->url && !data->content)
+        {
+          object factory = _Server->get_factory(CLASS_DOCEXTERN);
+          object newlink = factory->execute( ([ "name":data->name, "url":data->url]) );
+          newlink->move(o);
+        }
+        if (data->name && !data->url && data->content)
+          // create document
+        if (data->name && !data->url && !data->content && o->get_object_class() & CLASS_ROOM)
+          // create room
+        if (data->name && !data->url && !data->content && o->get_object_class() & CLASS_CONTAINER)
+          // create container
       break;
       case "DELETE": // delete after describing the object
       break;
