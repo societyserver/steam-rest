@@ -564,7 +564,7 @@ mapping handle_annotations(object o, void|array path_info)
         {
             mapping res = handle_annotations(oa, path_info);
             if (sizeof(res->annotations))
-                result->annotations += ({ res });
+                result->annotations += res->annotations;
         }
       }
     };
