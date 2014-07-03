@@ -562,7 +562,7 @@ mapping handle_annotations(object o, void|array path_info)
       {
         array all = handle_annotations(o->get_inventory()[*], path_info);
         if (sizeof(all->annotations))
-            result->annotations += all->annotations;
+            result->annotations += all->annotations - ({});
       }
     };
     return result;
