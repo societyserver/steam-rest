@@ -46,8 +46,7 @@ mapping execute(mapping vars)
     mixed type_result;
     if (o && path_info && sizeof(path_info) && path_info[0]=="annotation")
     {
-      type_result = ([ "annotations":describe_object(o->get_annotations()[*]) ]);
-      result->debug = ([ "annotations":"here be dragons"]);
+      type_result = ([ "annotations":handle_annotations(o, path_info[1..]) ]);
     }
     else if (o)
     {
@@ -546,3 +545,26 @@ array get_path_info(string path)
     // ->this() fixes that, while on proxy objects it returns itself
     return ({ parent->this(), path_info });
 }
+
+array handle_annotations(object o, void|array path_info)
+{
+  array annotations = ({});
+  foreach (o->get_annotations();; object a)
+  {
+    mapping annotation = describe_annotation(a);
+    annotation->annotations = handle_annotations(a);
+    annotations += ({ annotation });
+  }
+  return annotations;
+}
+
+mapping describe_annotation(object o)
+{
+  mapping annotation = ([]);
+  annotation->subject = o->query_attribute("OBJ_NAME");
+  annotation->desc = o->query_attribute("OBJ_DESC");
+  annotation->content = o->get_content();
+
+  return annotation;
+}
+
