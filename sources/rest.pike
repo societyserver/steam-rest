@@ -1,6 +1,7 @@
 inherit "classes/Script";
 #include <database.h>
 #include <classes.h>
+#include <access.h>
 
 mapping execute(mapping vars)
 {
