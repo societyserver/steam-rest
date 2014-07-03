@@ -121,12 +121,12 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     mapping desc = ([]);
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
-    desc->title = o->query_attribute("OBJ_DESC");
-    desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
     if (!_SECURITY->check_access(o, this_user(), SANCTION_READ,ROLE_READ_ALL, false))
         return desc;
 
+    desc->title = o->query_attribute("OBJ_DESC");
+    desc->name = o->query_attribute("OBJ_NAME");
     if (show_details)
         desc += prune_attributes(o);
     if (!icon)
