@@ -567,6 +567,9 @@ mapping handle_annotations(object o, void|array path_info)
 
 array get_annotations(object o)
 {
+  if (!_SECURITY->check_access(o, this_user(), SANCTION_READ,ROLE_READ_ALL, false))
+    return ({});
+
   array annotations = ({});
   foreach (o->get_annotations();; object a)
   {
