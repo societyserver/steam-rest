@@ -552,6 +552,13 @@ mapping handle_annotations(object o, void|array path_info)
     mapping obj = describe_object(o);
     obj->annotations = get_annotations(o);
     result->annotations += ({ obj });
+
+    if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
+    {
+      array all = handle_annotations(o->get_inventory()[*], path_info);
+      result->annotations += all->annotations;
+    }
+
     return result;
 }
 
