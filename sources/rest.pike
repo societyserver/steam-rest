@@ -572,7 +572,7 @@ mapping handle_annotations(object o, void|array path_info)
     return result;
 }
 
-array get_annotations(object o, int all)
+array get_annotations(object o, void|int all)
 {
   array annotations = ({});
 
