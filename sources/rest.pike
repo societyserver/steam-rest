@@ -595,9 +595,9 @@ mapping describe_annotation(object o)
   annotation->oid = o->get_object_id();
   annotation->publication_date = o->query_attribute("OBJ_CREATION_TIME");
   annotation->modified = o->query_attribute("OBJ_LAST_CHANGED");
-  annotation->authors = o->get_object_byname("content")->query_attribute("DOC_AUTHORS");
-  annotation->version = o->get_object_byname("content")->query_attribute("DOC_VERSION");
-  annotation->cmodified = o->get_object_byname("content")->query_attribute("DOC_LAST_MODIFIED");
+  annotation->authors =   o->query_attribute("DOC_AUTHORS");
+  annotation->version =   o->query_attribute("DOC_VERSION");
+  annotation->cmodified = o->query_attribute("DOC_LAST_MODIFIED");
 
 
   return annotation;
