@@ -589,7 +589,7 @@ array get_annotations(object o, void|int all)
 mapping describe_annotation(object o)
 {
   mapping annotation = ([]);
-  annotation->name = o->query_attribute("OBJ_NAME");
+  //annotation->name = o->query_attribute("OBJ_NAME");
   annotation->subject = o->query_attribute("OBJ_DESC");
   annotation->content = o->get_content();
   annotation->oid = o->get_object_id();
