@@ -1,8 +1,6 @@
 inherit "classes/Script";
 #include <database.h>
 #include <classes.h>
-#include <access.h>
-#include <roles.h>
 
 mapping execute(mapping vars)
 {
@@ -117,16 +115,10 @@ mapping handle_group(object group, mapping vars)
 
 mapping describe_object(object o, int|void show_details, int|void tree, int|void icon)
 {
+    if (!_SECURITY->check_access(o, this_user(), SANCTION_READ,ROLE_READ_ALL, false))
+
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
-    desc->oid = o->get_object_id();
-    desc->path = get_path(o);
-    if (!_SECURITY->check_access(o, this_user(), SANCTION_READ,ROLE_READ_ALL, false))
-        return desc;
-
-    desc->class = o->get_class();
-    desc->title = o->query_attribute("OBJ_DESC");
-    desc->name = o->query_attribute("OBJ_NAME");
     if (show_details)
         desc += prune_attributes(o);
     if (!icon)
@@ -554,8 +546,9 @@ array get_path_info(string path)
 mapping handle_annotations(object o, void|array path_info)
 {
     mapping result = ([ "annotations":({}) ]);
-    mapping obj = describe_object(o);
-    obj->annotations = get_annotations(o);
+    mapping obj;
+    catch{ obj = describe_object(o); };
+    catch{ obj->annotations = get_annotations(o); };
     result->annotations += ({ obj });
 
     if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
@@ -569,9 +562,6 @@ mapping handle_annotations(object o, void|array path_info)
 
 array get_annotations(object o)
 {
-  if (!_SECURITY->check_access(o, this_user(), SANCTION_READ,ROLE_READ_ALL, false))
-    return ({});
-
   array annotations = ({});
   foreach (o->get_annotations();; object a)
   {
