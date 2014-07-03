@@ -589,9 +589,16 @@ array get_annotations(object o, void|int all)
 mapping describe_annotation(object o)
 {
   mapping annotation = ([]);
-  annotation->subject = o->query_attribute("OBJ_NAME");
-  annotation->desc = o->query_attribute("OBJ_DESC");
+  annotation->name = o->query_attribute("OBJ_NAME");
+  annotation->subject = o->query_attribute("OBJ_DESC");
   annotation->content = o->get_content();
+  annotation->oid = o->get_object_id();
+  annotation->publication_date = o->query_attribute("OBJ_CREATION_TIME");
+  annotation->modified = o->query_attribute("OBJ_LAST_CHANGED");
+  annotation->authors = o->get_object_byname("content")->query_attribute("DOC_AUTHORS");
+  annotation->version = o->get_object_byname("content")->query_attribute("DOC_VERSION");
+  annotation->cmodified = o->get_object_byname("content")->query_attribute("DOC_LAST_MODIFIED");
+
 
   return annotation;
 }
