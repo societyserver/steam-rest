@@ -47,7 +47,7 @@ mapping execute(mapping vars)
     if (o && path_info && sizeof(path_info) && path_info[0]=="foo-annotations")
     {
       type_result = ([ "annotations":"here be dragons" ]);
-      result->debug = "annotations";
+      result->debug = ([ "annotations":"here be dragons"]);
     }
     else if (o)
     {
