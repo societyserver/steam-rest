@@ -551,7 +551,7 @@ mapping handle_annotations(object o, void|array path_info)
     mapping result = ([ "annotations":({}) ]);
     mapping obj = describe_object(o);
     catch{ obj = describe_object(o); };
-    catch{ obj->annotations = get_annotations(o);
+    catch{ obj->annotations = get_annotations(o); }
 
     catch
     {
