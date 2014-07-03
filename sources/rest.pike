@@ -553,11 +553,14 @@ mapping handle_annotations(object o, void|array path_info)
     catch{ obj = describe_object(o); };
     catch{ obj->annotations = get_annotations(o);
 
-    if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
+    catch
     {
-      array all = handle_annotations(o->get_inventory()[*], path_info);
-      result->annotations += all->annotations;
-    }
+      if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
+      {
+        array all = handle_annotations(o->get_inventory()[*], path_info);
+        result->annotations += all->annotations;
+      }
+    };
 
     return result;
 }
