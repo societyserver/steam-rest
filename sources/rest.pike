@@ -549,19 +549,22 @@ array get_path_info(string path)
 mapping handle_annotations(object o, void|array path_info)
 {
     mapping result = ([ "annotations":({}) ]);
-    mapping obj = describe_object(o);
+    mapping obj = ([]);
+
     catch{ obj = describe_object(o); };
     catch{ obj->annotations = get_annotations(o); };
+    if (sizeof(obj))
+        result->annotations += ({ obj });
 
     catch
     {
       if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
       {
         array all = handle_annotations(o->get_inventory()[*], path_info);
-        result->annotations += all->annotations;
+        if (sizeof(all->annotations))
+            result->annotations += all->annotations;
       }
     };
-
     return result;
 }
 
