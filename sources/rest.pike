@@ -115,12 +115,15 @@ mapping handle_group(object group, mapping vars)
 
 mapping describe_object(object o, int|void show_details, int|void tree, int|void icon)
 {
-    if (!_SECURITY->check_access(o, this_user(), SANCTION_READ,ROLE_READ_ALL, false))
-
     function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
     if (show_details)
         desc += prune_attributes(o);
+    desc->oid = o->get_object_id();
+    desc->path = get_path(o);
+    desc->title = o->query_attribute("OBJ_DESC");
+    desc->name = o->query_attribute("OBJ_NAME");
+    desc->class = o->get_class();
     if (!icon)
         desc->icon = describe_object(o->get_icon(), 0, 0, 1);
     if (o->query_attribute("event"))
@@ -546,10 +549,9 @@ array get_path_info(string path)
 mapping handle_annotations(object o, void|array path_info)
 {
     mapping result = ([ "annotations":({}) ]);
-    mapping obj;
+    mapping obj = describe_object(o);
     catch{ obj = describe_object(o); };
-    catch{ obj->annotations = get_annotations(o); };
-    result->annotations += ({ obj });
+    catch{ obj->annotations = get_annotations(o);
 
     if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
     {
