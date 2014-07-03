@@ -553,7 +553,7 @@ mapping handle_annotations(object o, void|array path_info)
 
     catch{ obj = describe_object(o); };
     catch{ obj->annotations = get_annotations(o); };
-    if (sizeof(obj))
+    if (obj->annotations && sizeof(obj->annotations))
         result->annotations += ({ obj });
 
     catch
