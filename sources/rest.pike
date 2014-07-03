@@ -7,7 +7,7 @@ mapping execute(mapping vars)
     werror("(WE WON'T REST (%O %O))\n", vars->__internal->request_method, vars->request);
     mapping result = ([]);
     object o;
-    string path_info;
+    array path_info;
 
     result->me = describe_object(this_user());
     catch{ result->me->session = this_user()->get_session_id(); };
@@ -44,7 +44,11 @@ mapping execute(mapping vars)
     }
 
     mixed type_result;
-    if (o)
+    if (o && path_info && sizeof(path_info) && path_info[0]=="annotations")
+    {
+      //
+    }
+    else if (o)
     {
         if (result->debug)
             result->debug->trace += ({ "calling type-handler" });
@@ -182,13 +186,13 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     return desc;
 }
 
-mapping handle_path(object o, string request_method, mapping data, void|string path_info)
+mapping handle_path(object o, string request_method, mapping data, void|array path_info)
 {
     werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
-    if (path_info && path_info != "tree")
+    if (path_info && sizeof(path_info) && path_info[0] != "tree")
     {
-        result->error = ({ "can not find "+path_info, sprintf("%O", o) });
+        result->error = ({ "can not find path_info", path_info, sprintf("%O", o) });
         return result;
     }
 
@@ -233,7 +237,7 @@ mapping handle_path(object o, string request_method, mapping data, void|string p
     if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM|CLASS_DOCUMENT|CLASS_DOCEXTERN)[*]);
 
-    if (o->get_object_class() & CLASS_ROOM && path_info == "tree")
+    if (o->get_object_class() & CLASS_ROOM && path_info && sizeof(path_info) && path_info[0]=="tree")
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
 
     if (request_method == "DELETE")
@@ -525,7 +529,7 @@ array get_path_info(string path)
 
     object parent = OBJ("/");
     object o;
-    string path_info;
+    array path_info;
     array restpath = (path/"/")-({""});
 
     while (sizeof(restpath) && (o = parent->get_object_byname(restpath[0])))
@@ -534,7 +538,7 @@ array get_path_info(string path)
         restpath = restpath[1..];
     }
     if (sizeof(restpath))
-        path_info = restpath * "/";
+        path_info = restpath;
 
     werror("(get_path_info %O %O)\n", parent, path_info);
     // for some reason,  OBJ("/home")->get_object_byname("foo") does not return a proxy object.
