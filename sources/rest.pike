@@ -556,18 +556,15 @@ mapping handle_annotations(object o, void|array path_info)
     if (obj->annotations && sizeof(obj->annotations))
         result->annotations += ({ obj });
 
-    catch
+    if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
     {
-      if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
+      foreach (o->get_inventory();; object oa)
       {
-        foreach (o->get_inventory();; object oa)
-        {
-            mapping res = handle_annotations(oa, path_info);
-            if (sizeof(res->annotations))
-                result->annotations += res->annotations;
-        }
+          mapping res = handle_annotations(oa, path_info);
+          if (sizeof(res->annotations))
+              result->annotations += res->annotations;
       }
-    };
+    }
     return result;
 }
 
