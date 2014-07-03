@@ -46,7 +46,7 @@ mapping execute(mapping vars)
     mixed type_result;
     if (o && path_info && sizeof(path_info) && path_info[0]=="annotation")
     {
-      type_result = ([ "annotations":handle_annotations(o, path_info[1..]) ]);
+      type_result = handle_annotations(o, path_info[1..]);
     }
     else if (o)
     {
@@ -546,13 +546,21 @@ array get_path_info(string path)
     return ({ parent->this(), path_info });
 }
 
-array handle_annotations(object o, void|array path_info)
+mapping handle_annotations(object o, void|array path_info)
+{
+    mapping result = ([]);
+    result->object = describe_object(o);
+    result->annotations = get_annotations(o);
+    return result;
+}
+
+array get_annotations(object o)
 {
   array annotations = ({});
   foreach (o->get_annotations();; object a)
   {
     mapping annotation = describe_annotation(a);
-    annotation->annotations = handle_annotations(a);
+    annotation->annotations = get_annotations(a);
     annotations += ({ annotation });
   }
   return annotations;
