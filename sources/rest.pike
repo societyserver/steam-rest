@@ -561,8 +561,7 @@ mapping handle_annotations(object o, void|array path_info)
       if (path_info && sizeof(path_info) && path_info[0]=="all" && o->get_object_class() & CLASS_CONTAINER)
       {
         array all = handle_annotations(o->get_inventory()[*], path_info);
-        if (sizeof(all->annotations))
-            result->annotations += all->annotations - ({});
+        result->annotations += all->annotations - ({});
       }
     };
     return result;
