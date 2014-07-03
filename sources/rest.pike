@@ -46,7 +46,7 @@ mapping execute(mapping vars)
     mixed type_result;
     if (o && path_info && sizeof(path_info) && path_info[0]=="annotation")
     {
-      type_result = ([ "annotations":o->get_annotations() ]);
+      type_result = ([ "annotations":describe_object(o->get_annotations()[*]) ]);
       result->debug = ([ "annotations":"here be dragons"]);
     }
     else if (o)
