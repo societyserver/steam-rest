@@ -548,9 +548,10 @@ array get_path_info(string path)
 
 mapping handle_annotations(object o, void|array path_info)
 {
-    mapping result = ([ "annotations":([]) ]);
-    result->annotations->object = describe_object(o);
-    result->annotations->object->annotations = get_annotations(o);
+    mapping result = ([ "annotations":({}) ]);
+    mapping obj = describe_object(o);
+    obj->annotations = get_annotations(o);
+    result->annotations += ({ describe_object(o) });
     return result;
 }
 
