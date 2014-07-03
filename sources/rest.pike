@@ -2,6 +2,7 @@ inherit "classes/Script";
 #include <database.h>
 #include <classes.h>
 #include <access.h>
+#include <roles.h>
 
 mapping execute(mapping vars)
 {
