@@ -37,6 +37,8 @@ mapping execute(mapping vars)
         werror("(path_to_object %s %O)\n", vars->request, o);
         if (!o)
             [o, path_info] = get_path_info(vars->request);
+        else if (vars->request[sizeof(vars->request)-11..]=="annotations")
+            path_info = ({ "annotations" });
     }
     else
     {
@@ -46,7 +48,7 @@ mapping execute(mapping vars)
     }
 
     mixed type_result;
-    if (o && path_info && sizeof(path_info) && path_info[0]=="annotation")
+    if (o && path_info && sizeof(path_info) && path_info[0]=="annotations")
     {
       type_result = handle_annotations(o, path_info[1..]);
     }
