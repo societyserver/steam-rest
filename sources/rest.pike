@@ -2,6 +2,8 @@ inherit "classes/Script";
 #include <database.h>
 #include <classes.h>
 
+function get_path = _Server->get_module("filepath:url")->object_to_filename;
+
 mapping execute(mapping vars)
 {
     werror("(WE WON'T REST (%O %O))\n", vars->__internal->request_method, vars->request);
@@ -115,7 +117,6 @@ mapping handle_group(object group, mapping vars)
 
 mapping describe_object(object o, int|void show_details, int|void tree, int|void icon)
 {
-    function get_path = _Server->get_module("filepath:url")->object_to_filename;
     mapping desc = ([]);
     if (show_details)
         desc += prune_attributes(o);
@@ -590,6 +591,7 @@ mapping describe_annotation(object o)
 {
   mapping annotation = ([]);
   //annotation->name = o->query_attribute("OBJ_NAME");
+  result->path = get_path(o);      
   annotation->subject = o->query_attribute("OBJ_DESC");
   annotation->content = o->get_content();
   annotation->oid = o->get_object_id();
