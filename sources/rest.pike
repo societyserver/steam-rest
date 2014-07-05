@@ -87,9 +87,9 @@ mapping execute(mapping vars)
     string data = Standards.JSON.encode((["error":"unknown error"]));
     mixed err = catch
     {
-      //data = Standards.JSON.encode(result);
+      data = Standards.JSON.encode(result);
     };
-    if (err)
+    /* if (err)
       data = err[0];
      /* data = sprintf("%O", ([ "error":err[0], 
                               "trace": err, 
