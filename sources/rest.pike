@@ -563,7 +563,7 @@ array get_path_info(string path)
     return ({ parent->this(), path_info });
 }
 
-mapping handle_annotations(object o, void|array path_info)
+mapping handle_annotations(object o, void|array path_info, void|int need_annotations)
 {
     int all = path_info && sizeof(path_info) && path_info[0]=="all";
     mapping result = ([ "annotations":({}) ]);
@@ -577,8 +577,8 @@ mapping handle_annotations(object o, void|array path_info)
         obj = describe_object(o, 1);
     };
     catch{ obj->annotations = get_annotations(o, !all); };
-    //if (obj->annotations && sizeof(obj->annotations))
-    result->annotations += ({ obj });
+    if (!need_annotations || (obj->annotations && sizeof(obj->annotations)))
+        result->annotations += ({ obj });
 
     catch
     {
