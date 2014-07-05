@@ -85,18 +85,21 @@ mapping execute(mapping vars)
         result->debug->request = vars - ([ "fp":true ]);
 
     string data = Standards.JSON.encode((["error":"unknown error"]));
+    type = "application/json"
     mixed err = catch
     {
+
       data = Standards.JSON.encode(result);
     };
     if (err)
+    {
       data = sprintf("%O", ([ "error":err[0],
                               "trace": err,
                               "data": result ]));
-    data = Standards.JSON.encode((["error":data ]));
-    
+      type = "text/plain";
+    }
 
-    return ([ "data":string_to_utf8(data), "type":"application/json" ]);
+    return ([ "data":string_to_utf8(data), "type":type ]);
 }
 
 mapping handle_user(object user, mapping vars)
