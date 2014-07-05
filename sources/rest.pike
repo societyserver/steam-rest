@@ -84,7 +84,17 @@ mapping execute(mapping vars)
     if (result->debug)
         result->debug->request = vars - ([ "fp":true ]);
 
-    return ([ "data":string_to_utf8(Standards.JSON.encode(result)), "type":"application/json" ]);
+    string data;
+    mixed err = catch
+    {
+      data = Standards.JSON.encode(result);
+    };
+    if (err)
+      data = Standards.JSON.encode(([ "error":err[0], 
+                                      "trace":sprintf("%O", err), 
+                                      "data":sprintf("%O", result) ]));
+
+    return ([ "data":string_to_utf8(data), "type":"application/json" ]);
 }
 
 mapping handle_user(object user, mapping vars)
@@ -556,7 +566,7 @@ mapping handle_annotations(object o, void|array path_info)
     mapping obj = ([]);
 
     catch
-    { 
+    {
       if (o->get_annotating())
         obj = describe_annotation(o);
       else
