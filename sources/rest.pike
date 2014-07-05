@@ -586,7 +586,7 @@ mapping handle_annotations(object o, void|array path_info, void|int need_annotat
       {
         foreach (o->get_inventory();; object oa)
         {
-            mapping res = handle_annotations(oa, path_info);
+            mapping res = handle_annotations(oa, path_info, 1);
             if (res->annotations->annotations && sizeof(res->annotations->annotations))
                 result->annotations += res->annotations;
         }
