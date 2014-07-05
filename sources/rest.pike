@@ -603,7 +603,7 @@ array get_annotations(object o, void|int all)
   {
     mapping annotation = describe_annotation(a);
     if (all)
-      annotation->annotations = get_annotations(a);
+      annotation->annotations = get_annotations(a, all);
     annotations += ({ annotation });
   }
   return annotations;
