@@ -599,6 +599,7 @@ mapping describe_annotation(object o)
 {
   mapping annotation = ([]);
   //annotation->name = o->query_attribute("OBJ_NAME");
+  annotation->parent = o->get_annotating()->query_attribute("OBJ_PATH");
   annotation->path = o->query_attribute("OBJ_PATH");
   annotation->subject = o->query_attribute("OBJ_DESC");
   annotation->content = o->get_content();
