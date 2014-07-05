@@ -89,7 +89,7 @@ mapping execute(mapping vars)
     {
       data = Standards.JSON.encode(result);
     };
-    /* if (err)
+    if (err)
       data = err[0];
      /* data = sprintf("%O", ([ "error":err[0], 
                               "trace": err, 
