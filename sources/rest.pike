@@ -558,9 +558,10 @@ mapping handle_annotations(object o, void|array path_info)
     catch
     { 
       if (o->get_annotating())
-        obj = describe_annotation(o); };
+        obj = describe_annotation(o);
       else
-        obj = describe_object(o, 1); };
+        obj = describe_object(o, 1);
+    };
     catch{ obj->annotations = get_annotations(o, !all); };
     if (obj->annotations && sizeof(obj->annotations))
         result->annotations += ({ obj });
