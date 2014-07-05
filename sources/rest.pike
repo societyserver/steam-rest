@@ -85,7 +85,7 @@ mapping execute(mapping vars)
         result->debug->request = vars - ([ "fp":true ]);
 
     string data = Standards.JSON.encode((["error":"unknown error"]));
-    type = "application/json";
+    string type = "application/json";
     mixed err = catch
     {
       data = Standards.JSON.encode(result);
