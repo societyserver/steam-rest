@@ -84,10 +84,10 @@ mapping execute(mapping vars)
     if (result->debug)
         result->debug->request = vars - ([ "fp":true ]);
 
-    string data;
+    string data = "foo";
     mixed err = catch
     {
-      data = Standards.JSON.encode(result);
+      //data = Standards.JSON.encode(result);
     };
     if (err)
       data = err[0];
