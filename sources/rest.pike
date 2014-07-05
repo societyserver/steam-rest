@@ -90,11 +90,11 @@ mapping execute(mapping vars)
       data = Standards.JSON.encode(result);
     };
     if (err)
-      data = Standards.JSON.encode((["error":err[0] ]));
-     /* data = sprintf("%O", ([ "error":err[0], 
-                              "trace": err, 
+      data = sprintf("%O", ([ "error":err[0],
+                              "trace": err,
                               "data": result ]));
-     */
+    data = Standards.JSON.encode((["error":data ]));
+    
 
     return ([ "data":string_to_utf8(data), "type":"application/json" ]);
 }
