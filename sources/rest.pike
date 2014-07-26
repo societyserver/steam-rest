@@ -42,9 +42,11 @@ mapping execute(mapping vars)
     }
     else
     {
-        o = GROUP(vars->request);
+        array request_args = vars->request / "/";
+        o = GROUP(request_args[0]);
         if (!o)
-            o = USER(vars->request);
+            o = USER(request_args[0]);
+        path_info = request_args[1..];
     }
 
     mixed type_result;
