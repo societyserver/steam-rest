@@ -1,0 +1,22 @@
+<html>
+<head>
+ <script src="lib/angular-1.2.16/angular.js"></script>
+ <script src="lib/angular/localStorageModule.js"></script>
+ <script src="js/steam.js"></script>
+ <script src="js/calendar.js"></script>
+ <link rel="stylesheet" type="text/css" href="css/calendar.css"></link>
+</head>
+<body>
+  <div class="community-calendar" ng-app="myapp">
+    <div ng-controller="MyCtrl">
+      <ul>
+        <li class="cc-event" ng-repeat="event in events">
+          <div class="cc-event-title">{{ event.title }}</div>
+          <div class="cc-event-date">{{ event.date }}</div>
+          <pre>{{ event }} </pre>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

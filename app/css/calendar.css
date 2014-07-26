@@ -1,0 +1,4 @@
+.community-calendar li { list-style-type: none; }
+.cc-event { border: 1px solid black; }
+.cc-event-title { font-weight: bold; }
+.cc-event-date {}
