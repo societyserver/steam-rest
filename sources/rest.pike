@@ -194,6 +194,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
 
     if (o->get_object_class() & CLASS_DOCEXTERN)
        desc->url = o->query_attribute("DOC_EXTERN_URL");
+  };
 
     if (o->get_object_class() & CLASS_ROOM && tree)
     {
@@ -204,7 +205,6 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         desc->documents = sizeof(o->get_inventory_by_class(CLASS_CONTAINER|CLASS_DOCUMENT|CLASS_LINK));
         desc->links = sizeof(o->get_inventory_by_class(CLASS_DOCEXTERN));
     }
-  };
 
     return desc;
 }
