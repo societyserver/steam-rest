@@ -384,7 +384,7 @@ mapping handle_settings(mapping vars)
                 if (this_user()->query_attribute(key) != value)
                     this_user()->set_attribute(key, value);
             }
-        result->settings = this_user()->query_attributes() & (< "OBJ_DESC", "OBJ_NAME", "USER_ADRESS", "USER_EMAIL", "USER_FIRSTNAME", "USER_FULLNAME", "USER_LANGUAGE" >);
+        result->settings = this_user()->query_attributes() & (< "OBJ_DESC", "OBJ_NAME", "USER_ADRESS", "USER_EMAIL", "USER_FIRSTNAME", "USER_FULLNAME", "USER_LANGUAGE", "techgrind" >);
     }
     return result;
 }
