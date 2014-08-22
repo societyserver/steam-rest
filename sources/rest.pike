@@ -142,7 +142,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         desc += prune_attributes(o);
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
-    desc->title = o->query_attribute("OBJ_DESC");
+    desc->description = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
     if (!icon)
@@ -181,6 +181,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
 
     if (o->get_object_class() & CLASS_DOCUMENT)
     {
+        desc->title = o->query_attribute("OBJ_DESC");
         desc->mime_type = o->query_attribute("DOC_MIME_TYPE");
         catch { desc->size = sizeof(o->get_content()); };
 
