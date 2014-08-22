@@ -125,7 +125,7 @@ mapping handle_group(object group, mapping vars, void|array path_info)
     catch{ result->documents = describe_object(group->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
     result->subgroups = describe_object(group->get_sub_groups()[*]);
     if (search(path_info, "members") >= 0)
-        result->members = describe_object(group->get_members()[*]);
+        result->members = describe_object(group->get_members(CLASS_USER)[*]);
     if (err)
        result->error = sprintf("handle_group %O", err[0]);
     if (objectp(res))
