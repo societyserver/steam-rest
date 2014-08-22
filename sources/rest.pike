@@ -71,7 +71,7 @@ mapping execute(mapping vars)
     else if (o && o->get_class() == "User")
         result += handle_user(o, vars);
     else if (o && o->get_class() == "Group")
-        result += handle_group(o, vars);
+        result += handle_group(o, vars, path_info);
     else if (o)
         result += handle_path(o, vars->__internal->request_method, vars->__data, path_info);
     else
@@ -111,7 +111,7 @@ mapping handle_user(object user, mapping vars)
     return result;
 }
 
-mapping handle_group(object group, mapping vars)
+mapping handle_group(object group, mapping vars, array ath_info)
 {
     mixed err;
     mixed res;
@@ -124,6 +124,8 @@ mapping handle_group(object group, mapping vars)
     catch{ result->menu = describe_object(group->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_ROOM)[*]); };
     catch{ result->documents = describe_object(group->query_attribute("GROUP_WORKROOM")->get_inventory_by_class(CLASS_DOCHTML)[*], 1); };
     result->subgroups = describe_object(group->get_sub_groups()[*]);
+    if (search(path_info, "members") >= 0)
+        result->members = describe_object(group->get_members()[*]);
     if (err)
        result->error = sprintf("handle_group %O", err[0]);
     if (objectp(res))
