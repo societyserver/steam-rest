@@ -140,6 +140,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     mapping desc = ([]);
     if (show_details)
         desc += prune_attributes(o);
+  catch {
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
     desc->title = o->query_attribute("OBJ_DESC");
@@ -149,6 +150,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         catch(desc->icon = describe_object(o->get_icon(), 0, 0, 1));
     if (o->query_attribute("event"))
         desc->type = "event";
+  };
 
     if (o->get_class() == "User")
     {
