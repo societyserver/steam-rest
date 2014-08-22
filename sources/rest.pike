@@ -111,7 +111,7 @@ mapping handle_user(object user, mapping vars)
     return result;
 }
 
-mapping handle_group(object group, mapping vars, array ath_info)
+mapping handle_group(object group, mapping vars, void|array path_info)
 {
     mixed err;
     mixed res;
