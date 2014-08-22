@@ -146,7 +146,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
     if (!icon)
-        desc->icon = describe_object(o->get_icon(), 0, 0, 1);
+        catch(desc->icon = describe_object(o->get_icon(), 0, 0, 1));
     if (o->query_attribute("event"))
         desc->type = "event";
 
