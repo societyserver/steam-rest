@@ -159,7 +159,6 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         if (show_details && o == this_user())
             desc->trail = describe_object(Array.uniq(reverse(o->query_attribute("trail")))[*]);
     }
-  };
 
     if (o->get_class() == "Group")
     {
@@ -180,6 +179,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         if (o->query_attribute("event"))
             desc->event=o->query_attribute("event");
     }
+  };
 
     if (o->get_object_class() & CLASS_DOCUMENT)
     {
