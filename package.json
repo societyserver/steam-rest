@@ -1,0 +1,22 @@
+{
+  "name": "TechGrind",
+  "version": "0.1.1",
+  "private": true,
+  "dependencies": {
+    "express": "",
+    "coffee-script": "",
+    "morgan": "",
+    "compression": "",
+    "method-override": "",
+    "body-parser": "",
+    "serve-static": "",
+    "errorhandler": ""
+  },
+  "production_dirs": {
+    "coffee_src": "src/",
+    "src": "app/",
+    "dest": "app_production/"
+  },
+  "devDependencies": {
+  }
+}
