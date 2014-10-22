@@ -1,3 +1,18 @@
+about this project
+==================
+
+this project contains a set of examples and tests for the RESTful API for the
+sTeam server.
+
+the code is written in coffeescript and needs node.js only for coffeescript translation.  
+deployment can be done as static javascript files, and does not need any kind of dynamic server for the front-end.
+
+the back-end is a RESTful API written for the sTeam server as used by techgrind.asia
+
+
+development instructions
+========================
+
 step 1: install node
 
     http://nodejs.org/download/
