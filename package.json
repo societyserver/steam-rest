@@ -10,7 +10,8 @@
     "method-override": "",
     "body-parser": "",
     "serve-static": "",
-    "errorhandler": ""
+    "errorhandler": "",
+    "bower": ""
   },
   "production_dirs": {
     "coffee_src": "src/",
@@ -18,5 +19,8 @@
     "dest": "app_production/"
   },
   "devDependencies": {
+  },
+  "scripts": {
+    "postinstall": "bower install"
   }
 }
