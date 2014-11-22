@@ -2,3 +2,6 @@ logs/
 !.gitkeep
 node_modules/
 .DS_Store
+bower_components/
+app/lib/components/
+*.swp
