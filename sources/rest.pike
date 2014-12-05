@@ -214,7 +214,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
 {
     werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
-    if (path_info && sizeof(path_info) && path_info[0] != "tree")
+    if (path_info && sizeof(path_info) && path_info[0] != "tree" && request_method != "PUT" || sizeof(path_info) > 1)
     {
         result->error = ({ sprintf("can not find path %{/%s%} in %s", path_info, get_path(o)), path_info, describe_object(o, 0, 0, 1) });
         return result;
