@@ -216,7 +216,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
     mapping result = ([]);
     if (path_info && sizeof(path_info) && path_info[0] != "tree")
     {
-        result->error = ({ "can not find path_info", path_info, sprintf("%O", o) });
+        result->error = ({ "can not find path_info", path_info, describe_object(o) });
         return result;
     }
 
@@ -635,4 +635,3 @@ mapping describe_annotation(object o)
 
   return annotation;
 }
-
