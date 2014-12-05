@@ -235,7 +235,10 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
         result->data = data;
       break;
       case "PUT":
-        if (data->name && data->url && !data->content)
+        if (data->url && !data->content &&
+            (sizeof(path_info)==1 && !data->name || // path_info and not name is new form
+             !sizeof(path_info) && data->name))     // name and not path_info is old form,
+                                                    // violates REST
         {
           object factory = _Server->get_factory(CLASS_DOCEXTERN);
           object newlink = factory->execute( ([ "name":data->name, "url":data->url]) );
@@ -244,11 +247,18 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
           result->PUT=sprintf("%O", newlink);
         }
         if (data->name && !data->url && data->content)
-          // create document
-        if (data->name && !data->url && !data->content && o->get_object_class() & CLASS_ROOM)
+          ;// create document
+        if (!data && sizeof(path_info)==1 && o->get_object_class() & CLASS_ROOM)
+        {
           // create room
+          object factory = _Server->get_factory(CLASS_ROOM);
+          object newroom = factory->execute( ([ "name":path_info[0] ]) );
+          newroom->set_attribute("OBJ_DESC", data->title);
+          newroom->move(o);
+          result->PUT=describe_object(newroom);
+        }
         if (data->name && !data->url && !data->content && o->get_object_class() & CLASS_CONTAINER)
-          // create container
+          ;// create container
       break;
       case "DELETE": // delete after describing the object
       break;
