@@ -216,7 +216,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
     mapping result = ([]);
     if (path_info && sizeof(path_info) && path_info[0] != "tree")
     {
-        result->error = ({ "can not find path_info", path_info, describe_object(o, 0, 0, 1) });
+        result->error = ({ sprintf("can not find path %{/%s%} in %s", path_info, get_path(o)), path_info, describe_object(o, 0, 0, 1) });
         return result;
     }
 
