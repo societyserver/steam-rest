@@ -235,7 +235,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
         result->data = data;
       break;
       case "PUT":
-        if (data->url && !data->content &&
+        if (data && data->url && !data->content &&
             (sizeof(path_info)==1 && !data->name || // path_info and not name is new form
              !sizeof(path_info) && data->name))     // name and not path_info is old form,
                                                     // violates REST
@@ -246,7 +246,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
           newlink->move(o);
           result->PUT=sprintf("%O", newlink);
         }
-        if (data->name && !data->url && data->content)
+        if (data && data->name && !data->url && data->content)
           ;// create document
         if (!data && sizeof(path_info)==1 && o->get_object_class() & CLASS_ROOM)
         {
@@ -257,7 +257,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
           newroom->move(o);
           result->PUT=describe_object(newroom);
         }
-        if (data->name && !data->url && !data->content && o->get_object_class() & CLASS_CONTAINER)
+        if (data && data->name && !data->url && !data->content && o->get_object_class() & CLASS_CONTAINER)
           ;// create container
       break;
       case "DELETE": // delete after describing the object
