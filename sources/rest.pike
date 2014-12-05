@@ -135,17 +135,17 @@ mapping handle_group(object group, mapping vars, void|array path_info)
     return result;
 }
 
-mapping describe_object(object o, int|void show_details, int|void tree, int|void icon)
+mapping describe_object(object o, int|void show_details, int|void tree, int|void no_icon)
 {
     mapping desc = ([]);
-    if (show_details)
+    if (show_details > 0)
         desc += prune_attributes(o);
     desc->oid = o->get_object_id();
     desc->path = get_path(o);
     desc->description = o->query_attribute("OBJ_DESC");
     desc->name = o->query_attribute("OBJ_NAME");
     desc->class = o->get_class();
-    if (!icon)
+    if (!no_icon)
         catch(desc->icon = describe_object(o->get_icon(), 0, 0, 1));
     if (o->query_attribute("event"))
         desc->type = "event";
@@ -216,7 +216,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
     mapping result = ([]);
     if (path_info && sizeof(path_info) && path_info[0] != "tree")
     {
-        result->error = ({ "can not find path_info", path_info, describe_object(o) });
+        result->error = ({ "can not find path_info", path_info, describe_object(o, 0, 0, 1) });
         return result;
     }
 
