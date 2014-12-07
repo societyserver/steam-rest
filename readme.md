@@ -13,10 +13,9 @@ the back-end is a RESTful API written for the sTeam server as used by techgrind.
 development instructions
 ========================
 
-step 1: install node
+step 1: install node.js
 
     http://nodejs.org/download/
-
 
 
 step 2: clone the repo
@@ -48,3 +47,24 @@ so we can just say
 if the server is working you'll see:
 
     Listening on port 8000
+
+
+how to contribute your changes
+==============================
+
+fork the project on github
+
+clone the forked project to your computer
+
+    git clone https://github.com/<your name>/steam-rest
+
+follow the instructions above to set up your environment
+
+when you are properly set up you should be able to load http://localhost:8000/ in your browser
+
+each example should be a standalone application, so copy one example, and modify it.
+
+push changes to your repo frequently.
+
+when ready please file a merge request or notify the project developers about your contribution
+
