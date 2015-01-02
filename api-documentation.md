@@ -9,7 +9,7 @@ All requests to the API begin with `http://dev-back1.techgrind.asia/scripts/rest
 
 The debug method is a part of every response from the API. It looks like:
 
-```json
+```javascript
 "debug":{  
   "count":4, // Integer, number of items in main response array
   "request":{  
@@ -57,7 +57,7 @@ The debug method is a part of every response from the API. It looks like:
 
 Gives information about the user requesting data from the API. Default response shown below:
 
-```json
+```javascript
 "me":{  
   "name":"guest",
   "documents":0,
