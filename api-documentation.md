@@ -1,6 +1,6 @@
 # REST API for the community calender
 
-All requests to the API begin with `http://dev-back1.techgrind.asia/scripts/rest.pike`. Each response has `debug`, `me`, and other objects with meta details, and then the actual response.
+All requests to the API begin with `http://dev-back1.techgrind.asia/scripts/rest.pike?request=`. Each response has `debug`, `me`, and other objects with meta details, and then the actual response.
 
 
 ## Meta 
@@ -82,10 +82,11 @@ Gives information about the user requesting data from the API. Default response 
 }
 ```
 
-## Techgrind Events
+## Getting Events
 
-URL: `?request=techgrind.events`
-Data in: `event-list`.
+Type: GET
+URL: `techgrind.events`  
+Data in: `event-list`.  
 
 `event-list` is an array of object, each having:
 
@@ -121,3 +122,51 @@ date | String. Based on milliseconds since Jan 1
 city | String. City, example "beijing"
 class | String. Group
 oid | Integer. 4 digit unique ID.
+
+
+A specific event can be seen by adding it's ID to `techgrind.events`. To see information of an event with the ID 'wednesday-meetup', a GET request to `techgrind.events.wednesday-meetup` will show data.
+
+
+## Login
+
+Type: GET
+URL: `login`  
+Response data in: `me`.  
+
+The request to `login` contains an header that is a JSON stringified base64 encryption of `"id:password"`. 
+
+~~~~~~~
+JSON.stringify(Authorization: 'Basic '+window.btoa(userid + ":" + password));
+// This is sent to 'login' as an header
+~~~~~~~
+
+If the login details are valid, the server responds with updated user information in the `me` object (described above).
+
+If no data is sent to `login`, it is effectively same as **logging the user out**.
+
+
+## Submitting Events
+
+Type: PUT
+URL: `techgrind.events`
+
+A PUT request is made to `techgrind.events` that carries with it JSON that in the following format:
+
+Key | Description
+--- | ---
+name | The name of the event. 
+id | A unique identifier. Only alphabets and dash (-). Usually the name without uppercase letters, special characters, and spaces.
+description | A longer description for the event.
+region | Location of the event. Can be one of: Asia-Pacific, Australia, Cambodia, China, Indonesia, India, Japan, Korea, Laos, Malaysia, New Zealand, Philippines, Singapore, Thailand, Vietnam
+category | Type of the event. Can be meetup, workshop, or conference.
+keywords | An array of keywords. Example: ['git', 'ubuntu']
+
+
+## Updating Events
+
+Type: POST
+URL: `techgrind.events.{{ event-id }}`.
+
+Events can be updated by making a POST request to the URL of the event with updated data (See "Getting Events").
+
+The POST request has the same complete structure as the response recieved from getting an event. If 
