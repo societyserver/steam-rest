@@ -26,34 +26,37 @@ function testMe (me) {
   expect(me.fullname).toEqual(jasmine.any(String));
 }
 
+function toBeStringIfExists(val) {
+  if ( val ) 
+    expect(val).toEqual(jasmine.any(String));
+}
+function toBeObjectIfExists(val) {
+  if ( val ) 
+    expect(val).toEqual(jasmine.any(Object));
+}
+
 frisby.create('Test events')
   .get('http://dev-back1.techgrind.asia/scripts/rest.pike?request=techgrind.events')
   .expectStatus(200)
   .expectJSON({
     "request": "techgrind.events",
-    "request_method": "GET",
+    "request-method": "GET",
     "debug": testDebug,
     "me": testMe,
   })
-  .expectJSONTypes('event_list.*', {
+  .expectJSONTypes('event-list.*', {
     "class": String,
     "title": String,
     "oid": Number,
     "name": String,
     "id": String,
-    "description": String,
-    "category": String,
+    "description": toBeStringIfExists,
+    "category": toBeStringIfExists,
     "path": String,
-    "eventid": String,
+    "eventid": toBeStringIfExists,
     "type": String,
-    "owner": function(val) { 
-      if ( val ) 
-        expect(val).toEqual(jasmine.any(String));
-    },
-    "events": function(val) {
-      if ( val ) 
-        expect(val).toEqual(jasmine.any(Object));
-    },
+    "owner": toBeStringIfExists,
+    "events": toBeObjectIfExists,
     "keywords": function(kw) {
       if ( kw ) {
         kw.forEach(function(word) {
