@@ -63,22 +63,7 @@ frisby.create('Test events')
           expect(word).toEqual(jasmine.any(String));
         })
       }
-    }
+    },
+    "schedule": toBeObjectIfExists
   })
   .toss();
-
-
-/*
-{  
-  "class":"Group",
-  "title":"curated events",
-  "oid":3977,
-  "name":"gap",
-  "id":"techgrind.events.gap",
-  "description":"Find your cofounders - partners - and hires!",
-  "category":"event",
-  "path":"/home/techgrind.events.gap",
-  "eventid":"techgrind.events.gap",
-  "type":"event"
-},
-*/
