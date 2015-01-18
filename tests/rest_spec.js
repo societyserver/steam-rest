@@ -1,5 +1,8 @@
 var frisby = require('frisby');
 
+//
+// Generic testing functions
+//
 function testDebug (d) {
   expect(d.count).toEqual(jasmine.any(Number));
   expect(d.request.request).toEqual(jasmine.any(String));
@@ -26,6 +29,10 @@ function testMe (me) {
   expect(me.fullname).toEqual(jasmine.any(String));
 }
 
+
+//
+// Useful helpers
+//
 function toBeStringIfExists(val) {
   if ( val ) 
     expect(val).toEqual(jasmine.any(String));
@@ -35,6 +42,10 @@ function toBeObjectIfExists(val) {
     expect(val).toEqual(jasmine.any(Object));
 }
 
+
+//
+// Actual Tests
+//
 frisby.create('Test techgrind.events to be well-formed')
   .get('http://dev-back1.techgrind.asia/scripts/rest.pike?request=techgrind.events')
   .expectStatus(200)
