@@ -35,7 +35,7 @@ function toBeObjectIfExists(val) {
     expect(val).toEqual(jasmine.any(Object));
 }
 
-frisby.create('Test events')
+frisby.create('Test techgrind.events to be well-formed')
   .get('http://dev-back1.techgrind.asia/scripts/rest.pike?request=techgrind.events')
   .expectStatus(200)
   .expectJSON({
