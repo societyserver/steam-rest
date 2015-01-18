@@ -68,3 +68,22 @@ push changes to your repo frequently.
 
 when ready please file a merge request or notify the project developers about your contribution
 
+
+=======
+testing
+=======
+
+[FrisbyJS](http://frisbyjs.com/) is used to test the API. It is run through [Jasmine](http://jasmine.github.io/) and is based on [nodejs](http://nodejs.org/).
+
+Once you have nodejs installed, run the following statement to install Frisby and Jasmine:
+
+```
+npm install -g jasmine-node frisby
+```
+
+Then execute the test by:
+
+```
+cd project/directory
+jasmine-node tests/
+```
