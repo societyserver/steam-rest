@@ -50,7 +50,22 @@ function testEvent(e) {
   toBeDateIfExists( e.date );
 
   toBeObjectIfExists( e.events );
-  toBeObjectIfExists( e.schedule );
+
+  if ( e.schedule ) {
+    e.schedule.forEach(function(schedule) {
+      expect( schedule.type ).toEqual( jasmine.any(String) );
+      expect( schedule.name ).toEqual( jasmine.any(String) );
+      expect( schedule.title ).toEqual( jasmine.any(String) );
+      expect( schedule.id ).toEqual( jasmine.any(String) );
+      expect( schedule.path ).toEqual( jasmine.any(String) );
+      expect( schedule['class'] ).toEqual( jasmine.any(String) );
+      expect( schedule.oid ).toEqual( jasmine.any(Number) );
+
+      toBeStringIfExists( schedule.address )
+
+      toBeDateIfExists( schedule.date );
+    });
+  }
   
   if ( e.keywords ) {
     e.keywords.forEach(function(word) {
@@ -120,11 +135,10 @@ frisby.create('Testing an instance of an event to be well-formed')
   .get('http://dev-back1.techgrind.asia/scripts/rest.pike?request=techgrind.events.blug-coding-for-fun')
   .expectStatus(200)
   .expectJSON({
-    "request": "techgrind.events/order-by-date",
+    "request": "techgrind.events.blug-coding-for-fun",
     "request-method": "GET",
     "debug": testDebug,
     "me": testMe,
     "event": testEvent
-    }
   })
   .toss();
