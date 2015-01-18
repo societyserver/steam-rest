@@ -31,7 +31,51 @@ frisby.create('Test events')
   .expectStatus(200)
   .expectJSON({
     "request": "techgrind.events",
+    "request_method": "GET",
     "debug": testDebug,
-    "me": testMe
+    "me": testMe,
+  })
+  .expectJSONTypes('event_list.*', {
+    "class": String,
+    "title": String,
+    "oid": Number,
+    "name": String,
+    "id": String,
+    "description": String,
+    "category": String,
+    "path": String,
+    "eventid": String,
+    "type": String,
+    "owner": function(val) { 
+      if ( val ) 
+        expect(val).toEqual(jasmine.any(String));
+    },
+    "events": function(val) {
+      if ( val ) 
+        expect(val).toEqual(jasmine.any(Object));
+    },
+    "keywords": function(kw) {
+      if ( kw ) {
+        kw.forEach(function(word) {
+          expect(word).toEqual(jasmine.any(String));
+        })
+      }
+    }
   })
   .toss();
+
+
+/*
+{  
+  "class":"Group",
+  "title":"curated events",
+  "oid":3977,
+  "name":"gap",
+  "id":"techgrind.events.gap",
+  "description":"Find your cofounders - partners - and hires!",
+  "category":"event",
+  "path":"/home/techgrind.events.gap",
+  "eventid":"techgrind.events.gap",
+  "type":"event"
+},
+*/
