@@ -129,8 +129,8 @@ A specific event can be seen by adding it's ID to `techgrind.events`. To see inf
 
 ## Login
 
-Type: GET
-URL: `login`  
+Type: GET  
+URL: `login`   
 Response data in: `me`.  
 
 The request to `login` contains an header that is a JSON stringified base64 encryption of `"id:password"`. 
@@ -147,7 +147,7 @@ If no data is sent to `login`, it is effectively same as **logging the user out*
 
 ## Submitting Events
 
-Type: PUT
+Type: PUT  
 URL: `techgrind.events`
 
 A PUT request is made to `techgrind.events` that carries with it JSON that in the following format:
@@ -164,7 +164,7 @@ keywords | An array of keywords. Example: ['git', 'ubuntu']
 
 ## Updating Events
 
-Type: POST
+Type: POST  
 URL: `techgrind.events.{{ event-id }}`.
 
 Events can be updated by making a POST request to the URL of the event with updated data (See "Getting Events").
