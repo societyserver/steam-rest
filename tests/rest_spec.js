@@ -114,3 +114,17 @@ frisby.create('Test techgrind.events/order-by-date to be well-formed')
     }
   })
   .toss();
+
+
+frisby.create('Testing an instance of an event to be well-formed')
+  .get('http://dev-back1.techgrind.asia/scripts/rest.pike?request=techgrind.events.blug-coding-for-fun')
+  .expectStatus(200)
+  .expectJSON({
+    "request": "techgrind.events/order-by-date",
+    "request-method": "GET",
+    "debug": testDebug,
+    "me": testMe,
+    "event": testEvent
+    }
+  })
+  .toss();
