@@ -100,7 +100,7 @@ mapping execute(mapping vars)
       type = "text/plain";
     }
 
-    return ([ "data":string_to_utf8(data), "type":type ]);
+    return ([ "data":data, "type":type ]);
 }
 
 mapping handle_user(object user, mapping vars)
