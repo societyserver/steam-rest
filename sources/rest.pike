@@ -94,9 +94,9 @@ mapping execute(mapping vars)
     };
     if (err)
     {
-      data = sprintf("%O", ([ "error":err[0],
-                              "trace": err,
-                              "data": result ]));
+      data = string_to_utf8(sprintf("%O", ([ "error":err[0],
+                                             "trace": err,
+                                             "data": result ])));
       type = "text/plain";
     }
 
