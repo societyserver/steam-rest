@@ -185,7 +185,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         desc->mime_type = o->query_attribute("DOC_MIME_TYPE");
         catch { desc->size = sizeof(o->get_content()); };
 
-        if (show_details && o->query_attribute("DOC_MIME_TYPE")[..3]=="text")
+        if (show_details && (<"text","source">)[(o->query_attribute("DOC_MIME_TYPE")/"/")[0]])
             catch { desc->content = o->get_content(); };
 
 //        if (show_details && o->query_attribute("DOC_MIME_TYPE")=="application/json")
