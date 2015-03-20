@@ -179,7 +179,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
             desc->event=o->query_attribute("event");
     }
 
-    if (o->get_object_class() & (CLASS_DOCUMENT|CLASS_DOCLPC))
+    if (o->get_object_class() & CLASS_DOCUMENT))
     {
         desc->title = o->query_attribute("OBJ_DESC");
         desc->mime_type = o->query_attribute("DOC_MIME_TYPE");
