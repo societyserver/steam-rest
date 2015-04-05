@@ -52,7 +52,7 @@ mapping execute(mapping vars)
     }
     else
     {
-        result->error = "request missing!"
+        result->error = "request missing!";
     }
 
     mixed type_result;
