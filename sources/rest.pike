@@ -20,6 +20,8 @@ mapping execute(mapping vars)
     result->__version = _get_version();
     result->__date = Calendar.now()->format_time_short();
 
+    
+
     if (vars->__body)
     {
         vars->_json = vars->__body;
@@ -31,7 +33,7 @@ mapping execute(mapping vars)
     {
         result += this()->get_object()["handle_"+vars->request](vars);
     }
-    else if (vars->request[0] == '/')
+    else if (stringp(vars->request) && vars->request[0] == '/')
     {
         o = _Server->get_module("filepath:tree")->path_to_object(vars->request);
         werror("(path_to_object %s %O)\n", vars->request, o);
@@ -40,13 +42,17 @@ mapping execute(mapping vars)
         else if (vars->request[sizeof(vars->request)-11..]=="annotations")
             path_info = ({ "annotations" });
     }
-    else
+    else if (stringp(vars->request))
     {
         array request_args = vars->request / "/";
         o = GROUP(request_args[0]);
         if (!o)
             o = USER(request_args[0]);
         path_info = request_args[1..];
+    }
+    else
+    {
+        result->error = "request missing!"
     }
 
     mixed type_result;
