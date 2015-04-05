@@ -50,10 +50,6 @@ mapping execute(mapping vars)
             o = USER(request_args[0]);
         path_info = request_args[1..];
     }
-    else
-    {
-        result->error = "request missing!";
-    }
 
     mixed type_result;
     if (o && path_info && sizeof(path_info) && path_info[0]=="annotations")
