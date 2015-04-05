@@ -557,7 +557,11 @@ int testuser(object user)
 
 mixed _get_version()
 {
-    return ({ "2013-07-09-1", Calendar.Second(this()->get_object()->query_attribute("OBJ_SCRIPT")->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short() });
+    object instance = this()->get_object()->query_attribute("OBJ_SCRIPT");
+    int instancetime;
+    if (instance)
+        instancetime = Calendar.Second(instance->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
+    return ({ "2013-07-09-1", instancetime });
 }
 
 array get_path_info(string path)
