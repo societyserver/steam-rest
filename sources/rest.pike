@@ -558,7 +558,7 @@ int testuser(object user)
 mixed _get_version()
 {
     object instance = this()->get_object()->query_attribute("OBJ_SCRIPT");
-    int instancetime;
+    string instancetime;
     if (instance)
         instancetime = Calendar.Second(instance->query_attribute("DOCLPC_INSTANCETIME"))->format_time_short();
     return ({ "2013-07-09-1", instancetime });
