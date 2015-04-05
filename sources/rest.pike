@@ -80,10 +80,11 @@ mapping execute(mapping vars)
         result += handle_group(o, vars, path_info);
     else if (o)
         result += handle_path(o, vars->__internal->request_method, vars->__data, path_info);
+    else if (!vars->request)
+        result->error = "request missing!";
     else
-    {
         result->error = "request not found";
-    }
+
     result->request = vars->request;
     result["request-method"] = vars->__internal->request_method;
 
