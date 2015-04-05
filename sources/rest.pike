@@ -60,7 +60,7 @@ mapping execute(mapping vars)
     {
       type_result = handle_annotations(o, path_info[1..]);
     }
-    else if (o)
+    else if (o && OBJ("/scripts/type-handler.pike"))
     {
         if (result->debug)
             result->debug->trace += ({ "calling type-handler" });
