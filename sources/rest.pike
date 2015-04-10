@@ -235,35 +235,47 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
             o->set_identifier(data->name);
         if (data->title && data->title != o->query_attribute("OBJ_DESC"))
             o->set_attribute("OBJ_DESC", data->title);
-        if (data->content && data->content != o->get_content())
+        if (data->content && o->get_object_class() & CLASS_DOCUMENT && data->content != o->get_content())
             o->set_content(data->content);
         result->data = data;
       break;
       case "PUT":
-        if (data && data->url && !data->content &&
-            (sizeof(path_info)==1 && !data->name || // path_info and not name is new form
-             !sizeof(path_info) && data->name))     // name and not path_info is old form,
-                                                    // violates REST
+        if (sizeof(path_info)==1)
         {
-          object factory = _Server->get_factory(CLASS_DOCEXTERN);
-          object newlink = factory->execute( ([ "name":data->name, "url":data->url]) );
-          newlink->set_attribute("OBJ_DESC", data->title);
-          newlink->move(o);
-          result->PUT=sprintf("%O", newlink);
+          if (!data)
+            data = ([]); // simplify tests below
+          object factory;
+          object newobject;
+	  if (data->url && !data->content)
+	  {
+	    factory = _Server->get_factory(CLASS_DOCEXTERN);
+	    newobject = factory->execute( ([ "name":path_info[0], "url":data->url]) );
+	  }
+	  if (!data->url && data->content)
+	  {
+	    factory = _Server->get_factory(CLASS_DOCUMENT);
+            newobject = factory->execute( ([ "name":path_info[0] ]) );
+            newobject->set_content(data->content);
+	  }
+	  if (!data->url && !data->content)
+	  {
+            // create room or container
+            if (o->get_object_class() & CLASS_ROOM && data->type!="container")
+              factory = _Server->get_factory(CLASS_ROOM);
+            else if (o->get_object_class() & CLASS_CONTAINER || data->type=="container")
+              factory = _Server->get_factory(CLASS_CONTAINER);
+            newobject = factory->execute( ([ "name":path_info[0] ]) );
+	  }
+
+          newobject->set_attribute("OBJ_DESC", data->title);
+          mapping attributes = data->attributes || data - (<"title", "url", "content", "type">);
+          foreach (attributes; string attribute; mixed value)
+          {
+            newobject->set_attribute(attribute, value);
+          }
+          newobject->move(o);
+          result->PUT=sprintf("%O", newobject);
         }
-        if (data && data->name && !data->url && data->content)
-          ;// create document
-        if (!data && sizeof(path_info)==1 && o->get_object_class() & CLASS_ROOM)
-        {
-          // create room
-          object factory = _Server->get_factory(CLASS_ROOM);
-          object newroom = factory->execute( ([ "name":path_info[0] ]) );
-          newroom->set_attribute("OBJ_DESC", data->title);
-          newroom->move(o);
-          result->PUT=describe_object(newroom);
-        }
-        if (data && data->name && !data->url && !data->content && o->get_object_class() & CLASS_CONTAINER)
-          ;// create container
       break;
       case "DELETE": // delete after describing the object
       break;
