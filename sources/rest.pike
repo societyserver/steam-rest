@@ -260,21 +260,26 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
 	  if (!data->url && !data->content)
 	  {
             // create room or container
-            if (o->get_object_class() & CLASS_ROOM && data->type!="container")
+            if (o->get_object_class() & CLASS_ROOM && lower_case(data->type)!="container")
               factory = _Server->get_factory(CLASS_ROOM);
-            else if (o->get_object_class() & CLASS_CONTAINER || data->type=="container")
+            else if (o->get_object_class() & CLASS_CONTAINER && lower_case(data->type)!="room" || lower_case(data->type)=="container")
               factory = _Server->get_factory(CLASS_CONTAINER);
             newobject = factory->execute( ([ "name":path_info[0] ]) );
 	  }
 
-          newobject->set_attribute("OBJ_DESC", data->title);
-          mapping attributes = data->attributes || data - (<"title", "url", "content", "type">);
-          foreach (attributes; string attribute; mixed value)
+          if (!newobject)
+            result->PUT="invalid arguments";
+          else
           {
-            newobject->set_attribute(attribute, value);
+            newobject->set_attribute("OBJ_DESC", data->title);
+            mapping attributes = data->attributes || data - (<"title", "url", "content", "type">);
+            foreach (attributes; string attribute; mixed value)
+            {
+              newobject->set_attribute(attribute, value);
+            }
+            newobject->move(o);
+            result->PUT=sprintf("%O", newobject);
           }
-          newobject->move(o);
-          result->PUT=sprintf("%O", newobject);
         }
       break;
       case "DELETE": // delete after describing the object
