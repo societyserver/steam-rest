@@ -619,7 +619,7 @@ mapping handle_annotations(object o, void|array path_info, void|int need_annotat
       else
         obj = describe_object(o, 1);
     };
-    catch{ obj->annotations = get_annotations(o, !all); };
+    catch{ obj->annotations = describe_annotations(o, !all); };
     if (!need_annotations || (obj->annotations && sizeof(obj->annotations)))
         result->annotations += ({ obj });
 
@@ -638,7 +638,7 @@ mapping handle_annotations(object o, void|array path_info, void|int need_annotat
     return result;
 }
 
-array get_annotations(object o, void|int all)
+array describe_annotations(object o, void|int all)
 {
   array annotations = ({});
 
@@ -646,7 +646,7 @@ array get_annotations(object o, void|int all)
   {
     mapping annotation = describe_annotation(a);
     if (all)
-      annotation->annotations = get_annotations(a, all);
+      annotation->annotations = describe_annotations(a, all);
     annotations += ({ annotation });
   }
   return annotations;
