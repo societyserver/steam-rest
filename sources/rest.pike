@@ -199,12 +199,13 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
        desc->url = o->query_attribute("DOC_EXTERN_URL");
 
   catch {
-    if (o->get_object_class() & CLASS_ROOM && tree)
+    if (o->get_object_class() & CLASS_ROOM)
     {
-        desc->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
+        desc->navigation = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, tree);
     }
     if (o->get_object_class() & CLASS_CONTAINER)
     {
+        desc->container = describe_object(o->get_inventory_by_class(CLASS_CONTAINER)[*]);
         desc->documents = sizeof(o->get_inventory_by_class(CLASS_CONTAINER|CLASS_DOCUMENT|CLASS_LINK));
         desc->links = sizeof(o->get_inventory_by_class(CLASS_DOCEXTERN));
     }
