@@ -199,7 +199,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
        desc->url = o->query_attribute("DOC_EXTERN_URL");
 
   catch {
-    if (o->get_object_class() & CLASS_ROOM)
+    if (o->get_object_class() & CLASS_ROOM && tree)
     {
         desc->navigation = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, tree);
     }
@@ -292,7 +292,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
 
     result->object = describe_object(o, 2);
     if (o->get_environment())
-        result->thisenvironment = describe_object(o->get_environment());
+        result->environment = describe_object(o->get_environment());
 
     if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
         result->inventory = describe_object(o->get_inventory()[*], 1);
