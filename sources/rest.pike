@@ -219,10 +219,10 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
 
 mapping handle_path(object o, mapping vars, void|array path_info)
 {
-    werror("(REST handle_path %s %O)", request_method, o);
     string request_method = vars->__internal->request_method;
     mapping data = vars->__data;
 
+    werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
     if (path_info && 
         (sizeof(path_info) && path_info[0] != "tree" && request_method != "PUT" || 
