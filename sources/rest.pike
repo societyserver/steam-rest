@@ -292,7 +292,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
 
     result->object = describe_object(o, 2);
     if (o->get_environment())
-        result->environment = describe_object(o->get_environment());
+        result->thisenvironment = describe_object(o->get_environment());
 
     if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
         result->inventory = describe_object(o->get_inventory()[*], 1);
