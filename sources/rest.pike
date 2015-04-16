@@ -298,17 +298,17 @@ mapping handle_path(object o, mapping vars, void|array path_info)
         result->environment = describe_object(o->get_environment());
 
     mapping objclasses = ([ "room":CLASS_ROOM,
-                          "container":CLASS_CONTAINER,
-                          "document":CLASS_DOCUMENT,
-                          "user":CLASS_USER,
-                          "link":CLASS_DOCEXTERN
-                          // FIXME: support more classes
-                         ]);
+                            "container":CLASS_CONTAINER,
+                            "document":CLASS_DOCUMENT,
+                            "user":CLASS_USER,
+                            "link":CLASS_DOCEXTERN
+                            // FIXME: support more classes
+                          ]);
 
     if (o->get_object_class() & (CLASS_CONTAINER))
     {
-        if (vars->classes)
-            result->inventory = describe_object(o->get_inventory_by_class(objclasses[vars->classes])[*], 0, 1);
+        if (vars->class)
+            result->inventory = describe_object(o->get_inventory_by_class(objclasses[vars->class])[*], 0, 1);
         else
             result->inventory = describe_object(o->get_inventory()[*], 1);
     }
