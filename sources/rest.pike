@@ -75,7 +75,7 @@ mapping execute(mapping vars)
     else if (o && o->get_class() == "Group")
         result += handle_group(o, vars, path_info);
     else if (o)
-        result += handle_path(o, vars->__internal->request_method, vars->__data, path_info);
+        result += handle_path(o, vars, path_info);
     else if (!vars->request)
         result->error = "request missing!";
     else
@@ -217,9 +217,12 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     return desc;
 }
 
-mapping handle_path(object o, string request_method, mapping data, void|array path_info)
+mapping handle_path(object o, mapping vars, void|array path_info)
 {
     werror("(REST handle_path %s %O)", request_method, o);
+    string request_method = vars->__internal->request_method;
+    mapping data = vars->__data;
+
     mapping result = ([]);
     if (path_info && 
         (sizeof(path_info) && path_info[0] != "tree" && request_method != "PUT" || 
@@ -295,7 +298,10 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
         result->environment = describe_object(o->get_environment());
 
     if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
+    {
+        if 
         result->inventory = describe_object(o->get_inventory()[*], 1);
+    }
 
     if (o->get_object_class() & CLASS_ROOM && path_info && sizeof(path_info) && path_info[0]=="tree")
         result->navigation = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
