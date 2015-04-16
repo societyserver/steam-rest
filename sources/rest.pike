@@ -297,9 +297,19 @@ mapping handle_path(object o, mapping vars, void|array path_info)
     if (o->get_environment())
         result->environment = describe_object(o->get_environment());
 
-    if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
+    mapping objtypes = ([ "room":CLASS_ROOM,
+                          "container":CLASS_CONTAINER,
+                          "document":CLASS_DOCUMENT,
+                          "user":CLASS_USER,
+                          "link":CLASS_DOCEXTERN
+                         ]);
+
+    if (o->get_object_class() & (CLASS_CONTAINER))
     {
-        result->inventory = describe_object(o->get_inventory()[*], 1);
+        if (vars->type)
+            result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
+        else
+            result->inventory = describe_object(o->get_inventory()[*], 1);
     }
 
     if (o->get_object_class() & CLASS_ROOM && path_info && sizeof(path_info) && path_info[0]=="tree")
