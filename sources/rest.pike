@@ -298,7 +298,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
         result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM|CLASS_DOCUMENT|CLASS_DOCEXTERN)[*]);
 
     if (o->get_object_class() & CLASS_ROOM && path_info && sizeof(path_info) && path_info[0]=="tree")
-        result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
+        result->navigation = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
 
     if (request_method == "DELETE")
     {
