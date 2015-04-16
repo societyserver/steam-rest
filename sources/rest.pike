@@ -295,7 +295,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
         result->environment = describe_object(o->get_environment());
 
     if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
-        result->inventory = describe_object(o->get_inventory_by_class(CLASS_ROOM|CLASS_DOCUMENT|CLASS_DOCEXTERN)[*]);
+        result->inventory = describe_object(o->get_inventory()[*], 1);
 
     if (o->get_object_class() & CLASS_ROOM && path_info && sizeof(path_info) && path_info[0]=="tree")
         result->navigation = describe_object(o->get_inventory_by_class(CLASS_ROOM)[*], 0, 1);
