@@ -310,7 +310,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
         if (vars->class)
             result->inventory = describe_object(o->get_inventory_by_class(objclasses[vars->class])[*], 0, 1);
         else if (vars->filter)
-            result->inventory = describe_object(Array.filter(o->get_inventory(), lambda(f){return f->query_attribute(vars->filter); })[*], 1);
+            result->inventory = describe_object(Array.filter(o->get_inventory(), lambda(object f){return f->query_attribute(vars->filter); })[*], 1);
         else
             result->inventory = describe_object(o->get_inventory()[*], 1);
     }
