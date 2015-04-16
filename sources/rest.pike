@@ -299,7 +299,6 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 
     if (o->get_object_class() & (CLASS_ROOM|CLASS_CONTAINER))
     {
-        if 
         result->inventory = describe_object(o->get_inventory()[*], 1);
     }
 
