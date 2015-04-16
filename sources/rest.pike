@@ -291,6 +291,8 @@ mapping handle_path(object o, mapping vars, void|array path_info)
       break;
       case "DELETE": // delete after describing the object
       break;
+      case "MOVE": // move object to destination
+      break;
     }
 
     result->object = describe_object(o, 2);
