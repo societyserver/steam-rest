@@ -157,8 +157,8 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     {
         desc->id = o->get_identifier();
         desc->fullname = o->query_attribute("USER_FULLNAME");
-        desc->path = get_path(o->query_attribute("USER_WORKROOM"));
-        if (show_details && o == this_user())
+	desc->path = get_path(o->query_attribute("USER_WORKROOM"));
+	if (show_details >= 2 && o == this_user())
             desc->trail = describe_object(Array.uniq(reverse(o->query_attribute("trail")))[*]);
     }
 
@@ -168,7 +168,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         desc->id = o->get_identifier();
         desc->name = (o->get_identifier()/".")[-1];
         desc->path = get_path(workroom);
-        if (show_details)
+        if (show_details >= 2)
         {
             //object schedule = workroom->get_object_byname("schedule");
             //if (schedule)
@@ -188,10 +188,10 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
         desc->mime_type = o->query_attribute("DOC_MIME_TYPE");
         catch { desc->size = sizeof(o->get_content()); };
 
-        if (show_details && (<"text","source">)[(o->query_attribute("DOC_MIME_TYPE")/"/")[0]])
+        if (show_details >= 2 && (<"text","source">)[(o->query_attribute("DOC_MIME_TYPE")/"/")[0]])
             catch { desc->content = o->get_content(); };
 
-//        if (show_details && o->query_attribute("DOC_MIME_TYPE")=="application/json")
+//        if (show_details >= && o->query_attribute("DOC_MIME_TYPE")=="application/json")
 //            catch { desc->data = o->get_content(); };
     }
 
@@ -205,7 +205,7 @@ mapping describe_object(object o, int|void show_details, int|void tree, int|void
     }
     else if (o->get_object_class() & CLASS_CONTAINER)
     {
-        desc->container = describe_object(o->get_inventory_by_class(CLASS_CONTAINER)[*], 1);
+        desc->container = describe_object(o->get_inventory_by_class(CLASS_CONTAINER)[*]);
     }
     if (o->get_object_class() & CLASS_CONTAINER)
     {
@@ -290,7 +290,7 @@ mapping handle_path(object o, string request_method, mapping data, void|array pa
       break;
     }
 
-    result->object = describe_object(o, 1);
+    result->object = describe_object(o, 2);
     if (o->get_environment())
         result->environment = describe_object(o->get_environment());
 
