@@ -221,6 +221,10 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 {
     string request_method = vars->__internal->request_method;
     mapping data = vars->__data;
+    mapping attributes;
+
+    if (mappingp(data))
+        attributes = data->attributes || data - (<"title", "url", "content", "type">);
 
     werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
@@ -235,7 +239,6 @@ mapping handle_path(object o, mapping vars, void|array path_info)
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
 
-    mapping attributes = data->attributes || data - (<"title", "url", "content", "type">);
 
     switch (request_method)
     {
