@@ -249,7 +249,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 
         foreach (attributes; string attribute; mixed value)
         {
-            if (attributes(attribute) != o->query_attribute(attribute))
+            if (value != o->query_attribute(attribute))
                 o->set_attribute(attribute, value);
         }
         result->data = data;
