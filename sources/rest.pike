@@ -235,6 +235,8 @@ mapping handle_path(object o, mapping vars, void|array path_info)
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
 
+    mapping attributes = data->attributes || data - (<"title", "url", "content", "type">);
+
     switch (request_method)
     {
       case "POST":
@@ -244,6 +246,12 @@ mapping handle_path(object o, mapping vars, void|array path_info)
             o->set_attribute("OBJ_DESC", data->title);
         if (data->content && o->get_object_class() & CLASS_DOCUMENT && data->content != o->get_content())
             o->set_content(data->content);
+
+        foreach (attributes; string attribute; mixed value)
+        {
+            if (attributes(attribute) != o->query_attribute(attribute))
+                newobject->set_attribute(attribute, value);
+        }
         result->data = data;
       break;
       case "PUT":
@@ -279,7 +287,6 @@ mapping handle_path(object o, mapping vars, void|array path_info)
           else
           {
             newobject->set_attribute("OBJ_DESC", data->title);
-            mapping attributes = data->attributes || data - (<"title", "url", "content", "type">);
             foreach (attributes; string attribute; mixed value)
             {
               newobject->set_attribute(attribute, value);
