@@ -261,7 +261,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
       case "PUT":
         if (!sizeof(path_info))
             result->error = "can not replace existing object with PUT";
-        if (sizeof(path_info)==1)
+        if (sizeof(path_info)==1 o->get_object_class() & CLASS_CONTAINER)
         {
           if (!data)
             data = ([]); // simplify tests below
