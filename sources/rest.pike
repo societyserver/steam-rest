@@ -255,6 +255,8 @@ mapping handle_path(object o, mapping vars, void|array path_info)
         result->data = data;
       break;
       case "PUT":
+        if (!sizeof(path_info))
+            result->error = "can not replace existing object with PUT";
         if (sizeof(path_info)==1)
         {
           if (!data)
