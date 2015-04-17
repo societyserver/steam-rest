@@ -22,11 +22,16 @@ mapping execute(mapping vars)
 
     
 
-    if (vars->__body)
+    if (vars->__body && vars->__internal->request_headers["content-type"] == "application/json")
     {
         vars->_json = vars->__body;
         vars->__data = Standards.JSON.decode(vars->__body);
         werror("(REST %O)\n(REST %O)\n", vars->__data, vars->__body);
+    }
+    else if (vars->__body)
+    {
+        result->notjson = vars;
+        result->debug = "this is not json";
     }
 
     if (this()->get_object()["handle_"+vars->request])
