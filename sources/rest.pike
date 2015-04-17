@@ -255,6 +255,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
             if (value != o->query_attribute(attribute))
                 o->set_attribute(attribute, value);
         }
+
         result->data = data;
       break;
       case "PUT":
