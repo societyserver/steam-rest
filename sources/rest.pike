@@ -292,7 +292,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
             // create room or container
             if (o->get_object_class() & CLASS_ROOM && lower_case(data->type)!="container")
               factory = _Server->get_factory(CLASS_ROOM);
-            else if (o->get_object_class() & CLASS_CONTAINER && lower_case(data->type)!="room" || lower_case(data->type)=="container")
+            else if (o->get_object_class() & CLASS_CONTAINER && !data->type || lower_case(data->type)=="container")
               factory = _Server->get_factory(CLASS_CONTAINER);
             newobject = factory->execute( ([ "name":path_info[0] ]) );
 	  }
