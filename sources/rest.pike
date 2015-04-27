@@ -226,7 +226,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 {
     string request_method = vars->__internal->request_method;
     mapping data = vars->__data;
-    mapping attributes;
+    mapping attributes = ([]);
 
     if (mappingp(data))
         attributes = data->attributes || data - (<"title", "url", "content", "type">);
