@@ -29,7 +29,6 @@ mapping execute(mapping vars)
 
     result->__version = _get_version();
     result->__date = Calendar.now()->format_time_short();
-
     
 
     if (vars->__body && vars->__internal->request_headers["content-type"] == "application/json")
