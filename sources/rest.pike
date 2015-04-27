@@ -277,7 +277,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 	    factory = _Server->get_factory(CLASS_DOCEXTERN);
 	    newobject = factory->execute( ([ "name":path_info[0], "url":data->url]) );
 	  }
-	  if (!data->url && data->content (!data->type || lower_case(data->type)=="document"))
+	  if (!data->url && data->content && (!data->type || lower_case(data->type)=="document"))
 	  {
 	    factory = _Server->get_factory(CLASS_DOCUMENT);
             newobject = factory->execute( ([ "name":path_info[0] ]) );
