@@ -40,7 +40,7 @@ mapping execute(mapping vars)
     }
     else if (vars->__body)
     {
-        rdebug(result, "notjson", vars);
+        rdebug(result, "notjson", vars-(< "fp" >));
         result->error = "this is not json";
     }
 
@@ -76,11 +76,7 @@ mapping execute(mapping vars)
         if (result->debug)
             result->debug->trace += ({ "calling type-handler" });
         type_result = OBJ("/scripts/type-handler.pike")->run(vars->__internal->request_method, o, path_info, vars->__data, vars);
-        if (result->debug)
-            if (mappingp(type_result))
-                result->debug->type_result = type_result->debug;
-            else
-                result->debug->type_result = type_result;
+        rdebug(result, "type_result", mappingp(type_result)?type_result->debug:type_result);
     }
 
     if (mappingp(type_result))
@@ -101,8 +97,7 @@ mapping execute(mapping vars)
 
     werror("(rest) %O\n", result);
 
-    if (result->debug)
-        result->debug->request = vars - ([ "fp":true ]);
+    rdebug(result, "request", vars-(< "fp" >));
 
     string data = Standards.JSON.encode((["error":"unknown error"]));
     string type = "application/json";
@@ -501,8 +496,7 @@ mapping handle_register(mapping vars)
         if(err)
         {
             result->error = sprintf("script permissions wrong!");
-            if (result->debug)
-                result->debug->setuid = sprintf("%O", err);
+            rdebug(result, "setuid", sprintf("%O", err));
         }
         else
         {
@@ -521,8 +515,7 @@ mapping handle_register(mapping vars)
             if (err)
             {
                 result->error = "failed to create user";
-                if (result->debug)
-                    result->debug->create_user = sprintf("%O", err);
+                rdebug(result, "create_user", sprintf("%O", err));
             }
             else
             {
@@ -611,8 +604,7 @@ mapping handle_delete(mapping vars)
         if(err)
         {
             result->error = sprintf("script permissions wrong!");
-            if (result->debug)
-                result->debug->delete = sprintf("%O", err);
+            rdebug(result, "delete", sprintf("%O", err));
         }
         else
         {
