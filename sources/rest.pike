@@ -31,7 +31,7 @@ mapping execute(mapping vars)
     result->__date = Calendar.now()->format_time_short();
     
 
-    if (vars->__body && vars->__internal->request_headers["content-type"] == "application/json")
+    if (vars->__body && vars->__internal["mime-type"] == "application/json")
     {
         vars->_json = vars->__body;
         vars->__data = Standards.JSON.decode(vars->__body);
