@@ -4,6 +4,15 @@ inherit "classes/Script";
 
 function get_path = _Server->get_module("filepath:url")->object_to_filename;
 
+void rdebug(mapping result, mixed key, mixed data)
+{
+    if (GROUP("coder")->is_virtual_member(this_user()))
+    {
+        if (!result->debug)
+            result->debug = ([]);
+        result->debug[key] = data; 
+    }
+}
 
 
 mapping execute(mapping vars)
@@ -16,8 +25,7 @@ mapping execute(mapping vars)
     result->me = describe_object(this_user());
     catch{ result->me->session = this_user()->get_session_id(); };
     catch{ result->me->vsession = this_user()->get_virtual_session_id(); };
-    if (GROUP("coder")->is_virtual_member(this_user()))
-        result->debug = ([ "trace":({}) ]);
+    rdebug(result, "trace", ({}));
 
     result->__version = _get_version();
     result->__date = Calendar.now()->format_time_short();
@@ -32,7 +40,7 @@ mapping execute(mapping vars)
     }
     else if (vars->__body)
     {
-        result->debug->notjson = vars;
+        rdebug(result, "notjson", vars);
         result->error = "this is not json";
     }
 
