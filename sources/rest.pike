@@ -290,7 +290,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 	  if (!data->url && !data->content)
 	  {
             // create room or container
-            if (o->get_object_class() & CLASS_ROOM && lower_case(data->type)!="container")
+            if (o->get_object_class() & CLASS_ROOM && !data->type || lower_case(data->type)=="room")
               factory = _Server->get_factory(CLASS_ROOM);
             else if (o->get_object_class() & CLASS_CONTAINER && !data->type || lower_case(data->type)=="container")
               factory = _Server->get_factory(CLASS_CONTAINER);
