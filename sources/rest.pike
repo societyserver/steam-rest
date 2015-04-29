@@ -235,6 +235,10 @@ mapping handle_path(object o, mapping vars, void|array path_info)
     if (mappingp(data))
         attributes = data->attributes || data - (<"title", "url", "content", "type">);
 
+    if (!data)
+        data = ([]); // simplify tests below
+
+
     werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
     if (path_info && 
@@ -247,7 +251,6 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 
     if (o->get_object_class() & CLASS_ROOM)
         this_user()->move(o);
-
 
     switch (request_method)
     {
@@ -272,8 +275,6 @@ mapping handle_path(object o, mapping vars, void|array path_info)
             result->error = "can not replace existing object with PUT";
         else if (sizeof(path_info)==1 && o->get_object_class() & CLASS_CONTAINER)
         {
-          if (!data)
-            data = ([]); // simplify tests below
           object factory;
           object newobject;
 	  if ((data->url && !data->content && !data->type) || lower_case(data->type)=="link")
