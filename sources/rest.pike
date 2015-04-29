@@ -276,18 +276,18 @@ mapping handle_path(object o, mapping vars, void|array path_info)
             data = ([]); // simplify tests below
           object factory;
           object newobject;
-	  if (data->url && !data->content && (!data->type || lower_case(data->type)=="link"))
+	  if ((data->url && !data->content && !data->type) || lower_case(data->type)=="link")
 	  {
 	    factory = _Server->get_factory(CLASS_DOCEXTERN);
-	    newobject = factory->execute( ([ "name":path_info[0], "url":data->url]) );
+	    newobject = factory->execute( ([ "name":path_info[0], "url":data->url||""]) );
 	  }
-	  if (!data->url && data->content && (!data->type || lower_case(data->type)=="document"))
+	  if ((!data->url && data->content && !data->type) || lower_case(data->type)=="document")
 	  {
 	    factory = _Server->get_factory(CLASS_DOCUMENT);
             newobject = factory->execute( ([ "name":path_info[0] ]) );
-            newobject->set_content(data->content);
+            newobject->set_content(data->content||"");
 	  }
-	  if (!data->url && !data->content)
+	  if ((!data->url && !data->content) || (<"room", "container">)[lower_case(data->type)])
 	  {
             // create room or container
             if (o->get_object_class() & CLASS_ROOM && !data->type || lower_case(data->type)=="room")
