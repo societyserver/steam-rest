@@ -257,8 +257,8 @@ mapping handle_path(object o, mapping vars, void|array path_info)
       case "POST":
         if (vars["file[].filename"] && vars["file[]"])
         {
-	    factory = _Server->get_factory(CLASS_DOCUMENT);
-            newobject = factory->execute( ([ "name":vars["file[].filename"] ]) );
+	    object factory = _Server->get_factory(CLASS_DOCUMENT);
+            object newobject = factory->execute( ([ "name":vars["file[].filename"] ]) );
             newobject->set_content(vars["file[]"]||"");
             newobject->move(o);
             result->POST=sprintf("%O", newobject);
