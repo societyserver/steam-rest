@@ -255,17 +255,28 @@ mapping handle_path(object o, mapping vars, void|array path_info)
     switch (request_method)
     {
       case "POST":
-        if (data->name && data->name != o->get_identifier())
-            o->set_identifier(data->name);
-        if (data->title && data->title != o->query_attribute("OBJ_DESC"))
-            o->set_attribute("OBJ_DESC", data->title);
-        if (data->content && o->get_object_class() & CLASS_DOCUMENT && data->content != o->get_content())
-            o->set_content(data->content);
-
-        foreach (attributes; string attribute; mixed value)
+        if (vars["file[].filename"] && vars["file[]"])
         {
-            if (value != o->query_attribute(attribute))
-                o->set_attribute(attribute, value);
+	    factory = _Server->get_factory(CLASS_DOCUMENT);
+            newobject = factory->execute( ([ "name":vars["file[].filename"] ]) );
+            newobject->set_content(vars["file[]"]||"");
+            newobject->move(o);
+            result->POST=sprintf("%O", newobject);
+        }
+        else 
+        {
+            if (data->name && data->name != o->get_identifier())
+                o->set_identifier(data->name);
+            if (data->title && data->title != o->query_attribute("OBJ_DESC"))
+                o->set_attribute("OBJ_DESC", data->title);
+            if (data->content && o->get_object_class() & CLASS_DOCUMENT && data->content != o->get_content())
+                o->set_content(data->content);
+
+            foreach (attributes; string attribute; mixed value)
+            {
+                if (value != o->query_attribute(attribute))
+                    o->set_attribute(attribute, value);
+            }
         }
 
         result->data = data;
