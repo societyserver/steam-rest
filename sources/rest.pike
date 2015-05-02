@@ -232,12 +232,14 @@ mapping handle_path(object o, mapping vars, void|array path_info)
     mapping data = vars->__data;
     mapping attributes = ([]);
 
-    if (mappingp(data))
-        attributes = data->attributes || data - (<"title", "url", "content", "type">);
-
     if (!data)
         data = ([]); // simplify tests below
 
+    if (mappingp(data))
+        attributes = data->attributes || data - (<"title", "url", "content", "type", "class">);
+
+    if (data->type && !data->class)
+        data->class = data->type;
 
     werror("(REST handle_path %s %O)", request_method, o);
     mapping result = ([]);
@@ -288,23 +290,23 @@ mapping handle_path(object o, mapping vars, void|array path_info)
         {
           object factory;
           object newobject;
-	  if ((data->url && !data->content && !data->type) || lower_case(data->type)=="link")
+	  if ((data->url && !data->content && !data->class) || lower_case(data->class)=="link")
 	  {
 	    factory = _Server->get_factory(CLASS_DOCEXTERN);
 	    newobject = factory->execute( ([ "name":path_info[0], "url":data->url||""]) );
 	  }
-	  if ((!data->url && data->content && !data->type) || lower_case(data->type)=="document")
+	  if ((!data->url && data->content && !data->class) || lower_case(data->class)=="document")
 	  {
 	    factory = _Server->get_factory(CLASS_DOCUMENT);
             newobject = factory->execute( ([ "name":path_info[0] ]) );
             newobject->set_content(data->content||"");
 	  }
-	  if ((!data->url && !data->content) || (<"room", "container">)[lower_case(data->type)])
+	  if ((!data->url && !data->content) || (<"room", "container">)[lower_case(data->class)])
 	  {
             // create room or container
-            if (o->get_object_class() & CLASS_ROOM && !data->type || lower_case(data->type)=="room")
+            if (o->get_object_class() & CLASS_ROOM && !data->class || lower_case(data->class)=="room")
               factory = _Server->get_factory(CLASS_ROOM);
-            else if (o->get_object_class() & CLASS_CONTAINER && !data->type || lower_case(data->type)=="container")
+            else if (o->get_object_class() & CLASS_CONTAINER && !data->class || lower_case(data->class)=="container")
               factory = _Server->get_factory(CLASS_CONTAINER);
             newobject = factory->execute( ([ "name":path_info[0] ]) );
 	  }
