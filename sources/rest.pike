@@ -328,6 +328,9 @@ mapping handle_path(object o, mapping vars, void|array path_info)
       case "DELETE": // delete after describing the object
       break;
       case "MOVE": // move object to destination
+        object dest = _Server->get_module("filepath:tree")->path_to_object(vars->__internal->headers->destination);
+        if (dest)
+          result->MOVE = !!o->move(dest);
       break;
     }
 
