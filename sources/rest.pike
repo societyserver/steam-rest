@@ -648,7 +648,7 @@ array get_path_info(string path)
 {
 
     object parent = OBJ("/");
-    object o = parent;
+    object o = parent->get_object_byname(restpath[0]);
     array path_info;
     array restpath = (path/"/")-({""});
 
