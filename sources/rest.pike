@@ -660,8 +660,6 @@ array get_path_info(string path)
     }
     if (sizeof(restpath))
         path_info = restpath;
-    if (!o || (< PSTAT_FAIL_DELETED, PSTAT_DELETED >)[o->status()])
-        o = parent;
 
     werror("(get_path_info %O %O)\n", parent, path_info);
     // for some reason,  OBJ("/home")->get_object_byname("foo") does not return a proxy object.
