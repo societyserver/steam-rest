@@ -361,7 +361,7 @@ mapping handle_path(object o, mapping vars, void|array path_info)
 
     if (request_method == "DELETE")
     {
-      mixed err = catch(o->delete());
+      mixed err = catch(result->DELETE=!!o->delete());
       if (err)
         result->error = sprintf("%O", err); 
     }
