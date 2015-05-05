@@ -656,7 +656,7 @@ array get_path_info(string path)
     {
         parent = o;
         restpath = restpath[1..];
-        o = parent->get_object_byname(restpath[0];
+        o = parent->get_object_byname(restpath[0]);
     }
     if (sizeof(restpath))
         path_info = restpath;
