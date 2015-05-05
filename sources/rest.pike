@@ -648,9 +648,9 @@ array get_path_info(string path)
 {
 
     object parent = OBJ("/");
-    object o = parent->get_object_byname(restpath[0]);
     array path_info;
     array restpath = (path/"/")-({""});
+    object o = parent->get_object_byname(restpath[0]);
 
     while (sizeof(restpath) && o && !(< PSTAT_FAIL_DELETED, PSTAT_DELETED >)[o->status()])
     {
