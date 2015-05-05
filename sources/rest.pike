@@ -51,7 +51,7 @@ mapping execute(mapping vars)
     {
         o = _Server->get_module("filepath:tree")->path_to_object(vars->request);
         werror("(path_to_object %s %O)\n", vars->request, o);
-        if (!o)
+        if (!o || (< PSTAT_FAIL_DELETE, PSTAT_DELETE >)[o->status()])
             [o, path_info] = get_path_info(vars->request);
         else if (vars->request[sizeof(vars->request)-11..]=="annotations")
             path_info = ({ "annotations" });
@@ -652,13 +652,16 @@ array get_path_info(string path)
     array path_info;
     array restpath = (path/"/")-({""});
 
-    while (sizeof(restpath) && (o = parent->get_object_byname(restpath[0])))
+    while (sizeof(restpath) && o && !(< PSTAT_FAIL_DELETE, PSTAT_DELETE >)[o->status()])
     {
         parent = o;
         restpath = restpath[1..];
+        o = parent->get_object_byname(restpath[0];
     }
     if (sizeof(restpath))
         path_info = restpath;
+    if (!o || (< PSTAT_FAIL_DELETE, PSTAT_DELETE >)[o->status()])
+        o = parent;
 
     werror("(get_path_info %O %O)\n", parent, path_info);
     // for some reason,  OBJ("/home")->get_object_byname("foo") does not return a proxy object.
