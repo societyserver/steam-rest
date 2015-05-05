@@ -51,7 +51,7 @@ mapping execute(mapping vars)
     {
         o = _Server->get_module("filepath:tree")->path_to_object(vars->request);
         werror("(path_to_object %s %O)\n", vars->request, o);
-        if (!o || (< PSTAT_FAIL_DELETE, PSTAT_DELETE >)[o->status()])
+        if (!o || (< PSTAT_FAIL_DELETED, PSTAT_DELETED >)[o->status()])
             [o, path_info] = get_path_info(vars->request);
         else if (vars->request[sizeof(vars->request)-11..]=="annotations")
             path_info = ({ "annotations" });
@@ -652,7 +652,7 @@ array get_path_info(string path)
     array path_info;
     array restpath = (path/"/")-({""});
 
-    while (sizeof(restpath) && o && !(< PSTAT_FAIL_DELETE, PSTAT_DELETE >)[o->status()])
+    while (sizeof(restpath) && o && !(< PSTAT_FAIL_DELETED, PSTAT_DELETED >)[o->status()])
     {
         parent = o;
         restpath = restpath[1..];
@@ -660,7 +660,7 @@ array get_path_info(string path)
     }
     if (sizeof(restpath))
         path_info = restpath;
-    if (!o || (< PSTAT_FAIL_DELETE, PSTAT_DELETE >)[o->status()])
+    if (!o || (< PSTAT_FAIL_DELETED, PSTAT_DELETED >)[o->status()])
         o = parent;
 
     werror("(get_path_info %O %O)\n", parent, path_info);
