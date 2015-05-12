@@ -62,6 +62,8 @@ mapping execute(mapping vars)
         o = GROUP(request_args[0]);
         if (!o)
             o = USER(request_args[0]);
+        if (!o && (string)(int)request_args[0]==request_args[0])
+            o = find_object((int)request_args[0]);
         path_info = request_args[1..];
     }
 
