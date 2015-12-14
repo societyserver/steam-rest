@@ -3,17 +3,6 @@ var frisby = require('frisby');
 //
 // Generic testing functions
 //
-function testDebug (d) {
-  expect( d.count ).toEqual( jasmine.any(Number) );
-  expect( d.request.request ).toEqual( jasmine.any(String) );
-  expect( d.request['interface'] ).toEqual( jasmine.any(String) );
-  expect( d.request.referer ).toEqual( jasmine.any(String) );
-  expect( d.request.auth ).toEqual( jasmine.any(String) );
-  expect( d.request.type ).toEqual( jasmine.any(String) );
-  expect( d.request['__internal'] ).toBeDefined();
-  expect( d.request.host ).toEqual( jasmine.any(String) );
-  expect( d['type-handler'] ).toBeDefined();
-}
 
 function testMe (me) {
   expect( me.name ).toEqual( jasmine.any(String) );
@@ -103,7 +92,6 @@ frisby.create('Test techgrind.events to be well-formed')
   .expectJSON({
     "request": "techgrind.events",
     "request-method": "GET",
-    "debug": testDebug,
     "me": testMe,
     "event-list": function(val) { 
       val.forEach(function(e) {
@@ -120,7 +108,6 @@ frisby.create('Test techgrind.events/order-by-date to be well-formed')
   .expectJSON({
     "request": "techgrind.events/order-by-date",
     "request-method": "GET",
-    "debug": testDebug,
     "me": testMe,
     "event-list": function(val) { 
       val.forEach(function(e) {
@@ -137,7 +124,6 @@ frisby.create('Testing an instance of an event to be well-formed')
   .expectJSON({
     "request": "techgrind.events.blug-coding-for-fun",
     "request-method": "GET",
-    "debug": testDebug,
     "me": testMe,
     "event": testEvent
   })
