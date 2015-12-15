@@ -158,5 +158,4 @@ frisby.create('Testing Registration API calls')
     "__version": testRegistrationVersion,
     "__date": testRegistrationDate
   })
-  .inspectJSON()
   .toss();
