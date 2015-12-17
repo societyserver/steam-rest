@@ -35,13 +35,14 @@ else
 	app.use errorHandler()
 
 if !module.parent
-	app.listen port = 8000
+	app.listen port = 7000
 	console.log 'Listening on port ' + port
 
 app.get '/js/:script.js', (req, res) ->
 	res.header 'Content-Type', 'application/javascript'
 	res.send coffee.compile fs.readFileSync(
 		"#{src_dir}/js/#{req.params.script}.coffee", "utf-8")
+
 app.get /(\/test\/(.+\/)?[^\/]+).js/, (req, res) ->
 	res.header 'Content-Type', 'application/javascript'
 	res.send coffee.compile fs.readFileSync(
