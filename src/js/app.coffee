@@ -2,6 +2,7 @@ app = angular.module 'SteamRestExamples', [
         'ngRoute'
         'LocalStorageModule'
         'steam-service'
+        'SteamRestExamples.register'
 ]
 
 app.config ['$routeProvider', ($routeProvider) ->
@@ -9,5 +10,9 @@ app.config ['$routeProvider', ($routeProvider) ->
 		templateUrl: 'partials/home.html'
 		controller: 'HomeCtrl'
 
-	$routeProvider.otherwise redirectTo: '/home'
+	$routeProvider.when '/register',
+		templateUrl: 'partials/register.html'
+		controller: 'RegisterCtrl'
+
+	$routeProvider.otherwise redirectTo: '/register'
 ]

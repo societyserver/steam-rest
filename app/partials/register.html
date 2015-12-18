@@ -1,0 +1,26 @@
+<div>
+	<div class="container">
+       <form name="user_registration" method="post" action="/">
+           <h3>Register</h3>
+           <ul>
+               <input type="text" ng-model="registerdata.fullname" placeholder="Full name" ng-required="true"/>
+               <br />
+               <input type="text" ng-model="registerdata.userid" placeholder="User id" ng-required="true"/><span ng-show="user_checking()">checking availability</span><span ng-show="user_available()">User id is available</span><span ng-show="user_taken()">User id is taken</span>
+               <br />
+               <input type="email" ng-model="registerdata.email" placeholder="Email address" ng-required="true"/>
+               <br />
+               <input type="password" ng-model="registerdata.password" placeholder="Password" ng-required="true" ng-valid="passwordmatch"/>
+               <br />
+               <input type="password" ng-model="registerdata.password2" placeholder="Confirm password" ng-required="true" ng-valid="passwordmatch"/><span ng-show="!passwordmatch">Passwords don't match!</span>
+               <br />
+               <button class="btn btn-primary"  ng-click="register()">
+                   Register
+               </button>
+               <br />
+               <div id="newuserid">{{ data.user.id }}</div>
+               <div id="newusercode" ng-show="data.activation"><a id="activation_link" href="/#activate/{{data.user.id}}/{{data.activation}}">activate</a></div>
+           </ul>
+       </form>
+       <div ng-show="registerSuccess">You are now registered.</div>
+   </div> 
+</div>
