@@ -1,8 +1,7 @@
-app = angular.module 'TechGrindApp', [
-	'TechGrindApp.filters'
-	'TechGrindApp.services'
-	'TechGrindApp.directives'
-	'TechGrindApp.controllers'
+app = angular.module 'SteamRestExamples', [
+        'ngRoute'
+        'LocalStorageModule'
+        'steam-service'
 ]
 
 app.config ['$routeProvider', ($routeProvider) ->

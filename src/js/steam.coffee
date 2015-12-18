@@ -1,7 +1,7 @@
 # File: services.coffee
 #   defines angular.js services
 
-services = angular.module 'myapp.services', []
+services = angular.module 'steam-service', []
 services.value 'version', '0.1'
 
 # Service: steam
