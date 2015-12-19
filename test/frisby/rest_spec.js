@@ -63,18 +63,10 @@ function testEvent(e) {
   };
 }
 
-function testRegistrationVersion (rvr) {
-  expect(rvr[0]).toEqual(jasmine.any(String));
-  expect(rvr[1]).toEqual(jasmine.any(String));
-}
-
-function testRegistrationDate (rd) {
-  expect(rd).toEqual(jasmine.any(String));
-}
-
 //
 // Useful helpers
 //
+
 function toBeStringIfExists(val) {
   if ( val ) 
     expect( val ).toEqual( jasmine.any(String) );
@@ -94,6 +86,7 @@ function toBeDateIfExists (val) {
 //
 // Actual Tests
 //
+
 frisby.create('Test techgrind.events to be well-formed')
   .get('http://dev-back1.techgrind.asia/scripts/rest.pike?request=techgrind.events')
   .expectStatus(200)
@@ -134,28 +127,5 @@ frisby.create('Testing an instance of an event to be well-formed')
     "request-method": "GET",
     "me": testMe,
     "event": testEvent
-  })
-  .toss();
-
-
-// Registration Tests
-
-
-frisby.create('Testing Registration API calls')
-  .post('http://dev-back1.techgrind.asia/scripts/rest.pike?request=register', {
-    email: "gcitester@tester.com",
-    fullname: "test user tg gci",
-    group: "techgrind",
-    password: "abcxyz",
-    password2: "abcdxyz",
-    userid: "test.user.gci"
-  }, {json: true})
-  .expectStatus(200)
-  .expectJSON({
-    "request-method": "POST",
-    "request": "register",
-    "me": testMe,
-    "__version": testRegistrationVersion,
-    "__date": testRegistrationDate
   })
   .toss();
