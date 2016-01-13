@@ -1,4 +1,4 @@
-app = angular.module 'SteamRestExamples.register', []
+app = angular.module 'steam-rest-examples.register', []
 
 app.controller 'RegisterCtrl', ['$scope', '$location', 'steam', (S, loc, steam) ->
 	S.registerdata = {}

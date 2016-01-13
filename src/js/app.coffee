@@ -1,18 +1,23 @@
-app = angular.module 'SteamRestExamples', [
-        'ngRoute'
-        'LocalStorageModule'
-        'steam-service'
-        'SteamRestExamples.register'
+app = angular.module 'app', [
+	'LocalStorageModule'
+	'steam-service'
+	'steam-rest-examples.main'
+	'steam-rest-examples.register'
+	'ui.router'
+	'ui.bootstrap'
 ]
 
-app.config ['$routeProvider', ($routeProvider) ->
-	$routeProvider.when '/home',
-		templateUrl: 'partials/home.html'
-		controller: 'HomeCtrl'
+app.config ['$urlRouterProvider', '$stateProvider', ($urlRouterProvider, $stateProvider) ->
+	$urlRouterProvider
+		.otherwise '/home'
+	
+	$stateProvider.state 'home',
+			url: '/home'
+			templateUrl: 'partials/home.html'
+			controller: 'HomeCtrl'
 
-	$routeProvider.when '/register',
-		templateUrl: 'partials/register.html'
-		controller: 'RegisterCtrl'
-
-	$routeProvider.otherwise redirectTo: '/register'
+	$stateProvider.state 'register',
+			url: '/register'
+			templateUrl: 'partials/register.html'
+			controller: 'RegisterCtrl'
 ]
