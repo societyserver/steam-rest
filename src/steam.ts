@@ -1,5 +1,5 @@
 import {autoinject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 
 @autoinject
 export class Steam {
@@ -15,7 +15,14 @@ export class Steam {
 
   get(request) {
     return this.http.fetch(request)
-      .then(response => response.json())
-      .then(data => data);
+      .then(response => response.json());
+  }
+
+  post(request, data) {
+    return this.http.fetch(request, { 
+      method: 'post',
+      body: json(data)
+    })
+    .then(response => response.json());
   }
 }
